@@ -22,7 +22,7 @@ function Home() {
   const [showSearch, setShowSearch] = useState(false);
   const username = useMemo(() => sessionStorage.getItem("username"), []);
   const [chatterRendered, setChatterRendered] = useState(false);
-  const socket = useMemo(() => socketIO.connect("http://localhost:3000"), []);
+  const socket = useMemo(() => socketIO.connect("http://localhost:4000"), []);
   const currentUser = sessionStorage.getItem("username");
 
   // Inside Home component
@@ -83,7 +83,7 @@ useEffect(() => {
   const performSearch = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/messageSearch/${searchQuery}`
+        `http://localhost:4000/api/messageSearch/${searchQuery}`
       );
       setSearchResults(response.data);
       console.log(response.data);
