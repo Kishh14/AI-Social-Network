@@ -26,6 +26,10 @@ const ChatPage = ({ socket, recipient, messages }) => {
     zegoRef.current = zego;
     zego.joinRoom({
       container: videoCallContainerRef.current,
+      maxUsers: 2,
+      turnOnCameraWhenJoining: true,
+      turnOnCameraWhenJoining: false,
+      layout: "Sidebar",
       scenario: {
         mode: ZegoUIKitPrebuilt.OneONoneCall,
       }
@@ -67,6 +71,7 @@ const ChatPage = ({ socket, recipient, messages }) => {
     }
 
     const handleNewMessage = (data) => {
+      console.log('New message received:', data);
       if (data.recipient === recipient || data.name === recipient) {
         setLocalMessages((prevMessages) => [...prevMessages, data]);
       }
@@ -75,8 +80,11 @@ const ChatPage = ({ socket, recipient, messages }) => {
     const handleTyping = (data) => setTyping(data.typing);
 
     const handleMessageHistory = (data) => {
+      console.log('Message history received:', data);
       const relevantMessages = data.filter(
-        (message) => message.recipient === recipient || message.name === recipient
+        (message) =>
+          (message.recipient === recipient && message.name === username) ||
+          (message.name === recipient && message.recipient === username)
       );
       setLocalMessages(relevantMessages);
     };
@@ -84,14 +92,14 @@ const ChatPage = ({ socket, recipient, messages }) => {
     socket.on("messageResponse", handleNewMessage);
     socket.on("typingResponse", handleTyping);
     socket.on("messageHistory", handleMessageHistory);
-
+    
     return () => {
       socket.off("messageResponse", handleNewMessage);
       socket.off("typingResponse", handleTyping);
       socket.off("messageHistory", handleMessageHistory);
-    };
-  }, [socket, recipient]);
-
+      };
+      }, [socket, recipient]);
+      
   useEffect(() => {
     lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [localMessages]);

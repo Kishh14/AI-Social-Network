@@ -39,18 +39,10 @@ const Messenger = ({
       }));
     });
 
-    socket.on("messageHistory", (history) => {
-      const groupedMessages = history.reduce((acc, message) => {
-        if (!acc[message.name]) acc[message.name] = [];
-        acc[message.name].push(message);
-        return acc;
-      }, {});
-      setMessages(groupedMessages);
-    });
+    
 
     return () => {
       socket.off("messageResponse");
-      socket.off("messageHistory");
     };
   }, [socket, currentUser]);
 

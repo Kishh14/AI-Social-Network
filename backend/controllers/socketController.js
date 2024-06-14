@@ -1,9 +1,8 @@
-const { createRequire } = require('module');
-// const require = createRequire(import.meta.url);
 const socketIO = require('socket.io');
 const { v4: uuidv4 } = require('uuid');
 const User = require('../models/user');
-const Message = require("../models/message");
+const Message = require('../models/message');
+const Notification = require('../models/notifications');
 
 let users = {};
 let usernames = {};
@@ -22,15 +21,37 @@ const initSocket = (http) => {
         socket.on('userConnected', async (username) => {
             users[socket.id] = username;
             usernames[username] = socket.id;
-
+        
             await User.updateOne({ username }, { $set: { online: true } }, { upsert: true });
-
+        
             const userList = await User.find({}, 'username online').lean();
             io.emit('userList', userList);
-
-            const messageHistory = await Message.find({ recipient: username });
-            socket.emit('messageHistory', messageHistory);
+        
+                const messageHistory = await Message.find({
+                    $or: [
+                        { recipient: username },
+                        { name: username }
+                    ]
+                });
+        
+        
+                socket.emit('messageHistory', messageHistory);
+            
+        
+            // Retrieve and send stored notifications
+            try {
+                const storedNotifications = await Notification.find({ recipient: username });
+                storedNotifications.forEach(notification => {
+                    socket.emit('messageResponse', notification.message);
+                });
+        
+                // Clear stored notifications after sending
+                await Notification.deleteMany({ recipient: username });
+            } catch (error) {
+                console.error(`Error retrieving notifications for ${username}:`, error);
+            }
         });
+        
 
         socket.on('message', async (data) => {
             const senderSocketId = socket.id;
@@ -56,8 +77,11 @@ const initSocket = (http) => {
 
             if (recipientSocketId) {
                 io.to(recipientSocketId).emit('messageResponse', message);
+            } else {
+                // Store notification for offline user
+                await Notification.create({ recipient: data.recipient, message });
             }
-            socket.emit('messageResponse', message);
+            
         });
 
         socket.on('typing', (data) => {
@@ -83,5 +107,4 @@ const initSocket = (http) => {
         });
     });
 };
-
-module.exports = { initSocket };
+module.exports ={initSocket}
