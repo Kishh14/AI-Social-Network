@@ -167,14 +167,14 @@ function UserProfile() {
   }, [name, user]);
 
   const fetchUser = async (nme) => {
-    const userPosts = await axios.get(`${import.meta.env.VITE_API_USER_URL}/${details.data.user._id}/singleUserPosts`);
-      setPosts(userPosts.data.post);
     try {
       const details = await axios.get(
         `${import.meta.env.VITE_API_USER_URL}/${nme}/getByName`
       );
       setUserPageDetails(details.data.user);
       
+    const userPosts = await axios.get(`${import.meta.env.VITE_API_USER_URL}/${details.data.user._id}/singleUserPosts`);
+    setPosts(userPosts.data.post);
     } catch (error) {
       toast.error(error.response.data.message);
       navigate("/");
@@ -585,8 +585,7 @@ function UserProfile() {
                               className="text-white mr-2 cursor-pointer hover:text-gray-300"
                               size={22}
                               onClick={() => {
-                                toggleModal();
-                                setCurrentPostID(post._id);
+                                toggleModal(post._id);
                               }}
                             />
                             <FaShare
@@ -618,7 +617,7 @@ function UserProfile() {
                         <div className="flex justify-between px-2 mt-4 ml-2">
                           <div className="text-gray-200 ml-2">
                             {/* <p>{post.likes} Likes</p> */}
-                            <p>1000 Likes</p>
+                            <p>{post.likes.length} Likes</p>
                           </div>
 
                           <div className="flex items-center gap-1 ml-2">
@@ -630,8 +629,7 @@ function UserProfile() {
                               className="text-white mr-2 cursor-pointer hover:text-gray-300"
                               size={22}
                               onClick={() => {
-                                toggleModal();
-                                setCurrentPostID(post._id);
+                                toggleModal(post._id);
                               }}
                             />
                             <FaShare
