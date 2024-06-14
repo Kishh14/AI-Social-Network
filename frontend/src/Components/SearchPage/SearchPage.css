@@ -1,0 +1,30 @@
+.search-container {
+  transition-delay: .3s;
+}
+
+.custom-div {
+  /* background: linear-gradient(to bottom, rgb(143, 192, 208), rgb(191, 125, 213)); */
+  clip-path: polygon(0 0, 100% 0, 93% 50%, 100% 100%, 0 100%, 7% 50%);
+  background: rgba(120, 120, 120, 0.219);
+  backdrop-filter: blur(90px);
+}
+
+.custom-input {
+  width: 100%;
+  padding: 8px 16px;
+  border-radius: 0px 25px;
+  background: #fff;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.custom-input::placeholder {
+  font-size: 30px;
+  font-weight: lighter;
+  color: #000;
+  padding: 3px;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

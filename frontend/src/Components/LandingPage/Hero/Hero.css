@@ -1,0 +1,13 @@
+.bg-image {
+    background-image: url('../../../assets/eclipse.png'), url('../../../assets/rectangle1.png');
+    background-size: cover, cover; /* Adjust sizes if needed */
+    background-position: center,center;
+    background-repeat: no-repeat, no-repeat;
+  }
+  
+
+/* .bg-image1{
+    background-image: url('../../../assets/rectangle.png'); 
+    background-size: cover;
+    background-position: 10px 20px;
+} */

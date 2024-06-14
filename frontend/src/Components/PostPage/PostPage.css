@@ -1,0 +1,19 @@
+.icon-container .icon {
+  cursor: pointer;
+  font-size: 28px;
+
+  transition: 0.3s;
+}
+
+.icon-container .icon:hover {
+  color: rgba(252, 109, 252, 0.324) !important;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

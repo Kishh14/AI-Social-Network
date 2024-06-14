@@ -1,0 +1,86 @@
+/* .bg-image{
+  background-image: url('../../../assets/bg1.png'); 
+  background-size: cover;
+  background-position: center;
+} */
+
+.glassmorphism {
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+  }
+  .gallery{
+    display: flex;
+    gap: 4px;
+    
+  }
+  .card{
+    position: relative;
+    left: 0px;
+    padding: 8px;
+    overflow: hidden;
+    background-color: white;
+    transition:5s ease-in;
+    flex: 1 1 auto;
+  }
+  
+  .card:nth-child(1){
+    background-image: url("../../../assets/planet-06.png");
+    background-size: cover; 
+    background-position: center;
+   
+    
+  }
+  .card:nth-child(2){
+    background-image: url("../../../assets/planet-07.png");
+    background-size: cover; 
+    background-position: center;
+    
+  }
+  .card:nth-child(3){
+    background-image: url("../../../assets/planet-06.png");
+    background-size: cover; 
+    background-position: center;
+  } 
+   .card:nth-child(4){
+    background-image: url("../../../assets/planet-07.png");
+    background-size: cover; 
+    background-position: center;
+  }
+  .card:nth-child(5){
+    background-image: url("../../../assets/planet-06.png");
+    background-size: cover; 
+    background-position: center;
+  }
+
+  .card:hover{
+    width: 300px;
+    font-weight:bold ;
+    cursor: pointer;
+  }
+
+  .card .hide {
+    position: absolute;
+    bottom: 0;
+    padding: 8px;
+    display: flex;
+    justify-content: start;
+    width: 100%;
+    flex-direction: column;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 0 0 24px 24px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease-in, visibility 0.4s ease-in;
+  }
+  
+  .card:hover .hide {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .card:hover h3{
+    visibility: hidden;
+  }

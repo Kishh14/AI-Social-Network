@@ -1,0 +1,30 @@
+.create-post-container {
+  backdrop-filter: blur(18px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.AI-container {
+  backdrop-filter: blur(70px);
+  background: rgba(232, 232, 232, 0.078);
+}
+
+.ai-tools-nav-btn {
+  width: 105px;
+}
+
+.ai-tools-nav-btn:hover {
+  border: 1px solid rgba(255, 255, 255, 0.669);
+  /* border-radius: 0px; */
+  background: transparent;
+}
+
+.ai-tools-nav-btn:hover .btn-text {
+  display: none !important;
+}
+
+.ai-tools-nav-btn:hover::after {
+  content: "(★‿★)";
+  position: absolute;
+  top: 15%;
+  right: 24%;
+}

@@ -1,0 +1,36 @@
+.auth-page{
+    height: 100dvh;
+    background-image: linear-gradient(to bottom right,black,black,rgb(2, 91, 60));
+  }
+  .left-img{
+    width: 100%;
+  }
+  .auth-row{
+    height: 600px;
+    width: 1000px;
+    background-color: rgba(255, 255, 255, 0.063);
+  }
+  .toggle-btn{
+    /* background-color: white; */
+    background-image: linear-gradient(to bottom right, rgb(2, 91, 60),black);
+    border-radius: 50%;
+    color: white;
+  }
+  input{
+    border: 0;
+    box-shadow: none !important;
+  }
+  @media (max-width:1000px){
+    .auth-row{
+      height: 500px;
+      width: 800px;
+    }
+    .img-sec{
+      margin-top: 20px !important;
+    }
+  }
+  @media (max-width:768px){
+    .img-div{
+      display: none;
+    }
+  }

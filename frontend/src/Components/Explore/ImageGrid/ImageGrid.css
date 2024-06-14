@@ -1,0 +1,26 @@
+.grid {
+  display: grid;
+  backdrop-filter: blur(18px);
+  background: rgba(0, 0, 0, 0.32);
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, 1fr); /* Display three columns in one row */
+}
+
+.gap-4 > * {
+  margin-top: 0.5rem;
+}
+
+.image-container {
+  width: 100%;
+  height: 300px;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Add other styles as needed */

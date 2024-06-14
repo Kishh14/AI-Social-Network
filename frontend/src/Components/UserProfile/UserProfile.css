@@ -1,0 +1,54 @@
+.profile-page {
+  height: 100vh;
+  
+}
+.profile-visible {
+  min-height: 100vh !important;
+  overflow-y: scroll;
+  width: 100vw;
+}
+.profile-img {
+  height: 150px;
+  width: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.posts-row {
+  overflow-y: scroll;
+}
+
+.profile-image-container {
+  width: 400px;
+  height: 300px;
+
+  overflow: hidden;
+}
+
+.profile-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  transition: 0.9s;
+}
+
+.profile-image:hover {
+  scale: 1.1;
+}
+
+#image-container img:hover {
+  opacity: 0.3;
+}
+
+.post-glass-effect{
+  background: rgba(255, 255, 255, 0.171);
+  backdrop-filter: blur(10px);
+}
+
+/* Modal */
+
+.modal-content {
+  backdrop-filter: blur(45px) !important;
+  background-color: rgba(255, 255, 255, 0.116);
+  color: rgba(255, 255, 255, 0.806);
+}

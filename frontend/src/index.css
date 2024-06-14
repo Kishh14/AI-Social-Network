@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.body-image {
+  /* DO NOT REMOVE THESE COMMENTS 👇🏻 */
+  /* background: url("https://i.pinimg.com/236x/1e/66/10/1e66103f355a5ec5b34a5a2ff1996b7b.jpg"); */
+  /* background: url("https://i.pinimg.com/236x/38/83/d2/3883d23846a6925fb9f3f6f67aa7ebcd.jpg"); */
+  /* background: url("https://i.pinimg.com/236x/bb/41/67/bb416797d79cac1b174092c5344ad911.jpg"); */
+  /* background: url("https://i.pinimg.com/236x/ef/cf/b6/efcfb6c677247cdc42b0fea3d0778e21.jpg"); */
+  background: url("../public/Background.jpeg");
+  background-size: cover;
+  background-position: center;
+}
+
+.glass-effect {
+  /* background-color: rgba(0, 0, 0, 0.176); */
+  backdrop-filter: blur(45px) !important;
+  /* border-radius: 10px; */
+}
