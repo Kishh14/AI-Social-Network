@@ -4,6 +4,12 @@
   background-position: center;
 } */
 
+.bgimage {
+  background-image: url('../../../assets/bg1.png');
+  background-size: cover; /* Adjust sizes if needed */
+  background-position: center;
+  background-repeat: no-repeat;
+}
 .glassmorphism {
     background: rgba(255, 255, 255, 0.25);
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
@@ -83,4 +89,36 @@
 
   .card:hover h3{
     visibility: hidden;
+  }
+
+  @media (max-width: 1024px) {
+    .media {
+      flex-direction: column !important;
+      
+    }
+    .card{
+      min-width: 500px !important;
+      height: 100px !important;
+    }
+    .card:hover{
+      height: 300px !important;
+      font-weight:bold !important;
+      cursor: pointer !important;
+    }
+  }
+
+  @media (max-width: 768px)  {
+    .media {
+      flex-direction: column !important;
+      
+    }
+    .card{
+      min-width: 300px !important;
+      height: 100px !important;
+    }
+    .card:hover{
+      height: 300px !important;
+      font-weight:bold !important;
+      cursor: pointer !important;
+    }
   }

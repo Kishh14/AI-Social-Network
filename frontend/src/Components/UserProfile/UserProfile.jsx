@@ -28,19 +28,12 @@ function UserProfile() {
   const [userPageDetails, setUserPageDetails] = useState();
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
+  const [posts] = useState([1, 2, 3]);
+  const [currentPostId, setCurrentPostId] = useState();
 
   const user = useSelector((state) => state.user.user);
   const userId = useSelector((state) => state.user.user.details._id);
-  console.log(userId);
-  const { data: posts } = trpc.posts.getPosts.useQuery(
-    {
-      id: userId,
-    },
-    {
-      queryKey: ["posts"],
-    }
-  );
-  console.log(posts);
+
   const { name } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -293,8 +286,9 @@ function UserProfile() {
   return (
     <>
       {!loggedinUser ? (
-        <div className="profile-page d-flex justify-center align-middle overflow-x-hidden no-scrollbar">
+        <div className="profile-page justify-center align-middle overflow-x-hidden no-scrollbar">
           <div className="row g-0 shadow-lg profile-visible glass-effect no-scrollbar pb-4">
+            {/* User Details */}
             <div className="text-center mt-4">
               <div className="mx-auto my-3 relative" style={{ width: "11%" }}>
                 <img
@@ -332,34 +326,33 @@ function UserProfile() {
               </div>
               <p className="text-gray-400 mt-2">{userPageDetails?.bio}</p>
               <br />
-              <div className="row justify-center mt-3 posts-row no-scrollbar">
-                {posts?.map((post) => (
-                  <div
-                    className="col-md-3 mx-3 w-[400px] h-[400px]"
-                    key={post._id}
-                  >
-                    {post.image && (
-                      <div className="rounded-md h-full overflow-hidden glass-effect">
-                        {/* Post Image Section */}
-                        <div className="pl-4 pb-1 border-l border-gray-400">
-                          <p className="font-semibold text-white text-start ml-2">
-                            {post.content}
-                          </p>
-                          <img
-                            className="mt-3 rounded-md"
-                            src={post.image}
-                            alt="Post"
-                            style={{
-                              width: "400px",
-                              height: "300px",
-                              objectFit: "cover",
-                            }}
-                          />
-                        </div>
+            </div>
 
+            {/* User Posts */}
+            <div className="flex flex-wrap gap-5 mt-5 text-white ml-28">
+              {posts?.map((post) => {
+                return (
+                  <div
+                    key={post._id}
+                    className="w-[350px] h-[370px] post-glass-effect rounded"
+                  >
+                    {post.image ? (
+                      <>
+                        <img
+                          className="h-[75%] w-full rounded"
+                          src={"https://placeholder.co/400x400"}
+                          alt={post.author}
+                        />
+                        <div className="ml-4 px-2 mt-2 text-gray-100">
+                          {post.content}{" "}
+                        </div>
                         {/* Like, Comment, Share Section */}
-                        <div className="flex flex-col py-1 mt-1">
-                          <div className="flex items-center gap-1 ml-5">
+                        <div className="flex justify-between px-2 mt-3 ml-2">
+                          <div className="text-gray-300 ml-2 mb-1">
+                            {/* <p>{post.likes} Likes</p> */}
+                            <p>1000 Likes</p>
+                          </div>
+                          <div className="flex items-center gap-1 ml-2">
                             <FaHeart
                               className="text-white mr-2 hover:text-red-500 cursor-pointer"
                               size={22}
@@ -367,146 +360,74 @@ function UserProfile() {
                             <FaComment
                               className="text-white mr-2 cursor-pointer hover:text-gray-300"
                               size={22}
-                              onClick={toggleModal}
+                              onClick={() => {
+                                toggleModal();
+                                setCurrentPostID(post._id);
+                              }}
                             />
                             <FaShare
                               size={22}
                               className="text-white mr-2 hover:text-gray-300 cursor-pointer"
                             />
                           </div>
-
-                          <div className="text-gray-400 text-start ml-5">
-                            <p>
-                              {/* {likeCount} Likes by - {likedUserName} */}
-                              {1000} Likes by - {"likedUserName"}
-                            </p>
-                          </div>
-                          {isModalOpen && (
-                            <div
-                              ref={modalRef}
-                              className="py-4 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded shadow-lg w-1/2 overflow-y-auto overflow-x-hidden no-scrollbar"
-                              style={{
-                                backdropFilter: "blur(20px)",
-                                background: "rgba(999,999,999, 0.2)",
-                              }}
-                            >
-                              <div className="flex justify-between border-b border-gray-300 pb-3 px-8 items-center mb-4">
-                                <h2 className="text-xl">Comments</h2>
-                                <FaTimes
-                                  className="text-black text-xl cursor-pointer"
-                                  onClick={toggleModal}
-                                />
-                              </div>
-                              <div className="border-white-400 max-h-80 overflow-y-auto no-scrollbar">
-                                <CommentCard
-                                  userName="John Doe"
-                                  postCaption="This is a comment caption"
-                                />
-                                <CommentCard
-                                  userName="Jane Smith"
-                                  postCaption="This is another comment caption"
-                                />
-                                <CommentCard
-                                  userName="Alice Johnson"
-                                  postCaption="Yet another comment caption"
-                                />
-                                <CommentCard
-                                  userName="Bob Brown"
-                                  postCaption="And another one!"
-                                />
-                              </div>
-                            </div>
-                          )}
                         </div>
-                      </div>
-                    )}
-                    {post.video && <video src={post.video}></video>}
-                    <div className="rounded-md h-full overflow-hidden glass-effect">
-                      {/* Text Post Section */}
-                      <div className="pl-4 pb-1 pt-4 border-l border-gray-400">
+                      </>
+                    ) : post.video ? (
+                      <video
+                        className="h-[80%] w-full"
+                        src={post.video}
+                        alt={post.author}
+                        controls
+                        muted
+                      />
+                    ) : (
+                      <>
                         <p
-                          className="mt-3 rounded-md flex items-center text-white justify-center post-glass-effect pt-4"
-                          style={{
-                            width: "380px",
-                            height: "280px",
-                            objectFit: "cover",
-                          }}
+                          className="h-[80%] w-full rounded bg-gray-400 bg-opacity-30 flex items-center justify-center"
+                          style={{ fontSize: "20px" }}
                         >
-                          {post.content}
+                          {" "}
+                          {post.content}{" "}
                         </p>
-                      </div>
 
-                      {/* Like, Comment, Share Section */}
-                      <div className="flex flex-col py-1 mt-2">
-                        <div className="flex items-center gap-1 ml-5">
-                          <FaHeart
-                            className="text-white mr-2 hover:text-red-500 cursor-pointer"
-                            size={22}
-                          />
-                          <FaComment
-                            className="text-white mr-2 cursor-pointer hover:text-gray-300"
-                            size={22}
-                            onClick={toggleModal}
-                          />
-                          <FaShare
-                            size={22}
-                            className="text-white mr-2 hover:text-gray-300 cursor-pointer"
-                          />
-                        </div>
-
-                        <div className="text-gray-400 text-start ml-5">
-                          <p>
-                            {/* {likeCount} Likes by - {likedUserName} */}
-                            {1000} Likes by - {"likedUserName"}
-                          </p>
-                        </div>
-                        {isModalOpen && (
-                          <div
-                            ref={modalRef}
-                            className="py-4 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded shadow-lg w-1/2 overflow-y-auto overflow-x-hidden no-scrollbar"
-                            style={{
-                              backdropFilter: "blur(20px)",
-                              background: "rgba(999,999,999, 0.2)",
-                            }}
-                          >
-                            <div className="flex justify-between border-b border-gray-300 pb-3 px-8 items-center mb-4">
-                              <h2 className="text-xl">Comments</h2>
-                              <FaTimes
-                                className="text-black text-xl cursor-pointer"
-                                onClick={toggleModal}
-                              />
-                            </div>
-                            <div className="border-white-400 max-h-80 overflow-y-auto no-scrollbar">
-                              <CommentCard
-                                userName="John Doe"
-                                postCaption="This is a comment caption"
-                              />
-                              <CommentCard
-                                userName="Jane Smith"
-                                postCaption="This is another comment caption"
-                              />
-                              <CommentCard
-                                userName="Alice Johnson"
-                                postCaption="Yet another comment caption"
-                              />
-                              <CommentCard
-                                userName="Bob Brown"
-                                postCaption="And another one!"
-                              />
-                            </div>
+                        {/* Like, Comment, Share Section */}
+                        <div className="flex justify-between px-2 mt-4 ml-2">
+                          <div className="text-gray-200 ml-2">
+                            {/* <p>{post.likes} Likes</p> */}
+                            <p>1000 Likes</p>
                           </div>
-                        )}
-                      </div>
-                    </div>
+
+                          <div className="flex items-center gap-1 ml-2">
+                            <FaHeart
+                              className="text-white mr-2 hover:text-red-500 cursor-pointer"
+                              size={22}
+                            />
+                            <FaComment
+                              className="text-white mr-2 cursor-pointer hover:text-gray-300"
+                              size={22}
+                              onClick={() => {
+                                toggleModal();
+                                setCurrentPostID(post._id);
+                              }}
+                            />
+                            <FaShare
+                              size={22}
+                              className="text-white mr-2 hover:text-gray-300 cursor-pointer"
+                            />
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </div>
-                ))}
-              </div>
+                );
+              })}
             </div>
           </div>
         </div>
       ) : (
         <div className="profile-page d-flex justify-center align-middle">
           <div className="row g-0 shadow-lg profile-visible mt-5 mb-5 rounded">
+            {/* User Details */}
             <div className="text-center">
               <img
                 src={userPageDetails?.profileImg}
@@ -549,17 +470,101 @@ function UserProfile() {
               </div>
               <p className="text-secondary mt-2">{userPageDetails?.bio}</p>
               <br />
-              <hr
-                className="line bg-red-500"
-                style={{ border: "2px solid white" }}
-              />
-              <div className="row justify-around mt-3 posts-row no-scrollbar">
-                {Array.from({ length: 9 }).map((_, index) => (
-                  <div className="col-md-3 m-3" key={index}>
-                    <img src="https://imgv3.fotor.com/images/slider-image/A-clear-close-up-photo-of-a-woman.jpg" />
+            </div>
+
+            {/* User Posts */}
+            <div className="flex flex-wrap gap-5 mt-5 text-white ml-28">
+              {posts?.map((post) => {
+                return (
+                  <div
+                    key={post._id}
+                    className="w-[350px] h-[370px] post-glass-effect rounded"
+                  >
+                    {post.image ? (
+                      <>
+                        <img
+                          className="h-[75%] w-full rounded"
+                          src={"https://placeholder.co/400x400"}
+                          alt={post.author}
+                        />
+                        <div className="ml-4 px-2 mt-2 text-gray-100">
+                          {post.content}{" "}
+                        </div>
+                        {/* Like, Comment, Share Section */}
+                        <div className="flex justify-between px-2 mt-3 ml-2">
+                          <div className="text-gray-300 ml-2 mb-1">
+                            {/* <p>{post.likes} Likes</p> */}
+                            <p>1000 Likes</p>
+                          </div>
+                          <div className="flex items-center gap-1 ml-2">
+                            <FaHeart
+                              className="text-white mr-2 hover:text-red-500 cursor-pointer"
+                              size={22}
+                            />
+                            <FaComment
+                              className="text-white mr-2 cursor-pointer hover:text-gray-300"
+                              size={22}
+                              onClick={() => {
+                                toggleModal();
+                                setCurrentPostID(post._id);
+                              }}
+                            />
+                            <FaShare
+                              size={22}
+                              className="text-white mr-2 hover:text-gray-300 cursor-pointer"
+                            />
+                          </div>
+                        </div>
+                      </>
+                    ) : post.video ? (
+                      <video
+                        className="h-[80%] w-full"
+                        src={post.video}
+                        alt={post.author}
+                        controls
+                        muted
+                      />
+                    ) : (
+                      <>
+                        <p
+                          className="h-[80%] w-full rounded bg-gray-400 bg-opacity-30 flex items-center justify-center"
+                          style={{ fontSize: "20px" }}
+                        >
+                          {" "}
+                          {post.content}{" "}
+                        </p>
+
+                        {/* Like, Comment, Share Section */}
+                        <div className="flex justify-between px-2 mt-4 ml-2">
+                          <div className="text-gray-200 ml-2">
+                            {/* <p>{post.likes} Likes</p> */}
+                            <p>1000 Likes</p>
+                          </div>
+
+                          <div className="flex items-center gap-1 ml-2">
+                            <FaHeart
+                              className="text-white mr-2 hover:text-red-500 cursor-pointer"
+                              size={22}
+                            />
+                            <FaComment
+                              className="text-white mr-2 cursor-pointer hover:text-gray-300"
+                              size={22}
+                              onClick={() => {
+                                toggleModal();
+                                setCurrentPostID(post._id);
+                              }}
+                            />
+                            <FaShare
+                              size={22}
+                              className="text-white mr-2 hover:text-gray-300 cursor-pointer"
+                            />
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </div>
-                ))}
-              </div>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -828,6 +833,45 @@ function UserProfile() {
           )}
         </Modal.Body>
       </Modal>
+
+      {/* Comment Modal */}
+      {isModalOpen && (
+        <div
+          ref={modalRef}
+          className="py-4 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded shadow-lg w-1/2 overflow-y-auto overflow-x-hidden no-scrollbar"
+          style={{
+            backdropFilter: "blur(20px)",
+            background: "rgba(999,999,999, 0.2)",
+          }}
+        >
+          <div className="flex justify-between border-b border-gray-300 pb-3 px-8 items-center mb-4">
+            <h2 className="text-xl text-white">Comments</h2>
+            <FaTimes
+              className="text-white text-xl cursor-pointer"
+              onClick={toggleModal}
+            />
+          </div>
+          <div className="border-white-400 max-h-80 overflow-y-auto no-scrollbar">
+            {/* Actual Logic to show post */}
+            {/* {posts.filter((post) => {
+              if (post._id === currentPostId) {
+                return (
+                  <CommentCard
+                    userName={"John Doe"}
+                    postCaption={post.content}
+                  />
+                );
+              }
+            })} */}
+
+            {/* Dummy (just to see how will it look) */}
+            <CommentCard
+              userName="John Doe"
+              postCaption="This is a comment caption"
+            />
+          </div>
+        </div>
+      )}
     </>
   );
 }

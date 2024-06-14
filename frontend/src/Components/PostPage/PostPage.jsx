@@ -4,7 +4,7 @@ import Notification from "./Notification/Notification";
 import FollowSuggestion from "./FollowingSuggession/FollowingSuggession";
 import "./PostPage.css";
 import NewPost from "./NewPost/NewPost";
-function PostPage({socket}) {
+function PostPage({ socket }) {
   return (
     <>
       <main className="w-full flex" style={{ height: "100vh" }}>
@@ -55,7 +55,7 @@ function PostPage({socket}) {
           </div>
         </div>
         <div className="w-1/4 glass-effect">
-          <div className="border-b overflow-y-scroll h-[300px] border-gray-400 pt-8">
+          <div className="border-b overflow-y-scroll h-[350px] border-gray-400 no-scrollbar">
             <Notification socket={socket} />
           </div>
 

@@ -1,20 +1,49 @@
+import { useState } from "react";
 import Carousel from "./Carousel/Carousel";
-import ImageGrid from "./ImageGrid/ImageGrid";
 import "./Explore.css";
-import { trpc } from "../../lib/trpc";
+
 function Explore() {
-  const { data: posts } = trpc.posts.explorePosts.useQuery();
+  const [posts] = useState([
+    { image: "https://placeholder.co/400x400" },
+    { image: "https://placeholder.co/400x400" },
+    { image: "https://placeholder.co/400x400" },
+  ]);
+
+  const handlePostClick = () => {
+    // Redirect the user to the respective user's profile
+  };
+
   return (
     <div className="w-full h-screen overflow-hidden px-4">
       <div className="mx-auto h-full overflow-y-scroll no-scrollbar">
         <Carousel />
-        {posts?.map((e) =>
-          e.image ? (
-            <img key={e._id} src={e.image} />
-          ) : (
-            <video key={e._id} src={e.video} />
-          )
-        )}
+
+        {/* Post Grid */}
+        <div className="flex gap-5 glass-effect rounded flex-wrap justify-center my-4 py-8">
+          {posts?.map((post) => {
+            return (
+              <div key={post._id} className="w-[400px] h-[300px]">
+                {post.image && (
+                  <img
+                    src={post.image}
+                    alt={`Image ${post._id}`}
+                    className="image rounded-md w-full h-full"
+                    onClick={handlePostClick}
+                  />
+                )}
+                {post.video && (
+                  <video
+                    className="image rounded-md w-full h-full"
+                    src={post.video}
+                    muted
+                    controls
+                  />
+                )}
+              </div>
+            );
+          })}
+        </div>
+
         {/* <ImageGrid
           imageUrls={[
             "https://source.unsplash.com/random/6",

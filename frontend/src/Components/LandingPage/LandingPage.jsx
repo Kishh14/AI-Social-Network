@@ -10,7 +10,7 @@ import Header from "./Header/Header";
 
 const LandingPage = () => {
   return (
-    <div className="w-full h-screen overflow-hidden px-4 bg-black bgIMAGE ">
+    <div className="w-full h-screen overflow-hidden px-4 bg-black  ">
       <div className="mx-auto h-full overflow-y-scroll no-scrollbar ">
         <Header/>
         <Hero />

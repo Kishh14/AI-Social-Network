@@ -13,20 +13,38 @@ function Home() {
   const [searchResults, setSearchResults] = useState([]);
   const [showSearchSidebar, setShowSearchSidebar] = useState(false);
   const [userList, setUserList] = useState({});
-  const [chatter, setChatter] = useState([]);
-  const [accounts, setAccounts] = useState([]);
+  const [chatter, setChatter] = useState(() => {
+    const storedChatter = sessionStorage.getItem("chatter");
+    return storedChatter ? JSON.parse(storedChatter) : [];
+  });
+  const [accounts, setAccounts] = useState(JSON.parse(sessionStorage.getItem("accounts")) || []);
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearch, setShowSearch] = useState(false);
   const username = useMemo(() => sessionStorage.getItem("username"), []);
   const [chatterRendered, setChatterRendered] = useState(false);
   const socket = useMemo(() => socketIO.connect("http://localhost:3000"), []);
   const currentUser = sessionStorage.getItem("username");
+
+  // Inside Home component
+useEffect(() => {
+  console.log("Chatter state initialized:", chatter);
+}, []); // Run only once on mount
+
+useEffect(() => {
+  console.log("Chatter state updated:", chatter);
+}, [chatter]); // Log whenever chatter state changes
+
+
+  useEffect(() => {
+    sessionStorage.setItem("chatter", JSON.stringify(chatter));
+    sessionStorage.setItem("accounts", JSON.stringify(accounts));
+  }, [chatter, accounts]);
   useEffect(() => {
     console.log("Setting up Home component...");
 
     socket.on("messageResponse", (message) => {
       if (message.recipient === currentUser) {
-        setChatterRendered(true);
+        setChatterRendered(false);
       }
       if (message.sender !== username) {
         setChatter((prevChatter) => {

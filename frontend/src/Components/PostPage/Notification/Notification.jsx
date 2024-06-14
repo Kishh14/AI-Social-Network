@@ -1,29 +1,14 @@
+import { MdNotificationsNone } from "react-icons/md";
 import React, { useEffect, useState } from "react";
-import { MdOutlineCircleNotifications } from "react-icons/md";
 import { IoMdClose } from "react-icons/io";
 import "./Notification.css"; // Import your CSS file for styles
 
 const Notification = ({ socket }) => {
-  const isValidJson = (jsonString) => {
-    try {
-      const data = JSON.parse(jsonString);
-      if (typeof data === "object" && data !== null) {
-        return data;
-      }
-    } catch (error) {
-      console.error("Invalid JSON in sessionStorage");
-    }
-    return null;
-  };
-  const [notifications, setNotifications] = useState(
-    isValidJson(sessionStorage.getItem("notifications")) || []
-  );
+  const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     const handleMessageResponse = (message) => {
-      const updatedNotifications = [...notifications, message];
-      setNotifications(updatedNotifications);
-      sessionStorage.setItem("notifications", JSON.stringify(updatedNotifications));
+      setNotifications((prevNotifications) => [...prevNotifications, message]);
     };
 
     socket.on("messageResponse", handleMessageResponse);
@@ -31,24 +16,34 @@ const Notification = ({ socket }) => {
     return () => {
       socket.off("messageResponse", handleMessageResponse);
     };
-  }, [notifications, socket]);
+  }, [socket]);
 
   const deleteNotification = (index) => {
-    const updatedNotifications = [...notifications];
-    updatedNotifications.splice(index, 1);
-    setNotifications(updatedNotifications);
-    sessionStorage.setItem("notifications", JSON.stringify(updatedNotifications));
+    setNotifications((prevNotifications) =>
+      prevNotifications.filter((_, i) => i !== index)
+    );
   };
 
   const deleteAllNotifications = () => {
     setNotifications([]);
-    sessionStorage.removeItem("notifications");
   };
 
   return (
-    <div className="p-2 mb-3 ml-4">
-      <div className="flex items-center mb-3 cursor-pointer ml-4">
-        <MdOutlineCircleNotifications className="text-white mr-2 sticky top-0" size={26} />
+    <div className="pb-2 mb-3 relative">
+      <div
+        className={`flex pr-3 pt-3 z-20 pl-6 sticky top-0 ${
+          notifications.length > 4 ? "bg-gray-900" : ""
+        } items-center mb-3 pb-3 cursor-pointer`}
+      >
+        <div className="rounded-circle border-2 mr-4">
+          {notifications.length > 0 ? (
+            <span className="badge" style={{ fontSize: "13px" }}>
+              {notifications.length}
+            </span>
+          ) : (
+            <MdNotificationsNone className="text-white" size={24} />
+          )}
+        </div>
         <p className="text-white" style={{ fontSize: "20px" }}>
           Notifications
         </p>
@@ -57,36 +52,37 @@ const Notification = ({ socket }) => {
             className="ml-auto text-white px-2 py-1 rounded"
             onClick={deleteAllNotifications}
           >
-            <IoMdClose className="text-red-300" />
+            <IoMdClose className="text-white" />
           </button>
         )}
       </div>
       {notifications.length > 0 ? (
         <>
-          <div className="relative bottom-[55px] left-[170px] bg-blue-500 w-10 h-10 p-2 text-center rounded-full">
-            <p className="text-white">{notifications.length}</p>
-          </div>
-          <div className="ml-5 text-white mb-2">
+          <div className="text-white mb-2 mx-3">
             {notifications.map((notification, i) => (
               <div
                 key={i}
-                className="bg-yellow-300 text-black rounded-md p-2 mt-2 flex justify-between items-center"
+                className="noti-glass-effect rounded-md p-2 mt-2 flex justify-between items-center"
               >
-                <p>
-                  A new message from <strong>{notification.name}</strong>: {notification.text}
+                <p className="overflow-x-scroll no-scrollbar mr-3">
+                  A new message from{" "}
+                  <strong className="text-blue-300">{notification.name}</strong>
+                  : {notification.text}
                 </p>
                 <button
-                  className=" text-white px-2 py-1 rounded"
+                  className="text-white px-2 py-1 rounded"
                   onClick={() => deleteNotification(i)}
                 >
-                  <IoMdClose className="text-red-500" />
+                  <IoMdClose className="text-red-100" />
                 </button>
               </div>
             ))}
           </div>
         </>
       ) : (
-        <p className="ml-5 text-white mb-2">No new notifications</p>
+        <p className="ml-5 text-white mb-2 text-center mt-5">
+          No new notifications
+        </p>
       )}
     </div>
   );

@@ -144,7 +144,7 @@ const Messenger = ({
           </div>
           <div className="overflow-y-auto mt-[100px] h-[100vh]">
             {renderAccounts()}
-            {chatterRendered && chatter.length > 0 ? (
+            {!chatterRendered && chatter.length > 0 ? (
               <div>{renderChatter()}</div>
             ) : (
               <p className="relative top-[250px] text-center text-gray-400"></p>
@@ -174,7 +174,6 @@ const Messenger = ({
               />
               <h2 className="text-2xl font-bold mb-2">Your Messages</h2>
               <p>Send private photos and messages to a friend or group.</p>
-              {chatter.length}
             </div>
           )}
         </div>
