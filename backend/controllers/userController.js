@@ -62,7 +62,6 @@ const LoginUser = async (req, res) => {
 
         return res.status(200).json({ message: "User Logged In Successfully!", token, user: userInfo });
     } catch (error) {
-        console.log(error);
         return res.status(400).json({ message: "Error Occurred!", error });
     }
 };
@@ -127,7 +126,6 @@ const followUser = async (req, res) => {
 
         return res.status(200).json({ message: "You followed the account", updateFollower, updateFollowing });
     } catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Error Occurred!", error });
     }
 };
@@ -342,7 +340,6 @@ const createComment = async (req, res) => {
 
         return res.status(201).json({ message: "Comment created!", comment: commentCreated });
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: "Server error", error });
     }
 };
@@ -404,7 +401,7 @@ const uploadImagePost = async (req, res) => {
         });
         const postCreated = await newPost.save();
 
-        
+
         // Delete the file from the local filesystem
         fs.unlink(image, (err) => {
             if (err) {
@@ -416,7 +413,6 @@ const uploadImagePost = async (req, res) => {
 
         return res.status(200).json({ message: "Image uploaded successfully!", post: postCreated });
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: "Error Occurred!", error });
     }
 }
@@ -508,6 +504,72 @@ const uploadAIvideoPost = async (req, res) => {
     }
 }
 
+const deletePost = async (req, res) => {
+    const postId = req.params.id;
+    const userId = req.user._id;
+
+    try {
+        const post = await Post.findById(postId);
+        if (!post) {
+            return res.status(404).json({ message: "Post not found" });
+        }
+
+        if (post.author !== userId) {
+            return res.status(403).json({ message: "Not authorized to delete this post" });
+        }
+
+        await Post.findByIdAndDelete(postId);
+
+        return res.status(200).json({ message: "Post deleted successfully" });
+    } catch (error) {
+        return res.status(500).json({ message: "Error occurred while deleting the post", error });
+    }
+};
+
+const getAllPosts = async(req,res)=> {
+    try {
+        const allPosts = await Post.find();
+        return res.status(200).json({message:"Posts found!",posts: allPosts});
+    } catch (error) {
+        return res.status(400).json({message:"Error",error});
+    }
+}
+
+const getSingleUserPosts = async(req,res)=> {
+    const userId = req.params.id;
+
+    try {
+        const findUser = await UserModel.findById(userId);
+        if(!findUser){
+            return res.status(404).json({message:"User not found"});
+        }
+
+        const posts = await Post.find({author:userId});
+        if (posts.length === 0) {
+            return res.status(404).json({ message: "No posts found" });
+        }
+
+        return res.status(200).json({message:"Posts Found!",post:posts});
+    } catch (error) {
+        return res.status(400).json({message:"Error",error});
+    }
+}
+
+const getSinglePost = async(req,res)=> {
+    const postId = req.params.id;
+
+    try {
+        const findPost = await Post.findById(postId);
+        if (!findPost) {
+            return res.status(400).json({message:"Post not found!"});
+        }
+
+        return res.status(200).json({message:"Post found!",post:findPost});
+    } catch (error) {
+        return res.status(400).json({message:"Error",error});
+    }
+}
+
 module.exports = {
     AddUser,
     LoginUser,
@@ -526,5 +588,9 @@ module.exports = {
     uploadImagePost,
     uploadAIimagePost,
     uploadTextPost,
-    uploadAIvideoPost
+    uploadAIvideoPost,
+    deletePost,
+    getAllPosts,
+    getSinglePost,
+    getSingleUserPosts
 };

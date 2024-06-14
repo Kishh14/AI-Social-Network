@@ -15,14 +15,18 @@ const {
   uploadImagePost,
   uploadAIimagePost,
   uploadTextPost,
-  uploadAIvideoPost
+  uploadAIvideoPost,
+  deletePost,
+  getAllPosts,
+  getSingleUserPosts,
+  getSinglePost
 } = require("../controllers/userController");
 const  upload  = require("../middlewares/uploadImage");
 const authenticate = require("../middlewares/protectedRoute");
 
 const router = Router();
 
-router.get('/:name', SingleUserSearchbyName);
+router.get('/:name/getByName', SingleUserSearchbyName);
 router.get('/:id/getbyid', SingleUserSearchbyId);
 router.put('/:id/follow', authenticate, followUser);
 router.put('/:id/unfollow', authenticate, unfollowUser);
@@ -38,5 +42,9 @@ router.post('/uploadImagePost',authenticate,upload.single('image'),uploadImagePo
 router.post('/uploadAIimagePost',authenticate,uploadAIimagePost);
 router.post('/uploadTextPost',authenticate,uploadTextPost);
 router.post('/uploadAIvideoPost',authenticate,uploadAIvideoPost); 
+router.delete('/:id/deletePost',authenticate,deletePost); 
+router.get('/allPosts',getAllPosts);
+router.get('/:id/singleUserPosts',getSingleUserPosts);
+router.get('/:id/singlePost',getSinglePost);
 
 module.exports = router;

@@ -152,7 +152,7 @@ function UserProfile() {
   const fetchUser = async (nme) => {
     try {
       const details = await axios.get(
-        `${import.meta.env.VITE_API_USER_URL}/${nme}`
+        `${import.meta.env.VITE_API_USER_URL}/${nme}/getByName`
       );
       setUserPageDetails(details.data.user);
     } catch (error) {
