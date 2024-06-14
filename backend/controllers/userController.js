@@ -570,6 +570,23 @@ const getSinglePost = async(req,res)=> {
     }
 }
 
+const getAllCommentsOfSinglePost = async (req, res) => {
+    const  postId  = req.params.id;
+  
+    try {
+      const findPost = await Post.findById(postId);
+      if (!findPost) {
+        return res.status(400).json({ message: "Post not found!" });
+      }
+  
+      const findComments = await Comment.find({ postId: postId }); 
+      return res.status(200).json({ message: "Comments found", comments: findComments });
+    } catch (error) {
+      return res.status(400).json({ message: "Error", error });
+    }
+  };
+  
+
 module.exports = {
     AddUser,
     LoginUser,
@@ -592,5 +609,6 @@ module.exports = {
     deletePost,
     getAllPosts,
     getSinglePost,
-    getSingleUserPosts
+    getSingleUserPosts,
+    getAllCommentsOfSinglePost
 };

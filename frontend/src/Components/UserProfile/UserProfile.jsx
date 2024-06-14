@@ -14,7 +14,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Modal } from "react-bootstrap";
-import { trpc } from "../../lib/trpc";
 import {
   logout_success,
   update_username,
@@ -28,7 +27,7 @@ function UserProfile() {
   const [userPageDetails, setUserPageDetails] = useState();
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
-  const [posts] = useState([1, 2, 3]);
+  const [posts, setPosts] = useState();
   const [currentPostId, setCurrentPostId] = useState();
 
   const user = useSelector((state) => state.user.user);
@@ -56,16 +55,41 @@ function UserProfile() {
 
   const [showFollowing, setShowFollowing] = useState(false);
   const [showFollowers, setShowFollowers] = useState(false);
+  const [currentComments, setCurrentComments] = useState();
 
   // Comment Modal for each post
   const [isModalOpen, setIsModalOpen] = useState(false);
   const modalRef = useClickAway(() => {
     console.log("Clicked!");
     setIsModalOpen(false);
+    setCurrentAuthors();
   });
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
+
+  const [currentAuthors, setCurrentAuthors] = useState();
+
+  const toggleModal = async (postId) => {
+    
+  
+    try {
+      const getComments = await axios.get(`${import.meta.env.VITE_API_USER_URL}/getSinglePostComments/${postId}`);
+      const comments = getComments.data.comments;
+      setCurrentComments(comments);
+  
+       // Fetch author details for each comment asynchronously
+      const authorDetailsPromises = comments.map(async (comment) => {
+        const getAuthor = await axios.get(`${import.meta.env.VITE_API_USER_URL}/${comment.author}/getbyid`);
+        return getAuthor.data.user;
+      });
+
+      // Resolve all author details promises
+      const authors = await Promise.all(authorDetailsPromises);
+      setCurrentAuthors(authors);
+      setIsModalOpen(!isModalOpen);
+    } catch (error) {
+      console.error('Error fetching comments or author details:', error);
+    }
   };
+  
 
   const handleShowfollowing = async () => {
     setShowFollowing(true);
@@ -137,17 +161,20 @@ function UserProfile() {
       console.log(username, "<- username");
       fetchUser(username);
     } else {
-      setLoggedinUser(false);
+      setLoggedinUser(true);
       fetchUser(name);
     }
   }, [name, user]);
 
   const fetchUser = async (nme) => {
+    const userPosts = await axios.get(`${import.meta.env.VITE_API_USER_URL}/${details.data.user._id}/singleUserPosts`);
+      setPosts(userPosts.data.post);
     try {
       const details = await axios.get(
         `${import.meta.env.VITE_API_USER_URL}/${nme}/getByName`
       );
       setUserPageDetails(details.data.user);
+      
     } catch (error) {
       toast.error(error.response.data.message);
       navigate("/");
@@ -283,6 +310,44 @@ function UserProfile() {
       setChangingPassword(false);
     }
   };
+
+  const handleLike = async (postId) => {
+    try {
+      const payload = { postId }
+      const like = await axios.post(`${import.meta.env.VITE_API_USER_URL}/liked`, payload, reqConfig);
+      if (name === user.details.username || name === undefined) {
+        // setLoggedinUser(true);
+        const username = user.details.username;
+        fetchUser(username);
+      } else {
+        setLoggedinUser(false);
+        fetchUser(name);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleDislike = async (postId) => {
+    try {
+      const payload = { postId };
+      const unlike = await axios.delete(`${import.meta.env.VITE_API_USER_URL}/unlike`, {
+        ...reqConfig,
+        data: payload,
+      });
+      if (name === user.details.username || name === undefined) {
+        const username = user.details.username;
+        fetchUser(username);
+      } else {
+        setLoggedinUser(false);
+        fetchUser(name);
+      }
+    } catch (error) {
+      console.error('Error disliking the post:', error.response ? error.response.data : error.message);
+    }
+  };
+
+
   return (
     <>
       {!loggedinUser ? (
@@ -340,7 +405,7 @@ function UserProfile() {
                       <>
                         <img
                           className="h-[75%] w-full rounded"
-                          src={"https://placeholder.co/400x400"}
+                          src={post.image}
                           alt={post.author}
                         />
                         <div className="ml-4 px-2 mt-2 text-gray-100">
@@ -350,19 +415,26 @@ function UserProfile() {
                         <div className="flex justify-between px-2 mt-3 ml-2">
                           <div className="text-gray-300 ml-2 mb-1">
                             {/* <p>{post.likes} Likes</p> */}
-                            <p>1000 Likes</p>
+                            <p>{post.likes.length} Likes</p>
                           </div>
                           <div className="flex items-center gap-1 ml-2">
-                            <FaHeart
-                              className="text-white mr-2 hover:text-red-500 cursor-pointer"
-                              size={22}
-                            />
+                            {post.likes.includes(user.details._id) ?
+                              <FaHeart
+                                className="mr-2 text-red-500 cursor-pointer"
+                                size={22}
+                                onClick={() => handleDislike(post._id)}
+                              /> :
+                              <FaHeart
+                                className="text-white mr-2 cursor-pointer"
+                                size={22}
+                                onClick={() => handleLike(post._id)}
+                              />
+                            }
                             <FaComment
                               className="text-white mr-2 cursor-pointer hover:text-gray-300"
                               size={22}
                               onClick={() => {
-                                toggleModal();
-                                setCurrentPostID(post._id);
+                                toggleModal(post._id);
                               }}
                             />
                             <FaShare
@@ -484,7 +556,7 @@ function UserProfile() {
                       <>
                         <img
                           className="h-[75%] w-full rounded"
-                          src={"https://placeholder.co/400x400"}
+                          src={post.image}
                           alt={post.author}
                         />
                         <div className="ml-4 px-2 mt-2 text-gray-100">
@@ -494,13 +566,21 @@ function UserProfile() {
                         <div className="flex justify-between px-2 mt-3 ml-2">
                           <div className="text-gray-300 ml-2 mb-1">
                             {/* <p>{post.likes} Likes</p> */}
-                            <p>1000 Likes</p>
+                            <p>{post.likes.length} Likes</p>
                           </div>
                           <div className="flex items-center gap-1 ml-2">
-                            <FaHeart
-                              className="text-white mr-2 hover:text-red-500 cursor-pointer"
-                              size={22}
-                            />
+                          {post.likes.includes(user.details._id) ?
+                              <FaHeart
+                                className="mr-2 text-red-500 cursor-pointer"
+                                size={22}
+                                onClick={() => handleDislike(post._id)}
+                              /> :
+                              <FaHeart
+                                className="text-white mr-2 cursor-pointer"
+                                size={22}
+                                onClick={() => handleLike(post._id)}
+                              />
+                            }
                             <FaComment
                               className="text-white mr-2 cursor-pointer hover:text-gray-300"
                               size={22}
@@ -865,10 +945,21 @@ function UserProfile() {
             })} */}
 
             {/* Dummy (just to see how will it look) */}
-            <CommentCard
-              userName="John Doe"
-              postCaption="This is a comment caption"
-            />
+            {!currentComments || currentComments.length === 0 ?
+              <p className="text-light text-center">No Comments!</p>
+              :
+              currentComments.map((comment, index) => {
+                const authorNow = currentAuthors.find(author => author._id === comment.author)
+                return (
+                  <CommentCard
+                    key={index}
+                    image={authorNow.profileImg}
+                    userName={authorNow ? authorNow.username : 'Unknown Author'}
+                    postCaption={comment.content}
+                  />
+              )}
+              )
+            }
           </div>
         </div>
       )}
