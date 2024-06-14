@@ -16,7 +16,7 @@ function CreatePost() {
   const [videoPrompt, setVideoPrompt] = useState("Elon musk riding horse");
   const [video, setVideo] = useState("");
   const [currentTool, setCurrentTool] = useState("ImageGen");
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
 
   const handleClose = () => {
     setShow(false);
@@ -30,7 +30,6 @@ function CreatePost() {
     },
   });
   const userId = useSelector((state) => state.user.user.details._id);
-  const savePost = () => {};
 
   const [media, setMedia] = useState(null);
   const [mediaPre, setMediaPrev] = useState(null);
@@ -59,18 +58,23 @@ function CreatePost() {
     try {
       const formData = new FormData();
       formData.append("image", media);
-      formData.append("content", "hello");
-      await axios.post(
-        `${import.meta.env.VITE_API_USER_URL}/uploadImagePost`,
-        formData,
-        reqConfig
-      );
-      toast.success("Post uploaded!");
+      formData.append("content", caption);
+      // await axios.post(
+      //   `${import.meta.env.VITE_API_USER_URL}/uploadImagePost`,
+      //   formData,
+      //   reqConfig
+      // );
+      setImageUrl(mediaPre);
+      // toast.success("Post uploaded!");
       handleClose();
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong!");
     }
+  };
+
+  const createPost = () => {
+    // Code to store the post in the DB
   };
 
   return (
@@ -128,9 +132,10 @@ function CreatePost() {
                 />
               </div>
             </div>
+
             <div className="py-3">
               <button
-                onClick={savePost}
+                onClick={createPost}
                 className="btn px-5 text-center bg-purple-600 text-white hover:bg-purple-700 hover:shadow-lg hover:border hover:border-gray-400 mx-auto block mb-3"
               >
                 Post Now
@@ -149,6 +154,9 @@ function CreatePost() {
           <Modal show={show} onHide={handleClose} centered>
             <Modal.Body>
               <section className="">
+                <p className="text-2xl border-b pb-3 mb-4">
+                  Upload Image to Post
+                </p>
                 <input
                   type="file"
                   name="file"
@@ -167,10 +175,10 @@ function CreatePost() {
 
                 <button
                   onClick={() => uploadImage()}
-                  className="btn px-5 text-center bg-purple-600 mx-auto block mt-4"
+                  className="btn px-5 w-[60%] text-white text-center bg-purple-600 mx-auto block mt-4"
                   type="submit"
                 >
-                  Post
+                  Add
                 </button>
               </section>
             </Modal.Body>

@@ -77,14 +77,14 @@ function PostPreview({ imageUrl, caption, video, currentTool, setCaption }) {
           </div>
 
           {/* Change the post type according to the tool */}
-          {!video ? (
+          {currentTool === "ImageGen" ? (
             <img
               className="mt-3 rounded-md"
               src={imageUrl}
               alt="Post"
               style={{ width: "400px", height: "350px", objectFit: "cover" }}
             />
-          ) : (
+          ) : currentTool === "VideoGen" ? (
             <video
               src={video}
               controls
@@ -92,7 +92,14 @@ function PostPreview({ imageUrl, caption, video, currentTool, setCaption }) {
               className="mt-3 rounded-md"
               style={{ width: "400px", height: "320px", objectFit: "cover" }}
             />
-          )}
+          ) : currentTool === "MemeGen" ? (
+            <img
+              className="mt-3 rounded-md"
+              src={imageUrl}
+              alt="Post"
+              style={{ width: "400px", height: "350px", objectFit: "cover" }}
+            />
+          ) : null}
         </div>
 
         {/* Like, Comment, Share Section */}
