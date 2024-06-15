@@ -10,6 +10,9 @@ import user from "../../../assets/user.png";
 import CommentCard from "../CommentCard/CommentCard";
 import "./PostCard.css";
 import { useClickAway } from "../../../hooks/useClickAway";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const PostCard = ({
   userName,
   time,
@@ -17,6 +20,10 @@ const PostCard = ({
   postImage,
   likeCount,
   likedUserName,
+  userImage,
+  authorId,
+  postId,
+  post
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const modalRef = useClickAway(() => {
@@ -27,13 +34,67 @@ const PostCard = ({
     setIsModalOpen(!isModalOpen);
   };
 
+  const [like,setLike] = useState(likeCount);
+  const [postLike,setPostLike] = useState();
+  const navigate=useNavigate()
+
+  const user = useSelector(state => state.user.user);
+
+  const reqConfig = {
+    headers: {
+      Authorization:`Bearer ${user.token}`
+    }
+  }
+
+  const handleLike = async (postId) => {
+    try {
+      const payload = { postId };
+      const like = await axios.post(
+        `${import.meta.env.VITE_API_USER_URL}/liked`,
+        payload,
+        reqConfig
+      );
+      navigate('/PostPage')
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDislike = async (postId) => {
+    try {
+      const payload = { postId };
+      const unlike = await axios.delete(
+        `${import.meta.env.VITE_API_USER_URL}/unlike`,
+        {
+          ...reqConfig,
+          data: payload,
+        }
+      );
+    } catch (error) {
+      console.error(
+        "Error disliking the post:",
+        error.response ? error.response.data : error.message
+      );
+    }
+  };
+
+  const fetchPost =async()=>{
+    try {
+      const resp = await axios.get(`${import.meta.env.VITE_API_USER_URL}/${postId}/singlePost`);
+      setPostLike(resp.data.post.like)
+      setLike(resp.data.post.likes.length)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <div className="rounded-md overflow-hidden mx-3 glass-effect my-3">
       {/* User Profile Section */}
       <div className="flex items-center p-4">
         <img
           className="w-12 h-12 rounded-full mr-4"
-          src={user}
+          src={userImage}
           alt="User Profile"
         />
         <div>
@@ -41,7 +102,7 @@ const PostCard = ({
         </div>
         <div className="ml-auto items-center flex justify-between gap-4">
           <p className="text-xs text-white mr-2">{time} ago</p>
-          <FaEllipsisH className="text-white" />
+          {authorId === user.details._id ? <FaEllipsisH className="text-white" /> : ''}
         </div>
       </div>
 
@@ -59,10 +120,19 @@ const PostCard = ({
       {/* Like, Comment, Share Section */}
       <div className="flex flex-col p-4">
         <div className="flex items-center gap-1 mb-1 ml-3">
-          <FaHeart
-            className="text-white mr-2 hover:text-red-500 cursor-pointer"
-            size={22}
-          />
+          {post?.likes.includes(pos=>pos===authorId) ? (
+            <FaHeart
+              className="mr-2 text-red-500 cursor-pointer"
+              size={22}
+              onClick={() => handleDislike(postId)}
+            />
+          ) : (
+            <FaHeart
+              className="text-white mr-2 cursor-pointer"
+              size={22}
+              onClick={() => handleLike(postId)}
+            />
+          )}
           <FaComment
             className="text-white mr-2 cursor-pointer hover:text-gray-300"
             size={22}
@@ -76,7 +146,7 @@ const PostCard = ({
 
         <div className="text-gray-400 ml-3">
           <p>
-            {likeCount} Likes by - {likedUserName}
+            {like} Likes
           </p>
         </div>
         {isModalOpen && (
