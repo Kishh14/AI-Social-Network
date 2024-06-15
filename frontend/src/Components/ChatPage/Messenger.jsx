@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { FaRegEdit } from "react-icons/fa";
 import ChatPage from "./ChatPage";
 import Chatter from "./Chatter";
+import { FaRegEdit } from "react-icons/fa";
 import { FiSend } from "react-icons/fi";
 import { FaRegCircle } from "react-icons/fa";
-
 const Messenger = ({
   accounts,
   performSearch,
@@ -18,26 +16,20 @@ const Messenger = ({
   chatterRendered,
   currentUser
 }) => {
-  const [messages, setMessages] = useState({});
-  const [username, setUsername] = useState(
-    sessionStorage.getItem("username") || ""
-  );
   const [selectedRecipient, setSelectedRecipient] = useState(null);
-  const [chatKey, setChatKey] = useState(0); // Key prop for ChatPage component
+  const [chatKey, setChatKey] = useState(0);
 
   useEffect(() => {
-    socket.on("messageResponse", (message) => {
-      setMessages((prevMessages) => ({
-        ...prevMessages,
-        [message.sender]: [...(prevMessages[message.sender] || []), message],
-      }));
-      setChatKey((prevKey) => prevKey + 1); // Update key to force re-render
-    });
+    const handleMessageResponse = () => {
+      setChatKey((prevKey) => prevKey + 1);
+    };
+
+    socket.on("messageResponse", handleMessageResponse);
 
     return () => {
-      socket.off("messageResponse");
+      socket.off("messageResponse", handleMessageResponse);
     };
-  }, [socket, currentUser]);
+  }, [socket]);
 
   const handleMessageContainer = (recipient) => {
     setSelectedRecipient(recipient);
@@ -95,7 +87,7 @@ const Messenger = ({
       <div className="flex w-full h-[95vh] max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden">
         <div className="w-1/3 h-[100vh] bg-gray-100 p-4 relative">
           <div className="flex justify-between items-center mb-4">
-            <span className="text-2xl font-bold">{username}</span>
+            <span className="text-2xl font-bold">{currentUser}</span>
             {showSearch ? (
               <FaRegEdit
                 className="text-2xl cursor-pointer"
@@ -136,13 +128,29 @@ const Messenger = ({
           </div>
         </div>
         <div className="w-2/3 flex flex-col items-center justify-center p-8 bg-gray-50">
-          {selectedRecipient && (
+          {selectedRecipient ? (
             <ChatPage
-              key={chatKey} // Update key prop for re-rendering
+              key={chatKey}
               socket={socket}
               recipient={selectedRecipient}
-              messages={messages[selectedRecipient] || []}
             />
+          ):(
+            <div className="text-center">
+              <FaRegCircle
+                className="text-gray-300 flex m-auto"
+                style={{
+                  fontSize: "75px",
+                }}
+              />
+              <FiSend
+                className="flex m-auto text-gray-700 translate-y-[-160%]"
+                style={{
+                  fontSize: "32px",
+                }}
+              />
+              <h2 className="text-2xl font-bold mb-2">Your Messages</h2>
+              <p>Send private messages or video chat wtih a friend.</p>
+            </div>
           )}
         </div>
       </div>

@@ -28,7 +28,7 @@ const Authentication = () => {
       const resp = await axios.post(`${import.meta.env.VITE_API_AUTH_URL}/login`, loginUser);
       toast.success(resp.data.message);
       dispatch(login_success({ token: resp.data.token, details: resp.data.user }));
-      navigate('/');
+      navigate('/PostPage');
       sessionStorage.setItem("username",resp.data.user.username);
       sessionStorage.setItem("email",resp.data.user.email);
     } catch (error) {

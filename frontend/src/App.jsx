@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/client";
 import React, { useMemo, useState, useEffect } from "react";
+import axios from "axios";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import socketIO from "socket.io-client";
 import Messenger from "./Components/ChatPage/Messenger";
@@ -16,6 +17,7 @@ import PostPage from "./Components/PostPage/PostPage";
 import CreatePost from "./Components/CreatePost/CreatePost";
 
 function App() {
+  const [isLandingPage, setIsLandingPage] = useState(true);
   const [showSearchSidebar, setShowSearchSidebar] = useState(false);
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
@@ -28,6 +30,11 @@ function App() {
     })
   );
 
+  useEffect(() => {
+    const page = window.location.pathname === "/";
+    setIsLandingPage(page);
+  }, []);
+
   const socket = useMemo(() => socketIO.connect("http://localhost:4000"), []);
   const [currentPage, setCurrentPage] = useState("PostPage");
   const [searchResults, setSearchResults] = useState([]);
@@ -36,22 +43,26 @@ function App() {
     const storedChatter = sessionStorage.getItem("chatter");
     return storedChatter ? JSON.parse(storedChatter) : [];
   });
-  const [accounts, setAccounts] = useState(JSON.parse(sessionStorage.getItem("accounts")) || []);
+  const [accounts, setAccounts] = useState(
+    JSON.parse(sessionStorage.getItem("accounts")) || []
+  );
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearch, setShowSearch] = useState(false);
   const username = useMemo(() => sessionStorage.getItem("username"), []);
   const [chatterRendered, setChatterRendered] = useState(false);
   const currentUser = sessionStorage.getItem("username");
 
+  // const location = useLocation();
+  // const isLandingPage = location.pathname === "/LandingPage";
+
   // Inside Home component
-useEffect(() => {
-  console.log("Chatter state initialized:", chatter);
-}, []); // Run only once on mount
+  useEffect(() => {
+    console.log("Chatter state initialized:", chatter);
+  }, []); // Run only once on mount
 
-useEffect(() => {
-  console.log("Chatter state updated:", chatter);
-}, [chatter]); // Log whenever chatter state changes
-
+  useEffect(() => {
+    console.log("Chatter state updated:", chatter);
+  }, [chatter]); // Log whenever chatter state changes
 
   useEffect(() => {
     sessionStorage.setItem("chatter", JSON.stringify(chatter));
@@ -124,14 +135,16 @@ useEffect(() => {
       <QueryClientProvider client={queryClient}>
         <Router>
           <main className="flex overflow-x-hidden no-scrollbar">
-            <Header
-              showSearchSidebar={showSearchSidebar}
-              setShowSearchSidebar={setShowSearchSidebar}
-            />
+            {!isLandingPage && (
+              <Header
+                showSearchSidebar={showSearchSidebar}
+                setShowSearchSidebar={setShowSearchSidebar}
+              />
+            )}
             <SearchPage showSearchSidebar={showSearchSidebar} />
             <div className="App flex-1 overflow-x-hidden">
               <Routes>
-                <Route path="/" element={<PostPage socket={socket} />} />
+                <Route path="/" element={<LandingPage />} />
                 <Route path="/explore" element={<Explore />} />
                 <Route path="/createPost" element={<CreatePost />} />
                 <Route
@@ -155,7 +168,10 @@ useEffect(() => {
                 <Route path="/profile/:name" element={<UserProfile />} />
                 <Route path="/videoGen" element={<VideoGen />} />
                 <Route path="/authentication" element={<Authentication />} />
-                <Route path="/LandingPage" element={<LandingPage />} />
+                <Route
+                  path="/PostPage"
+                  element={<PostPage socket={socket} setIsLandingPage={setIsLandingPage} />}
+                />
               </Routes>
             </div>
           </main>
