@@ -161,6 +161,6 @@ const Replicate = require("replicate");
 
   require('./dbconnect');
   server.listen(process.env.PORT, () => {
-    console.log("Server is listening!");
+    console.log(`Server is listening on ${process.env.PORT}!`);
   });
 

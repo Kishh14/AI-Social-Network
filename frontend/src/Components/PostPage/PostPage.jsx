@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PostCard from "./postCard/PostCard";
 import Notification from "./Notification/Notification";
 import FollowSuggestion from "./FollowingSuggession/FollowingSuggession";
 import "./PostPage.css";
 import NewPost from "./NewPost/NewPost";
-function PostPage({ socket }) {
+function PostPage({ socket, setIsLandingPage }) {
+
+  useEffect(() => {
+    const page = window.location.pathname === "/";
+    setIsLandingPage(page);
+  }, []);
+
   return (
     <>
       <main className="w-full flex" style={{ height: "100vh" }}>

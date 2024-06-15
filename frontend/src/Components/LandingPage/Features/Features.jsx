@@ -3,14 +3,14 @@ import "./Features.css";
 
 const Features = () => {
   return (
-    <div className="p-4 m-4 flex flex-col  justify-center items-center overflow-hidden bgimage">
+    <div className="p-4 flex flex-col  justify-center items-center overflow-hidden BGImage mb-4">
       <p className="text-white text-6xl text-center">
         Wanna know, what makes us stand apart?
       </p>
       <p className="text-white text-xl m-2 mt-5">Click on each card</p>
       <div className="flex  gap-2 mt-[50px]  min-h-[50h]  media">
         <div className="card min-w-[170px] h-[500px] justify-center items-center rounded-[24px]">
-          <h3 className="font-semibold sm:text-[26px] text-[18px] text-white absolute z-0 lg:bottom-20 lg:rotate-[-90deg] lg:origin-[0,0] mb-5 " style={{ whiteSpace: 'nowrap' }}>
+          <h3 className="txt font-semibold sm:text-[26px] text-[18px] text-white absolute z-0 lg:bottom-20 lg:rotate-[-90deg] lg:origin-[0,0] mb-5 " style={{ whiteSpace: 'nowrap' }}>
             Image Generation
           </h3>
          
@@ -22,7 +22,7 @@ const Features = () => {
           </div>
         </div>
         <div className="card min-w-[170px] h-[500px] justify-center items-center rounded-[24px]">
-          <h3 className="font-semibold sm:text-[26px] text-[18px] text-white absolute z-0 lg:bottom-20 lg:rotate-[-90deg] lg:origin-[0,0] mb-5" style={{ whiteSpace: 'nowrap' }}>
+          <h3 className="txt font-semibold sm:text-[26px] text-[18px] text-white absolute z-0 lg:bottom-20 lg:rotate-[-90deg] lg:origin-[0,0] mb-5" style={{ whiteSpace: 'nowrap' }}>
             Video Generation
           </h3>
          
@@ -34,7 +34,7 @@ const Features = () => {
           </div>
         </div>
         <div className="card min-w-[170px] h-[500px] justify-center items-center rounded-[24px]">
-          <h3 className="font-semibold sm:text-[26px] text-[18px] text-white absolute z-0 lg:bottom-20 lg:rotate-[-90deg] lg:origin-[0,0] mb-5" style={{ whiteSpace: 'nowrap' }}>
+          <h3 className="txt font-semibold sm:text-[26px] text-[18px] text-white absolute z-0 lg:bottom-20 lg:rotate-[-90deg] lg:origin-[0,0] mb-5" style={{ whiteSpace: 'nowrap' }}>
             Caption Generation
           </h3>
          
@@ -47,7 +47,7 @@ const Features = () => {
           </div>
         </div>
         <div className="card min-w-[170px] h-[500px] justify-center items-center rounded-[24px]">
-          <h3 className="font-semibold sm:text-[26px] text-[18px] text-white absolute z-0 lg:bottom-20 lg:rotate-[-90deg] lg:origin-[0,0] mb-5" style={{ whiteSpace: 'nowrap' }}>
+          <h3 className=" txt font-semibold sm:text-[26px] text-[18px] text-white absolute z-0 lg:bottom-20 lg:rotate-[-90deg] lg:origin-[0,0] mb-5" style={{ whiteSpace: 'nowrap' }}>
             Meme Generation
           </h3>
          
@@ -59,7 +59,7 @@ const Features = () => {
           </div>
         </div>
         <div className="card min-w-[170px] h-[500px] justify-center items-center rounded-[24px]">
-          <h3 className="font-semibold sm:text-[26px] text-[18px] text-white absolute z-0 lg:bottom-20 lg:rotate-[-90deg] lg:origin-[0,0] mb-5" style={{ whiteSpace: 'nowrap' }}>
+          <h3 className="txt font-semibold sm:text-[26px] text-[18px] text-white absolute z-0 lg:bottom-20 lg:rotate-[-90deg] lg:origin-[0,0] mb-5" style={{ whiteSpace: 'nowrap' }}>
             And many more...
           </h3>
          
