@@ -13,6 +13,7 @@ import { useClickAway } from "../../../hooks/useClickAway";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 const PostCard = ({
   userName,
   time,
@@ -30,9 +31,41 @@ const PostCard = ({
     console.log("Clicked!");
     setIsModalOpen(false);
   });
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
+
+  const [currentComments,setCurrentComments]=useState()
+  const [currentAuthors, setCurrentAuthors] = useState();
+  const [comment,setComment] = useState();
+
+  const toggleModal = async(postId) => {
+    try {
+      await fetchComments(postId)
+      setIsModalOpen(!isModalOpen);
+      
+    } catch (error) {
+      console.error("Error fetching comments or author details:", error);
+    } finally {
+      setIsModalOpen(!isModalOpen);
+    }
   };
+
+  const fetchComments = async(postId)=>{
+    const getComments = await axios.get(
+      `${import.meta.env.VITE_API_USER_URL}/getSinglePostComments/${postId}`
+    );
+    const comments = getComments.data.comments;
+    setCurrentComments(comments);
+    
+    // Fetch author details for each comment asynchronously
+    const authorDetailsPromises = comments.map(async (comment) => {
+      const getAuthor = await axios.get(
+        `${import.meta.env.VITE_API_USER_URL}/${comment.author}/getbyid`
+      );
+      return getAuthor.data.user;
+    });
+
+    const authors = await Promise.all(authorDetailsPromises);
+    setCurrentAuthors(authors);
+  }
 
   const [like,setLike] = useState(likeCount);
   const [postLike,setPostLike] = useState();
@@ -78,13 +111,24 @@ const PostCard = ({
     }
   };
 
-  const fetchPost =async()=>{
+  // const fetchPost =async()=>{
+  //   try {
+  //     const resp = await axios.get(`${import.meta.env.VITE_API_USER_URL}/${postId}/singlePost`);
+  //     setPostLike(resp.data.post.like)
+  //     setLike(resp.data.post.likes.length)
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+
+  const handleComment = async()=>{
     try {
-      const resp = await axios.get(`${import.meta.env.VITE_API_USER_URL}/${postId}/singlePost`);
-      setPostLike(resp.data.post.like)
-      setLike(resp.data.post.likes.length)
+      const resp = await axios.post(`${import.meta.env.VITE_API_USER_URL}/createComment`,{postId,content:comment},reqConfig);
+      setComment('');
+      setIsModalOpen(!isModalOpen);
+      toast.success(resp.data.message)
     } catch (error) {
-      console.log(error);
+      toast.error(error.response.data.message);
     }
   }
 
@@ -98,7 +142,7 @@ const PostCard = ({
           alt="User Profile"
         />
         <div>
-          <p className="font-semibold text-white">{userName}</p>
+          <p className="font-semibold text-white cursor-pointer" onClick={()=>{navigate(`/profile/${userName}`)}}>{userName}</p>
         </div>
         <div className="ml-auto items-center flex justify-between gap-4">
           <p className="text-xs text-white mr-2">{time} ago</p>
@@ -136,7 +180,7 @@ const PostCard = ({
           <FaComment
             className="text-white mr-2 cursor-pointer hover:text-gray-300"
             size={22}
-            onClick={toggleModal}
+            onClick={()=>toggleModal(post._id)}
           />
           <FaShare
             size={22}
@@ -171,33 +215,32 @@ const PostCard = ({
                 type="text"
                 className="form-control bg-gray-300 w-[70%]"
                 placeholder="Say Something..."
+                value={comment}
+                onChange={(e)=>setComment(e.target.value)}
               />
-              <button className="btn bg-gray-200">
+              <button className="btn bg-gray-200" onClick={()=>handleComment()}>
                 <IoMdSend size={26} />
               </button>
             </div>
 
             <div className="border-white-400 max-h-80 overflow-y-auto no-scrollbar">
-              <CommentCard
-                userName="John Doe"
-                postCaption="This is a comment caption"
-                image={"https://placeholder.co/300x300"}
-              />
-              <CommentCard
-                userName="Jane Smith"
-                postCaption="This is another comment caption"
-                image={"https://placeholder.co/300x300"}
-              />
-              <CommentCard
-                userName="Alice Johnson"
-                postCaption="Yet another comment caption"
-                image={"https://placeholder.co/300x300"}
-              />
-              <CommentCard
-                userName="Bob Brown"
-                postCaption="And another one!"
-                image={"https://placeholder.co/300x300"}
-              />
+            {!currentComments || currentComments.length === 0 ? (
+              <p className="text-light text-center">No Comments!</p>
+            ) : (
+              currentComments.map((comment, index) => {
+                const authorNow = currentAuthors.find(
+                  (author) => author._id === comment.author
+                );
+                return (
+                  <CommentCard
+                    key={index}
+                    image={authorNow.profileImg}
+                    userName={authorNow ? authorNow.username : "Unknown Author"}
+                    postCaption={comment.content}
+                  />
+                );
+              })
+            )}
               {/* Add more CommentCard components as needed */}
             </div>
           </div>

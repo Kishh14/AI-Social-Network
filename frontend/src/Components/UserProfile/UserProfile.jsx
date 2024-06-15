@@ -516,7 +516,7 @@ function UserProfile() {
                         <div className="flex justify-between px-2 mt-4 ml-2">
                           <div className="text-gray-200 ml-2">
                             {/* <p>{post.likes} Likes</p> */}
-                            <p>1000 Likes</p>
+                            <p>{post.likes.length} Likes</p>
                           </div>
 
                           <div className="flex items-center gap-1 ml-2">
@@ -528,8 +528,7 @@ function UserProfile() {
                               className="text-white mr-2 cursor-pointer hover:text-gray-300"
                               size={22}
                               onClick={() => {
-                                toggleModal();
-                                setCurrentPostId(post._id);
+                                toggleModal(post._id);
                               }}
                             />
                             {/* <FaShare
