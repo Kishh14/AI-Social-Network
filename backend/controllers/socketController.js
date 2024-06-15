@@ -10,7 +10,7 @@ let usernames = {};
 const initSocket = (http) => {
     const io = socketIO(http, {
         cors: {
-            origin: "http://localhost:5173",
+            origin: "*",
             methods: ["GET", "POST"]
         }
     });
