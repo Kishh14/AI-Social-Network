@@ -44,7 +44,7 @@ const ChatFooter = ({ socket, handleSendMessage, recipient }) => {
     e.preventDefault();
     const username = sessionStorage.getItem("username");
     if (message.trim() && username) {
-      handleSendMessage({ text: message, recipient });
+      handleSendMessage({ text: message, name:username, recipient:recipient});
       setMessage("");
       setIsTyping(false);
       socket.emit("typing", { typing: "", recipient });
@@ -69,7 +69,6 @@ const ChatFooter = ({ socket, handleSendMessage, recipient }) => {
         />
         <button
           className="sendBtn ml-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-          type="submit"
         >
           SEND
         </button>
