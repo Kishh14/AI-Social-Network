@@ -1,12 +1,11 @@
 import React from "react";
-import user from "../../../assets/user.png";
-const CommentCard = ({ userName, postCaption }) => {
+const CommentCard = ({ userName, postCaption,image }) => {
   return (
     <div className="mb-7 px-8">
       <div className="flex items-center">
         <img
           className="w-10 h-10 rounded-full mr-4"
-          src={user}
+          src={image}
           alt="User Profile"
         />
         <p className="font-semibold text-white">{userName}</p>

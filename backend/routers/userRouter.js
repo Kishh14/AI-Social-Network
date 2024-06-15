@@ -19,7 +19,8 @@ const {
   deletePost,
   getAllPosts,
   getSingleUserPosts,
-  getSinglePost
+  getSinglePost,
+  getAllCommentsOfSinglePost
 } = require("../controllers/userController");
 const  upload  = require("../middlewares/uploadImage");
 const authenticate = require("../middlewares/protectedRoute");
@@ -34,7 +35,7 @@ router.put('/editUsername', authenticate, editUsername);
 router.put('/editBio', authenticate, editBio);
 router.put('/editPassword', authenticate, editPassword);
 router.put('/:id/uploadImage', authenticate, upload.single('image'), uploadImage);
-router.post('/like',authenticate,handleLike);
+router.post('/liked',authenticate,handleLike);
 router.delete('/unlike',authenticate,handleUnlike);
 router.post('/createComment',authenticate,createComment);
 router.delete('/deleteComment',authenticate,deleteComment);
@@ -46,5 +47,6 @@ router.delete('/:id/deletePost',authenticate,deletePost);
 router.get('/allPosts',getAllPosts);
 router.get('/:id/singleUserPosts',getSingleUserPosts);
 router.get('/:id/singlePost',getSinglePost);
+router.get('/getSinglePostComments/:id',getAllCommentsOfSinglePost);
 
 module.exports = router;

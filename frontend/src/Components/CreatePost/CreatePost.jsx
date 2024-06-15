@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { Modal } from "react-bootstrap";
+import MemeGen from "./MemeGen/MemeGen";
 
 function CreatePost() {
   const [imageUrl, setImageUrl] = useState("http://placeholder.co/400x300");
@@ -80,7 +81,7 @@ function CreatePost() {
   return (
     <>
       <section className="create-post-container w-screen h-screen">
-        <div className="h-full overflow-y-auto px-4 pt-3">
+        <div className="h-full overflow-y-auto px-4 pt-3 no-scrollbar">
           {/* AI Tools Navigation */}
           <div className="flex gap-3 mb-3">
             <button
@@ -106,7 +107,7 @@ function CreatePost() {
           <div className="AI-container rounded-lg shadow-lg px-5 pt-4 mb-4">
             <div className="flex justify-between">
               {/* AI Tools */}
-              <div className="mt-3">
+              <div className="mt-2 w-full">
                 {currentTool === "ImageGen" ? (
                   <ImageGen imageUrl={imageUrl} setImageUrl={setImageUrl} />
                 ) : currentTool === "VideoGen" ? (
@@ -117,20 +118,22 @@ function CreatePost() {
                     setVideo={setVideo}
                   />
                 ) : (
-                  <span className="text-green-400 text-2xl">Coming Soon!!</span>
+                  <MemeGen />
                 )}
               </div>
 
               {/* Post Preview (on the right) */}
-              <div className="flex flex-col items-center">
-                <PostPreview
-                  imageUrl={imageUrl}
-                  caption={caption}
-                  video={video}
-                  setCaption={setCaption}
-                  currentTool={currentTool}
-                />
-              </div>
+              {currentTool !== "MemeGen" ? (
+                <div className="flex flex-col items-center">
+                  <PostPreview
+                    imageUrl={imageUrl}
+                    caption={caption}
+                    video={video}
+                    setCaption={setCaption}
+                    currentTool={currentTool}
+                  />
+                </div>
+              ) : null}
             </div>
 
             <div className="py-3">
