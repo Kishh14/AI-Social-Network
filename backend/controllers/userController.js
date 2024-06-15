@@ -526,14 +526,15 @@ const deletePost = async (req, res) => {
     }
 };
 
-const getAllPosts = async(req,res)=> {
+const getAllPosts = async (req, res) => {
     try {
-        const allPosts = await Post.find();
-        return res.status(200).json({message:"Posts found!",posts: allPosts});
+      const allPosts = await Post.find().sort({ createdAt: -1 });
+      return res.status(200).json({ message: "Posts found!", posts: allPosts });
     } catch (error) {
-        return res.status(400).json({message:"Error",error});
+      return res.status(400).json({ message: "Error", error });
     }
-}
+  };
+  
 
 const getSingleUserPosts = async(req,res)=> {
     const userId = req.params.id;
