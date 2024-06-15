@@ -23,15 +23,17 @@ const Messenger = ({
     sessionStorage.getItem("username") || ""
   );
   const [selectedRecipient, setSelectedRecipient] = useState(null);
-  const [chatKey, setChatKey] = useState(0); 
+  const [chatKey, setChatKey] = useState(0); // Key prop for ChatPage component
 
   useEffect(() => {
     socket.on("messageResponse", (message) => {
       setMessages((prevMessages) => ({
-        ...prevMessages
+        ...prevMessages,
+        [message.sender]: [...(prevMessages[message.sender] || []), message],
       }));
-      setChatKey((prevKey) => prevKey + 1); 
+      setChatKey((prevKey) => prevKey + 1); // Update key to force re-render
     });
+
     return () => {
       socket.off("messageResponse");
     };
