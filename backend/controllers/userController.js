@@ -583,6 +583,36 @@ const getAllCommentsOfSinglePost = async (req, res) => {
     }
   };
   
+  const getAllUsers=async(req,res)=>{
+    try {
+        const findAllUsers = await UserModel.find();
+
+        return res.status(200).json({message:"Users found",allUsers:findAllUsers});
+    } catch (error) {
+        return res.status(400).json({message:"Error",error});
+    }
+  }
+
+  const SingleUserSearch = async (req, res) => {
+    const name = req.params.name;
+    let projection = { password: 0 };
+
+    try {
+        const getUser = await UserModel.findOne(
+            { username: { $regex: new RegExp(`^${name}`, 'i') } }, 
+            projection
+        );
+
+        if (!getUser) {
+            return res.status(404).json({ message: "User not found!" });
+        }
+
+        return res.status(200).json({ message: "User found!", user: getUser });
+    } catch (error) {
+        console.error('Error searching for user:', error);
+        return res.status(500).json({ message: "Error occurred!", error: error.message });
+    }
+};
 
 module.exports = {
     AddUser,
@@ -607,5 +637,7 @@ module.exports = {
     getAllPosts,
     getSinglePost,
     getSingleUserPosts,
-    getAllCommentsOfSinglePost
+    getAllCommentsOfSinglePost,
+    getAllUsers,
+    SingleUserSearch
 };
