@@ -1,12 +1,11 @@
-import React, { createRef, useEffect, useState } from "react";
-import { getAllMems } from "./MemeApi";
+import React, { createRef, useState } from "react";
 import Cards from "./MemeCard/Cards";
 import Draggable from "react-draggable";
 import { exportComponentAsJPEG } from "react-component-export-image";
 
-function MemeGen() {
-  const [data, setData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
+function MemeGen({ data, filteredData, setFilteredData }) {
+  // const [data, setData] = useState([]);
+  // const [filteredData, setFilteredData] = useState([]);
   const [searchVal, setSearchVal] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [textVal, setTextVal] = useState("Double click to edit");
@@ -18,10 +17,10 @@ function MemeGen() {
     setCount(count + 1);
   };
 
-  useEffect(() => {
-    getAllMems().then((memes) => setData(memes.data.memes));
-    setFilteredData(data);
-  }, []);
+  // useEffect(() => {
+  //   getAllMems().then((memes) => setData(memes.data.memes));
+  //   setFilteredData(data);
+  // }, [filteredData]);
 
   const handleSearch = () => {
     const filteredMemes = data.filter((meme) =>
@@ -48,18 +47,23 @@ function MemeGen() {
           />
         </div>
         <div className="glass-effect p-4 flex flex-col gap-4">
-          {filteredData?.length > 0 ? (
-            filteredData?.map((item) => (
-              <Cards
-                key={item.name}
-                img={item.url}
-                name={item.name}
-                setEditMemeImg={setEditMemeImg}
-              />
-            ))
-          ) : (
-            <span>Loading...</span>
-          )}
+          {searchVal
+            ? filteredData.map((item) => (
+                <Cards
+                  key={item.name}
+                  img={item.url}
+                  name={item.name}
+                  setEditMemeImg={setEditMemeImg}
+                />
+              ))
+            : data.map((item) => (
+                <Cards
+                  key={item.name}
+                  img={item.url}
+                  name={item.name}
+                  setEditMemeImg={setEditMemeImg}
+                />
+              ))}
         </div>
       </div>
 
@@ -84,7 +88,7 @@ function MemeGen() {
                       type="text"
                       autoFocus
                       onClick={(e) => setTextVal(e.target.value)}
-                    //   onDoubleClick={(e) => setEditMode(false)}
+                      //   onDoubleClick={(e) => setEditMode(false)}
                       className="form-control text-black w-[40%] block border-none outline-none"
                     />
                   ) : (
