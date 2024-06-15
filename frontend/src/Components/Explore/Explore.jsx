@@ -1,16 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {useNavigate} from 'react-router-dom'
 import Carousel from "./Carousel/Carousel";
 import "./Explore.css";
+import axios from 'axios'
 
 function Explore() {
-  const [posts] = useState([
-    { image: "https://placeholder.co/400x400" },
-    { image: "https://placeholder.co/400x400" },
-    { image: "https://placeholder.co/400x400" },
-  ]);
+  const [posts,setPosts] = useState([]);
+  const navigate = useNavigate();
 
-  const handlePostClick = () => {
-    // Redirect the user to the respective user's profile
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const resp = await axios.get(`${import.meta.env.VITE_API_USER_URL}/allPosts`);
+        let topPost = resp.data.posts;
+        topPost = topPost.filter(post=>post.isMedia===true&&post.video===null)
+        setPosts(topPost);
+      } catch (error) {
+        console.error("Failed to fetch posts:", error);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
+  const handlePostClick = async(authorId) => {
+    const author = await axios.get(`${import.meta.env.VITE_API_USER_URL}/${authorId}/getbyid`);
+    navigate(`/profile/${author.data.user.username}`);
   };
 
   return (
@@ -28,7 +43,7 @@ function Explore() {
                     src={post.image}
                     alt={`Image ${post._id}`}
                     className="image rounded-md w-full h-full"
-                    onClick={handlePostClick}
+                    onClick={()=>handlePostClick(post.author)}
                   />
                 )}
                 {post.video && (

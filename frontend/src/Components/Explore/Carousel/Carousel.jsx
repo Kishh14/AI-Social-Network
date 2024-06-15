@@ -1,13 +1,27 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./Carousel.css";
-import image from '../../../assets/post.jpg';
+import axios from 'axios';
 
 const Carousel = () => {
   const carouselRef = useRef(null);
+  const [top, setTop] = useState([]);
 
   useEffect(() => {
-    const carousel = carouselRef.current;
+    const fetchPosts = async () => {
+      try {
+        const resp = await axios.get(`${import.meta.env.VITE_API_USER_URL}/allPosts`);
+        let topPost = resp.data.posts;
+        topPost = topPost.filter(post=>post.isMedia===true&&post.video===null)
+        setTop(topPost);
+      } catch (error) {
+        console.error("Failed to fetch posts:", error);
+      }
+    };
 
+    fetchPosts();
+  }, []);
+
+  useEffect(() => {
     const handleMouseEnterImage = (event) => {
       const image = event.target;
       image.style.transform = "scale(1.2)"; // Scale up the image on hover
@@ -31,46 +45,20 @@ const Carousel = () => {
         image.removeEventListener("mouseleave", handleMouseLeaveImage);
       });
     };
-  }, []);
+  }, [top]);
 
   return (
     <div className="carousel-container w-auto p-4 mt-3">
       <div className="carousel" ref={carouselRef}>
-        <div className="carousel__face">
-          <img
-            src="https://i.pinimg.com/564x/33/e1/cc/33e1cc97ea4cf9f119e5873def4658a7.jpg"
-            alt="1"
-            className="carousel__image w-full h-full object-cover"
-          />
-        </div>
-        <div className="carousel__face">
-          <img
-            src=""
-            alt="2"
-            className="carousel__image w-full h-full object-cover"
-          />
-        </div>
-        <div className="carousel__face">
-          <img
-            src={image}
-            alt="3"
-            className="carousel__image w-full h-full object-cover"
-          />
-        </div>
-        <div className="carousel__face">
-          <img
-            src="https://i.pinimg.com/564x/33/e1/cc/33e1cc97ea4cf9f119e5873def4658a7.jpg"
-            alt="4"
-            className="carousel__image w-full h-full object-cover"
-          />
-        </div>
-        <div className="carousel__face">
-          <img
-            src="https://i.pinimg.com/564x/33/e1/cc/33e1cc97ea4cf9f119e5873def4658a7.jpg"
-            alt="5"
-            className="carousel__image w-full h-full object-cover"
-          />
-        </div>
+        {top.slice(0, 5).map((post, index) => (
+          <div className="carousel__face" key={index}>
+            <img
+              src={post?.image}
+              alt={`Post ${index}`}
+              className="carousel__image w-full h-full object-cover"
+            />
+          </div>
+        ))}
       </div>
     </div>
   );
