@@ -409,6 +409,19 @@ function UserProfile() {
     }
   };
 
+  const handleDelete=async(postId)=>{
+    try {
+      const userConfirmed = confirm("Are you sure wanna delete? (btw, hiding somethin? 🌚😁)");
+      if(userConfirmed){
+       const deletePost = await axios.delete(`${import.meta.env.VITE_API_USER_URL}/${postId}/deletePost`,reqConfig);
+       toast.success("Post deleted!");
+       window.location.reload();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
       {!loggedinUser ? (
@@ -516,11 +529,7 @@ function UserProfile() {
                               <MdDelete
                                 className="text-white mr-2 cursor-pointer hover:text-gray-300"
                                 size={23}
-                                onClick={() => {
-                                  confirm(
-                                    "Are you sure wanna delete? (btw, hiding somethin? 🌚😁)"
-                                  );
-                                }}
+                                onClick={()=>handleDelete(post._id) }
                               />
                               {/* <FaShare
                               size={22}

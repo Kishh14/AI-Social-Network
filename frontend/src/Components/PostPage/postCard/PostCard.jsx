@@ -140,6 +140,19 @@ const PostCard = ({
     }
   };
 
+  const handleDelete=async(postId)=>{
+    try {
+      const userConfirmed = confirm("Are you sure wanna delete? (btw, hiding somethin? 🌚😁)");
+      if(userConfirmed){
+       const deletePost = await axios.delete(`${import.meta.env.VITE_API_USER_URL}/${postId}/deletePost`,reqConfig);
+       toast.success("Post deleted!");
+       window.location.reload();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <div className="rounded-md overflow-hidden mx-3 glass-effect my-3">
       {/* User Profile Section */}
@@ -174,11 +187,7 @@ const PostCard = ({
               {authorId === user.details._id ? (
                 <div
                   className="flex gap-2 mt-1 cursor-pointer"
-                  onClick={() => {
-                    confirm(
-                      "Are you sure wanna delete? (btw, hiding somethin? 🌚😁)"
-                    );
-                  }}
+                  onClick={() => handleDelete(postId)}
                 >
                   <MdDelete
                     className="text-white mr-2 cursor-pointer hover:text-gray-300"
