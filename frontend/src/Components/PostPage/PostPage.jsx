@@ -1,15 +1,36 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PostCard from "./postCard/PostCard";
 import Notification from "./Notification/Notification";
 import FollowSuggestion from "./FollowingSuggession/FollowingSuggession";
 import "./PostPage.css";
-import NewPost from "./NewPost/NewPost";
+import axios from "axios";
+import { formatDistanceToNow } from "date-fns";
+
 function PostPage({ socket, setIsLandingPage }) {
+  const [posts, setPosts] = useState([]);
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     const page = window.location.pathname === "/";
     setIsLandingPage(page);
+    fetchData();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      // Fetch all users first
+      const userResponse = await axios.get(`${import.meta.env.VITE_API_USER_URL}/getAllUsers`);
+      const allUsers = userResponse.data.allUsers;
+      setUsers(allUsers);
+
+      // Fetch all posts
+      const postResponse = await axios.get(`${import.meta.env.VITE_API_USER_URL}/allPosts`);
+      const filteredPosts = postResponse.data.posts.filter(post => post.image !== null);
+      setPosts(filteredPosts);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -18,46 +39,40 @@ function PostPage({ socket, setIsLandingPage }) {
           className="main-div w-3/4 border-r border-gray-400 flex flex-col"
           style={{ height: "100%" }}
         >
-          {/* <div className="story-bar flex items-center space-x-6 p-5 m-2 overflow-x-auto overflow-y-hidden no-scrollbar">
-            <img src={user} alt="" className="h-14 w-14 mt-5 mb-2" />
-            <img src={user} alt="" className="h-14 w-14 mt-5 mb-2" />
-            <img src={user} alt="" className="h-14 w-14 mt-5 mb-2" />
-            <img src={user} alt="" className="h-14 w-14 mt-5 mb-2" />
-            <img src={user} alt="" className="h-14 w-14 mt-5 mb-2" />
-            <img src={user} alt="" className="h-14 w-14 mt-5 mb-2" />
-            <img src={user} alt="" className="h-14 w-14 mt-5 mb-2" />
-            <img src={user} alt="" className="h-14 w-14 mt-5 mb-2" />
-            <img src={user} alt="" className="h-14 w-14 mt-5 mb-2" />
-            <img src={user} alt="" className="h-14 w-14 mt-5 mb-2" />
-            <img src={user} alt="" className="h-14 w-14 mt-5 mb-2" />
-            <img src={user} alt="" className="h-14 w-14 mt-5 mb-2" />
-          </div> */}
-
           <div
             className="post-card overflow-y-auto flex-grow no-scrollbar"
-            // style={{ maxHeight: "calc(100vh - 180px)" }}
           >
-            <NewPost />
-            <PostCard
-              userName="John Doe"
-              time="6m"
-              postCaption="This is a post caption"
-              postImage={
-                "https://i.pinimg.com/564x/33/e1/cc/33e1cc97ea4cf9f119e5873def4658a7.jpg"
-              }
-              likeCount={1300}
-              likedUserName="Alice, Bob and 8 others"
-            />
-            <PostCard
-              userName="John Doe"
-              time="6m"
-              postCaption="This is a post caption"
-              postImage={
-                "https://i.pinimg.com/564x/33/e1/cc/33e1cc97ea4cf9f119e5873def4658a7.jpg"
-              }
-              likeCount={2550}
-              likedUserName="Alice, Bob and 8 others"
-            />
+            {posts?.map((post) => {
+              const likeText =
+                post.likes.length > 3
+                  ? `Alice, Bob and ${post.likes.length - 2} others`
+                  : post.likes.length === 3
+                  ? `Alice, Bob and ${post.likes.length - 2} other`
+                  : post.likes.length === 2
+                  ? `Alice and Bob`
+                  : post.likes.length === 1
+                  ? `Alice`
+                  : "";
+
+              const postUser = users?.find(user => user._id === post.author);
+              const timeAgo = postUser ? formatDistanceToNow(new Date(post.createdAt)) : "";
+              
+              return (
+                <PostCard
+                  key={post._id}
+                  userName={postUser ? postUser.username : "Unknown User"}
+                  time={timeAgo}
+                  postCaption={post.content}
+                  postImage={post.image}
+                  likeCount={post.likes.length}
+                  likedUserName={likeText}
+                  authorId={post.author}
+                  userImage={postUser?.profileImg}
+                  postId={post._id}
+                  post={post}
+                />
+              );
+            })}
           </div>
         </div>
         <div className="w-1/4 glass-effect">
