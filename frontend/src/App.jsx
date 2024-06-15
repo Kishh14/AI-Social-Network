@@ -30,12 +30,7 @@ function App() {
     })
   );
 
-  useEffect(() => {
-    const page = window.location.pathname === "/";
-    setIsLandingPage(page);
-  }, []);
-
-  const socket = useMemo(() => socketIO.connect("http://localhost:4000"), []);
+  const socket = useMemo(() => socketIO.connect("https://ai-social-network-1-api.onrender.com"), []);
   const [currentPage, setCurrentPage] = useState("PostPage");
   const [searchResults, setSearchResults] = useState([]);
   const [userList, setUserList] = useState({});
@@ -112,7 +107,7 @@ function App() {
   const performSearch = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:4000/api/messageSearch/${searchQuery}`
+        `https://ai-social-network-1-api.onrender.com/api/messageSearch/${searchQuery}`
       );
       setSearchResults(response.data);
       console.log(response.data);

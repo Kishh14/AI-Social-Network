@@ -4,6 +4,7 @@ import L1 from "../../../assets/L1.png";
 import Vector from "../../../assets/Vector.png";
 import Start from "../../../assets/Start.png";
 import { useNavigate } from "react-router-dom";
+import heroImg from '../../../assets/hero-image.png'
 
 const Hero = () => {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ const Hero = () => {
         </p>
       </div>
       <div className="p-2 m-4 w-1/2 flex  justify-center">
-        <img src={Vector} alt="" className="" />
+        <img src={heroImg} alt="" className="" />
       </div>
     </div>
   );

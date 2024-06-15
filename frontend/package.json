@@ -34,6 +34,7 @@
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.2",
     "react-component-export-image": "^1.0.6",
+    "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.2.0",
     "react-draggable": "^4.4.6",
     "react-icons": "^5.2.1",
