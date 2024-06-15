@@ -60,13 +60,13 @@ function CreatePost() {
       const formData = new FormData();
       formData.append("image", media);
       formData.append("content", caption);
-      // await axios.post(
-      //   `${import.meta.env.VITE_API_USER_URL}/uploadImagePost`,
-      //   formData,
-      //   reqConfig
-      // );
+      await axios.post(
+        `${import.meta.env.VITE_API_USER_URL}/uploadImagePost`,
+        formData,
+        reqConfig
+      );
       setImageUrl(mediaPre);
-      // toast.success("Post uploaded!");
+      toast.success("Post uploaded!");
       handleClose();
     } catch (error) {
       console.log(error);
@@ -137,16 +137,21 @@ function CreatePost() {
             </div>
 
             <div className="py-3">
-              <button
+              {/* <button
                 onClick={createPost}
                 className="btn px-5 text-center bg-purple-600 text-white hover:bg-purple-700 hover:shadow-lg hover:border hover:border-gray-400 mx-auto block mb-3"
               >
                 Post Now
-              </button>
-              <span className="text-white text-center block">Or</span>
+              </button> */}
+              <div className="flex items-center justify-center">
+                <hr style={{ borderColor: "white", borderWidth: "1px", width: "30%" }} />
+                <span className="text-white text-center mx-2">OR</span>
+                <hr style={{ borderColor: "white", borderWidth: "1px", width: "30%" }} />
+              </div>
+
               <button
                 onClick={handleShow}
-                className="btn text-gray-300 hover:text-gray-200 mt-2 mb-2 mx-auto block"
+                className="btn text-gray-300 hover:text-gray-200 mt-3 mb-2 mx-auto block"
               >
                 Upload from system
               </button>

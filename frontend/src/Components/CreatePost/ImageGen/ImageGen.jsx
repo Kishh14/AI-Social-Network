@@ -88,6 +88,14 @@ function ImageGen({ imageUrl, setImageUrl }) {
           style={{ width: "100%", height: "400px" }}
         />
       </div>
+      <div className="my-3">
+      <button
+        // onClick={createPost}
+        className="btn px-5 text-center bg-purple-600 text-white hover:bg-purple-700 hover:shadow-lg hover:border hover:border-gray-400 mx-auto block mb-3"
+      >
+        Post Now
+      </button>
+      </div>
     </section>
   );
 }

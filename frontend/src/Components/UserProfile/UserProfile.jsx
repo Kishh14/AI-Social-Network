@@ -159,7 +159,7 @@ function UserProfile() {
 
   useEffect(() => {
     if (name === user.details.username || name === undefined) {
-      // setLoggedinUser(true);
+      setLoggedinUser(false);
       const username = user.details.username;
       console.log(username, "<- username");
       fetchUser(username);
@@ -909,7 +909,8 @@ function UserProfile() {
                   key={index}
                   className="mt-3 text-center"
                   onClick={() => {
-                    navigate(`/profile/:${user.username}`);
+                    navigate(`/profile/${user.username}`);
+                    handleClose()
                   }}
                 >
                   <img src={user.image} className="mx-auto" width="50px" />
@@ -932,7 +933,10 @@ function UserProfile() {
           ) : (
             <>
               {followers?.map((user, index) => (
-                <div key={index} className="mt-3 text-center">
+                <div key={index} className="mt-3 text-center" onClick={() => {
+                  navigate(`/profile/${user.username}`);
+                  handleClose()
+                }}>
                   <img src={user.image} className="mx-auto" width="50px" />
                   <p key={index}>{user.username}</p>
                 </div>
