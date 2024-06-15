@@ -77,10 +77,8 @@ function ImageGen({ imageUrl, setImageUrl,caption }) {
         data,
         reqConfig
       );
-      console.log(resp);
       toast.success('Post Uploaded!');
     } catch (error) {
-      console.log(error);
       toast.error(error.response.data.message);
     }
   };
