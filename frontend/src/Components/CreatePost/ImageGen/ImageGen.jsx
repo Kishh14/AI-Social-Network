@@ -19,7 +19,7 @@ function ImageGen({ imageUrl, setImageUrl, caption }) {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:4000/generate-image", {
+      const response = await fetch("https://ai-social-network-1-api.onrender.com/generate-image", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

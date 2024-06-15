@@ -27,7 +27,7 @@ function CreatePost() {
   useEffect(() => {
     getAllMems().then((memes) => setData(memes.data.memes));
     setFilteredData(data);
-  }, [filteredData]);
+  }, []);
 
   const handleClose = () => {
     setShow(false);
@@ -162,29 +162,33 @@ function CreatePost() {
                   </button>
                 )}
 
-                <div className="flex items-center justify-center">
-                  <hr
-                    style={{
-                      borderColor: "white",
-                      borderWidth: "1px",
-                      width: "30%",
-                    }}
-                  />
-                  <span className="text-white text-center mx-2">OR</span>
-                  <hr
-                    style={{
-                      borderColor: "white",
-                      borderWidth: "1px",
-                      width: "30%",
-                    }}
-                  />
-                </div>
+                {currentTool !== "MemeGen" && (
+                  <div className="flex items-center justify-center">
+                    <hr
+                      style={{
+                        borderColor: "white",
+                        borderWidth: "1px",
+                        width: "30%",
+                      }}
+                    />
+                    <span className="text-white text-center mx-2">OR</span>
+                    <hr
+                      style={{
+                        borderColor: "white",
+                        borderWidth: "1px",
+                        width: "30%",
+                      }}
+                    />
+                  </div>
+                )}
 
                 <button
                   onClick={handleShow}
                   className="btn text-gray-300 hover:text-gray-200 mt-3 mb-2 mx-auto block"
                 >
-                  Upload from system
+                  {currentTool !== "MemeGen"
+                    ? "Upload from system"
+                    : "Upload Meme"}
                 </button>
               </div>
             )}

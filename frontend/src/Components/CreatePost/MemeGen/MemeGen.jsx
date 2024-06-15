@@ -68,7 +68,7 @@ function MemeGen({ data, filteredData, setFilteredData }) {
       </div>
 
       {/* Edit Meme */}
-      <div className="glass-effect w-[46%] h-[82vh] py-5">
+      <div className="glass-effect w-[46%] h-[82vh] py-5 mb-3">
         <div className="">
           <div
             ref={memeref}

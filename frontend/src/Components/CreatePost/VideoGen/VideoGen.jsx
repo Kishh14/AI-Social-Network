@@ -17,7 +17,7 @@ function VideoGen({ setVideoPrompt, videoPrompt, video, setVideo, caption }) {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:4000/generate-video", {
+      const response = await fetch("https://ai-social-network-1-api.onrender.com/generate-video", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
