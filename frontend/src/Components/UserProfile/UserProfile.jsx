@@ -1,5 +1,7 @@
+import { IoIosCopy } from "react-icons/io";
+import { BiLinkAlt } from "react-icons/bi";
 /* eslint-disable react/no-unescaped-entities */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./UserProfile.css";
 import { IoMdClose } from "react-icons/io";
 import { AiOutlineLogout } from "react-icons/ai";
@@ -64,6 +66,37 @@ function UserProfile() {
     setIsModalOpen(false);
     setCurrentAuthors();
   });
+
+  // Share Modal for each post
+  const [isShareModalOpen, setIsShareModalOpen] = useState(true);
+  const shareModalRef = useClickAway(() => {
+    setIsShareModalOpen(false);
+  });
+
+  const toggleShareModal = () => {
+    setIsShareModalOpen(!isShareModalOpen);
+  };
+
+  // Copy
+  const textRef = useRef(null);
+  const copyToClipboard = () => {
+    const selection = window.getSelection();
+    const range = document.createRange();
+    range.selectNode(textRef.current);
+    selection.removeAllRanges();
+    selection.addRange(range);
+
+    try {
+      // Trigger the copy event
+      document.execCommand("copy");
+      alert("Text copied to clipboard!");
+    } catch (err) {
+      console.error("Failed to copy text:", err);
+      alert("Failed to copy text. Please try again.");
+    }
+
+    selection.removeAllRanges();
+  };
 
   const [currentAuthors, setCurrentAuthors] = useState();
 
@@ -457,6 +490,7 @@ function UserProfile() {
                             <FaShare
                               size={22}
                               className="text-white mr-2 hover:text-gray-300 cursor-pointer"
+                              onClick={() => toggleShareModal()}
                             />
                           </div>
                         </div>
@@ -910,7 +944,7 @@ function UserProfile() {
                   className="mt-3 text-center"
                   onClick={() => {
                     navigate(`/profile/${user.username}`);
-                    handleClose()
+                    handleClose();
                   }}
                 >
                   <img src={user.image} className="mx-auto" width="50px" />
@@ -933,10 +967,14 @@ function UserProfile() {
           ) : (
             <>
               {followers?.map((user, index) => (
-                <div key={index} className="mt-3 text-center" onClick={() => {
-                  navigate(`/profile/${user.username}`);
-                  handleClose()
-                }}>
+                <div
+                  key={index}
+                  className="mt-3 text-center"
+                  onClick={() => {
+                    navigate(`/profile/${user.username}`);
+                    handleClose();
+                  }}
+                >
                   <img src={user.image} className="mx-auto" width="50px" />
                   <p key={index}>{user.username}</p>
                 </div>
@@ -994,6 +1032,30 @@ function UserProfile() {
                 );
               })
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Share Modal */}
+      {isShareModalOpen && (
+        <div
+          ref={shareModalRef}
+          className="py-4 absolute flex items-center justify-center left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded shadow-lg w-[35%] h-[20%] overflow-y-auto overflow-x-hidden no-scrollbar"
+          style={{
+            backdropFilter: "blur(20px)",
+            background: "rgba(999,999,999, 0.2)",
+          }}
+        >
+          <div className="border-white-400 max-h-80 overflow-y-auto no-scrollbar">
+            <p className="mx-5 flex items-center justify-center">
+              <div className="flex gap-2 items-center border rounded p-1 px-3">
+                <BiLinkAlt size={26} color="white" />
+                <p ref={textRef}>Text to copy</p>
+              </div>
+              <button className="btn" onClick={copyToClipboard}>
+                <IoIosCopy size={20} color="white" />
+              </button>
+            </p>
           </div>
         </div>
       )}
