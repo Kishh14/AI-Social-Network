@@ -4,11 +4,11 @@
   background-position: center;
 } */
 
-.bgimage {
-  background-image: url('../../../assets/bg1.png');
-  background-size: cover; /* Adjust sizes if needed */
-  background-position: center;
-  background-repeat: no-repeat;
+.BGImage{
+  
+    background: radial-gradient(at 0% 50%, rgb(168, 96, 176) 0px, rgb(117, 160, 153) 10%,rgb(13, 78, 139), #070707 50%);
+    margin-top: 30px;
+    
 }
 .glassmorphism {
     background: rgba(255, 255, 255, 0.25);
@@ -105,6 +105,11 @@
       font-weight:bold !important;
       cursor: pointer !important;
     }
+    .txt {
+      transform: rotate(0deg) !important;
+      bottom: auto !important;
+      top: 30px !important; /* Adjust this value as needed */
+  }
   }
 
   @media (max-width: 768px)  {

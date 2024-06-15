@@ -1,8 +1,8 @@
 .bg-image {
-    background-image: url('../../../assets/eclipse.png'), url('../../../assets/rectangle1.png');
-    background-size: cover, cover; /* Adjust sizes if needed */
-    background-position: center,center;
-    background-repeat: no-repeat, no-repeat;
+  background: linear-gradient(30deg, rgba(2,0,36,1) 70%, rgba(9,26,121,1) 100%);
+  padding: 10px;
+
+   
   }
   
 
@@ -11,3 +11,18 @@
     background-size: cover;
     background-position: 10px 20px;
 } */
+
+
+@media (min-width: 1024px) {
+  .para {
+margin-left: 100px !important;   
+  }
+  
+}
+
+@media (min-width: 768px) and  (max-width: 1024px) {
+  .para {
+visibility: hidden;   
+  }
+  
+}

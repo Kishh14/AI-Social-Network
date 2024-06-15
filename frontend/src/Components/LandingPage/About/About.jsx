@@ -3,7 +3,7 @@ import './About.css'
 
 const About = () => {
   return (
-    <div className="p-4 m-4 flex flex-col justify-center items-center glassmorphism  BG-image">
+    <div className="p-4 mr-20 ml-20 mb-4 rounded-[20px] flex flex-col justify-center items-center BG-image">
       <p className="text-white text-6xl text-center m-2">
         Meet the team behind the platform
       </p>

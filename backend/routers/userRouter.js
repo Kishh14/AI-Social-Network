@@ -20,7 +20,9 @@ const {
   getAllPosts,
   getSingleUserPosts,
   getSinglePost,
-  getAllCommentsOfSinglePost
+  getAllCommentsOfSinglePost,
+  getAllUsers,
+  SingleUserSearch
 } = require("../controllers/userController");
 const  upload  = require("../middlewares/uploadImage");
 const authenticate = require("../middlewares/protectedRoute");
@@ -28,6 +30,7 @@ const authenticate = require("../middlewares/protectedRoute");
 const router = Router();
 
 router.get('/:name/getByName', SingleUserSearchbyName);
+router.get('/:name/singleUser', SingleUserSearch);
 router.get('/:id/getbyid', SingleUserSearchbyId);
 router.put('/:id/follow', authenticate, followUser);
 router.put('/:id/unfollow', authenticate, unfollowUser);
@@ -48,5 +51,6 @@ router.get('/allPosts',getAllPosts);
 router.get('/:id/singleUserPosts',getSingleUserPosts);
 router.get('/:id/singlePost',getSinglePost);
 router.get('/getSinglePostComments/:id',getAllCommentsOfSinglePost);
+router.get('/getAllUsers',getAllUsers);
 
 module.exports = router;
