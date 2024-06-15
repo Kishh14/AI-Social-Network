@@ -102,15 +102,15 @@ useEffect(() => {
   };
   return (
     <div className="flex items-center body-image">
-      <Header
+      {/* <Header
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         setShowSearchSidebar={setShowSearchSidebar}
         showSearchSidebar={showSearchSidebar}
       />
-      <SearchPage showSearchSidebar={showSearchSidebar} />
+      <SearchPage showSearchSidebar={showSearchSidebar} /> */}
 
-      {currentPage === "PostPage" ? (
+      {/* {currentPage === "PostPage" ? (
         <PostPage socket={socket} />
       ) : currentPage === "SearchPage" ? (
         <SearchPage />
@@ -133,7 +133,7 @@ useEffect(() => {
         <UserProfile />
       ) : currentPage === "Explore" ? (
         <Explore />
-      ) : null}
+      ) : null} */}
     </div>
   );
 }

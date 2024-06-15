@@ -368,7 +368,7 @@ function UserProfile() {
     <>
       {!loggedinUser ? (
         <div className="profile-page justify-center align-middle overflow-x-hidden no-scrollbar">
-          <div className="row g-0 shadow-lg profile-visible glass-effect no-scrollbar pb-4">
+          <div className="row g-0 shadow-lg profile-visible glass-effect no-scrollbar pb-4 w-full">
             {/* User Details */}
             <div className="text-center mt-4">
               <div className="mx-auto my-3 relative" style={{ width: "11%" }}>
@@ -410,7 +410,7 @@ function UserProfile() {
             </div>
 
             {/* User Posts */}
-            <div className="flex flex-wrap gap-5 mt-5 text-white ml-28">
+            <div className="flex flex-wrap gap-5 mt-5 text-white justify-center w-full">
               {posts?.map((post) => {
                 return (
                   <div
@@ -550,10 +550,16 @@ function UserProfile() {
                 )}
               </div>
               <div className="mt-2">
-                <span className="text-light cursor-pointer" onClick={() => handleShowfollowers()}>
+                <span
+                  className="text-light cursor-pointer"
+                  onClick={() => handleShowfollowers()}
+                >
                   {userPageDetails?.followers.length} Followers
                 </span>
-                <span className="text-light ms-4 cursor-pointer" onClick={() => handleShowfollowing()}>
+                <span
+                  className="text-light ms-4 cursor-pointer"
+                  onClick={() => handleShowfollowing()}
+                >
                   {userPageDetails?.following.length} Following
                 </span>
               </div>

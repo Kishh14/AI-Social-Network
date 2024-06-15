@@ -4,8 +4,11 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { BiChat, BiHomeAlt, BiMessageSquareEdit } from "react-icons/bi";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import "./PostPage/PostPage.css";
+import { useNavigate } from "react-router-dom";
 
 function Header({ setCurrentPage, showSearchSidebar, setShowSearchSidebar }) {
+  const navigate = useNavigate();
+
   return (
     <aside
       className="h-screen flex flex-col items-center justify-center shadow-md p-1"
@@ -17,7 +20,7 @@ function Header({ setCurrentPage, showSearchSidebar, setShowSearchSidebar }) {
       <div className="icon-container px-3">
         <BiHomeAlt
           className="icon text-white mb-7"
-          onClick={() => setCurrentPage("PostPage")}
+          onClick={() => navigate("/")}
         />
         <AiOutlineSearch
           className="icon text-white mb-7"
@@ -27,11 +30,11 @@ function Header({ setCurrentPage, showSearchSidebar, setShowSearchSidebar }) {
         />
         <MdOutlineExplore
           className="icon text-white mb-7"
-          onClick={() => setCurrentPage("Explore")}
+          onClick={() => navigate("/explore")}
         />
         <BiMessageSquareEdit
           className="icon text-white mb-7"
-          onClick={() => setCurrentPage("CreatePost")}
+          onClick={() => navigate("/createPost")}
         />
         <BiChat
           className="icon text-white mb-7"
@@ -39,7 +42,7 @@ function Header({ setCurrentPage, showSearchSidebar, setShowSearchSidebar }) {
         />
         <MdOutlineAccountCircle
           className="icon text-white mb-7"
-          onClick={() => setCurrentPage("UserProfile")}
+          onClick={() => navigate("/profile")}
         />
       </div>
     </aside>
