@@ -545,9 +545,6 @@ const getSingleUserPosts = async(req,res)=> {
         }
 
         const posts = await Post.find({author:userId});
-        if (posts.length === 0) {
-            return res.status(404).json({ message: "No posts found" });
-        }
 
         return res.status(200).json({message:"Posts Found!",post:posts});
     } catch (error) {

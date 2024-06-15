@@ -184,7 +184,7 @@ function UserProfile() {
       setPosts(userPosts.data.post);
     } catch (error) {
       toast.error(error.response.data.message);
-      // navigate("/");
+      navigate("/");
     }
   };
 
@@ -550,10 +550,10 @@ function UserProfile() {
                 )}
               </div>
               <div className="mt-2">
-                <span className="text-light">
+                <span className="text-light cursor-pointer" onClick={() => handleShowfollowers()}>
                   {userPageDetails?.followers.length} Followers
                 </span>
-                <span className="text-light ms-4">
+                <span className="text-light ms-4 cursor-pointer" onClick={() => handleShowfollowing()}>
                   {userPageDetails?.following.length} Following
                 </span>
               </div>
@@ -895,7 +895,7 @@ function UserProfile() {
           <h1 className="text-xl mb-2">Followings</h1>
           <hr />
           {following.length === 0 ? (
-            <h3 className="mt-3 text-gray-400">You don't follow anyone! </h3>
+            <h3 className="mt-3 text-gray-400">No following! </h3>
           ) : (
             <>
               {following?.map((user, index) => (
@@ -921,7 +921,7 @@ function UserProfile() {
           <hr />
           {followers.length === 0 ? (
             <>
-              <h3 className="mt-3 text-gray-400">You have no followers!</h3>
+              <h3 className="mt-3 text-gray-400">No followers!</h3>
             </>
           ) : (
             <>
