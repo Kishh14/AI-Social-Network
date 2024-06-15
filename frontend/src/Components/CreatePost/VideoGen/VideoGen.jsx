@@ -1,17 +1,21 @@
 import { FaRandom } from "react-icons/fa";
 import React, { useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
-function VideoGen({ setVideoPrompt, videoPrompt, video, setVideo }) {
+function VideoGen({ setVideoPrompt, videoPrompt, video, setVideo,caption }) {
   const [isGenerating, setIsGenerating] = useState(false);
 
   const [error, setError] = useState(null);
+  const [videoURL, setVideoURL] = useState();
 
   const generateVideo = async () => {
     setIsGenerating(true);
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:3000/generate-video", {
+      const response = await fetch("http://localhost:4000/generate-video", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -21,6 +25,7 @@ function VideoGen({ setVideoPrompt, videoPrompt, video, setVideo }) {
 
       const data = await response.json();
       setVideo(data?.videoURL[0]);
+      setVideoURL(data?.videoURL[0]);
       setIsGenerating(false);
     } catch (error) {
       setIsGenerating(false);
@@ -49,6 +54,31 @@ function VideoGen({ setVideoPrompt, videoPrompt, video, setVideo }) {
     const randomPrompt = videoPrompts[random % videoPrompts.length];
     setVideoPrompt(randomPrompt);
   };
+
+  const user = useSelector((state) => state.user.user);
+
+  const reqConfig = {
+    headers:{
+      Authorization:`Bearer ${user.token}`
+    }
+  }
+
+  const createPost = async()=>{
+    try {
+      const data = {
+        aiLink: videoURL,
+        content: caption,
+      };
+      const resp = await axios.post(
+        `${import.meta.env.VITE_API_USER_URL}/uploadAIvideoPost`,
+        data,
+        reqConfig
+      );
+      toast.success('Post Uploaded!');
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  }
 
   return (
     <section className="text-white w-[500px]">
@@ -87,7 +117,7 @@ function VideoGen({ setVideoPrompt, videoPrompt, video, setVideo }) {
 
       <div className="my-3">
       <button
-        // onClick={createPost}
+        onClick={createPost}
         className="btn px-5 text-center bg-purple-600 text-white hover:bg-purple-700 hover:shadow-lg hover:border hover:border-gray-400 mx-auto block mb-3"
       >
         Post Now

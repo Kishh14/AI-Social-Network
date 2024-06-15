@@ -116,6 +116,7 @@ function CreatePost() {
                     setVideoPrompt={setVideoPrompt}
                     video={video}
                     setVideo={setVideo}
+                    caption={caption}
                   />
                 ) : (
                   <MemeGen />
