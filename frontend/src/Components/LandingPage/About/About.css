@@ -7,7 +7,7 @@
 }
 
 .BG-image{
-    background: linear-gradient(30deg, rgba(2,0,36,1) 50%, rgb(197, 201, 224) 100%);
+    background: radial-gradient(at 100% 10%,rgb(143, 171, 198), #070707 50%);
     padding: 10px;
   
       

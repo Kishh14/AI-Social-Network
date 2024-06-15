@@ -1,7 +1,7 @@
 import React from "react";
 import "./Hero.css";
 import L1 from "../../../assets/L1.png";
-import Vector from "../../../assets/Vector.png";
+import Vector from "../../../assets/3d.png";
 import Start from "../../../assets/Start.png";
 import { useNavigate } from "react-router-dom";
 
@@ -9,7 +9,7 @@ const Hero = () => {
   const navigate = useNavigate();
 
   return (
-    <div className=" p-4 flex justify-between bg-image">
+    <div className="flex h-[80vh] justify-between bg-image">
       <div className="m-4 w-1/2 flex flex-col justify-center">
         <div className="h-auto w-2/3  mt-3 bg-gray-700 flex items-center rounded">
           <img src={L1} alt="image" className="h-12 w-12" />
@@ -36,7 +36,7 @@ const Hero = () => {
           creativity and social experience.
         </p>
       </div>
-      <div className="p-2 m-4 w-1/2 flex  justify-center">
+      <div className=" w-1/2 flex  mb-0">
         <img src={Vector} alt="" className="" />
       </div>
     </div>

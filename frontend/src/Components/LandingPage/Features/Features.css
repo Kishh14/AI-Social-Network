@@ -6,9 +6,11 @@
 
 .BGImage{
   
-    background: radial-gradient(at 0% 50%, rgb(168, 96, 176) 0px, rgb(117, 160, 153) 10%,rgb(13, 78, 139), #070707 50%);
-    margin-top: 30px;
-    
+  background: 
+  radial-gradient(at 0% 50%, rgb(168, 96, 176) 10px, rgb(117, 160, 153) 10%, rgb(13, 78, 139) 20%, #070707 70%) 0 0 / 20% 90% no-repeat,
+  linear-gradient(to right, #070707 20%, transparent 20%);
+  margin-top: 30px;
+ 
 }
 .glassmorphism {
     background: rgba(255, 255, 255, 0.25);

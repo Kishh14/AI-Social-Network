@@ -3,11 +3,14 @@ import './Connect.css';
 import connect from "../../../assets/connect.jpg";
 const Connect = () => {
   return (
-    <div className="m-4 mb-5 mt-2 flex flex-col justify-center items-center  bg-Image">
-      <p className="text-white text-6xl text-center  p-2 mt-4 mb-4">
+    <div className=" mb-[80px] mt-[80px]  flex flex-col justify-center items-center  bg-Image p-20">
+      <p className="text-white text-4xl text-center  p-2 ">
         Find People around you and socialize in the same world
       </p>
-      <img src={connect} alt="" className="w-full min-h-[50h] rounded-[20px] m-2 " />
+      <div className="w-full mx-20 ">
+        <img src={connect} alt="" className="rounded-[20px] mt-[100px]" />
+      </div>
+      
     </div>
   );
 };
