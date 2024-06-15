@@ -1,8 +1,14 @@
 import React from "react";
-const CommentCard = ({ userName, postCaption,image }) => {
+import { useNavigate } from "react-router-dom";
+const CommentCard = ({ userName, postCaption, image }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="mb-7 px-8">
-      <div className="flex items-center">
+      <div
+        className="flex items-center cursor-pointer"
+        onClick={() => navigate(`/profile/${userName}`)}
+      >
         <img
           className="w-10 h-10 rounded-full mr-4"
           src={image}

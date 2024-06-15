@@ -1,3 +1,6 @@
+import { AiFillDislike } from "react-icons/ai";
+import { AiFillLike } from "react-icons/ai";
+import { MdReportProblem } from "react-icons/md";
 import { React, useState } from "react";
 import {
   FaEllipsisH,
@@ -14,6 +17,7 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { MdDelete } from "react-icons/md";
 const PostCard = ({
   userName,
   time,
@@ -24,23 +28,23 @@ const PostCard = ({
   userImage,
   authorId,
   postId,
-  post
+  post,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showDeleteDropdown, setShowDeleteDropdown] = useState(false);
   const modalRef = useClickAway(() => {
     console.log("Clicked!");
     setIsModalOpen(false);
   });
 
-  const [currentComments,setCurrentComments]=useState()
+  const [currentComments, setCurrentComments] = useState();
   const [currentAuthors, setCurrentAuthors] = useState();
-  const [comment,setComment] = useState();
+  const [comment, setComment] = useState();
 
-  const toggleModal = async(postId) => {
+  const toggleModal = async (postId) => {
     try {
-      await fetchComments(postId)
+      await fetchComments(postId);
       setIsModalOpen(!isModalOpen);
-      
     } catch (error) {
       console.error("Error fetching comments or author details:", error);
     } finally {
@@ -48,13 +52,13 @@ const PostCard = ({
     }
   };
 
-  const fetchComments = async(postId)=>{
+  const fetchComments = async (postId) => {
     const getComments = await axios.get(
       `${import.meta.env.VITE_API_USER_URL}/getSinglePostComments/${postId}`
     );
     const comments = getComments.data.comments;
     setCurrentComments(comments);
-    
+
     // Fetch author details for each comment asynchronously
     const authorDetailsPromises = comments.map(async (comment) => {
       const getAuthor = await axios.get(
@@ -65,19 +69,19 @@ const PostCard = ({
 
     const authors = await Promise.all(authorDetailsPromises);
     setCurrentAuthors(authors);
-  }
+  };
 
-  const [like,setLike] = useState(likeCount);
-  const [postLike,setPostLike] = useState();
-  const navigate=useNavigate()
+  const [like, setLike] = useState(likeCount);
+  const [postLike, setPostLike] = useState();
+  const navigate = useNavigate();
 
-  const user = useSelector(state => state.user.user);
+  const user = useSelector((state) => state.user.user);
 
   const reqConfig = {
     headers: {
-      Authorization:`Bearer ${user.token}`
-    }
-  }
+      Authorization: `Bearer ${user.token}`,
+    },
+  };
 
   const handleLike = async (postId) => {
     try {
@@ -87,7 +91,7 @@ const PostCard = ({
         payload,
         reqConfig
       );
-      navigate('/PostPage')
+      navigate("/PostPage");
     } catch (error) {
       console.log(error);
     }
@@ -121,16 +125,20 @@ const PostCard = ({
   //   }
   // }
 
-  const handleComment = async()=>{
+  const handleComment = async () => {
     try {
-      const resp = await axios.post(`${import.meta.env.VITE_API_USER_URL}/createComment`,{postId,content:comment},reqConfig);
-      setComment('');
+      const resp = await axios.post(
+        `${import.meta.env.VITE_API_USER_URL}/createComment`,
+        { postId, content: comment },
+        reqConfig
+      );
+      setComment("");
       setIsModalOpen(!isModalOpen);
-      toast.success(resp.data.message)
+      toast.success(resp.data.message);
     } catch (error) {
       toast.error(error.response.data.message);
     }
-  }
+  };
 
   return (
     <div className="rounded-md overflow-hidden mx-3 glass-effect my-3">
@@ -142,11 +150,88 @@ const PostCard = ({
           alt="User Profile"
         />
         <div>
-          <p className="font-semibold text-white cursor-pointer" onClick={()=>{navigate(`/profile/${userName}`)}}>{userName}</p>
+          <p
+            className="font-semibold text-white cursor-pointer"
+            onClick={() => {
+              navigate(`/profile/${userName}`);
+            }}
+          >
+            {userName}
+          </p>
         </div>
-        <div className="ml-auto items-center flex justify-between gap-4">
+        <div className="ml-auto items-center flex justify-end gap-4 relative w-[200px]">
           <p className="text-xs text-white mr-2">{time} ago</p>
-          {authorId === user.details._id ? <FaEllipsisH className="text-white" /> : ''}
+          <FaEllipsisH
+            className="text-white cursor-pointer"
+            onClick={() => setShowDeleteDropdown(!showDeleteDropdown)}
+          />
+
+          {showDeleteDropdown && (
+            <div
+              className="flex flex-col gap-1 py-2 px-4 rounded absolute end-0 top-6 w-full glass-effect shadow-2xl"
+              style={{ background: "rgba(0,0,0,0.3)" }}
+            >
+              {authorId === user.details._id ? (
+                <div
+                  className="flex gap-2 mt-1 cursor-pointer"
+                  onClick={() => {
+                    confirm(
+                      "Are you sure wanna delete? (btw, hiding somethin? 🌚😁)"
+                    );
+                  }}
+                >
+                  <MdDelete
+                    className="text-white mr-2 cursor-pointer hover:text-gray-300"
+                    size={23}
+                  />
+                  <span className="text-white">Delete</span>
+                </div>
+              ) : (
+                ""
+              )}
+
+              <div
+                className="flex gap-2 mt-2 mb-1 cursor-pointer"
+                onClick={() => {
+                  alert(
+                    "Report submitted, Thank you for keeping this platform safe 🙏🏻"
+                  );
+                }}
+              >
+                <MdReportProblem
+                  className="text-white mr-2 cursor-pointer hover:text-gray-300"
+                  size={21}
+                />
+                <span className="text-white">Report</span>
+              </div>
+
+              <div
+                className="flex gap-2 mt-2 mb-1 cursor-pointer"
+                onClick={() => {
+                  alert("We'll keep your feed similar to your intrested 😎👍🏻");
+                }}
+              >
+                <AiFillLike
+                  className="text-white mr-2 cursor-pointer hover:text-gray-300"
+                  size={21}
+                />
+                <span className="text-white">Intrested</span>
+              </div>
+
+              <div
+                className="flex gap-2 mt-2 mb-1 cursor-pointer"
+                onClick={() => {
+                  alert("We'll not show posts similar to this 👍🏻");
+                }}
+              >
+                <AiFillDislike
+                  className="text-white mr-2 cursor-pointer hover:text-gray-300"
+                  size={21}
+                />
+                <span className="text-white">Not Intrested</span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -164,7 +249,7 @@ const PostCard = ({
       {/* Like, Comment, Share Section */}
       <div className="flex flex-col p-4">
         <div className="flex items-center gap-1 mb-1 ml-3">
-          {post?.likes.includes(pos=>pos===authorId) ? (
+          {post?.likes.includes((pos) => pos === authorId) ? (
             <FaHeart
               className="mr-2 text-red-500 cursor-pointer"
               size={22}
@@ -180,7 +265,7 @@ const PostCard = ({
           <FaComment
             className="text-white mr-2 cursor-pointer hover:text-gray-300"
             size={22}
-            onClick={()=>toggleModal(post._id)}
+            onClick={() => toggleModal(post._id)}
           />
           <FaShare
             size={22}
@@ -189,9 +274,7 @@ const PostCard = ({
         </div>
 
         <div className="text-gray-400 ml-3">
-          <p>
-            {like} Likes
-          </p>
+          <p>{like} Likes</p>
         </div>
         {isModalOpen && (
           <div
@@ -216,31 +299,36 @@ const PostCard = ({
                 className="form-control bg-gray-300 w-[70%]"
                 placeholder="Say Something..."
                 value={comment}
-                onChange={(e)=>setComment(e.target.value)}
+                onChange={(e) => setComment(e.target.value)}
               />
-              <button className="btn bg-gray-200" onClick={()=>handleComment()}>
+              <button
+                className="btn bg-gray-200"
+                onClick={() => handleComment()}
+              >
                 <IoMdSend size={26} />
               </button>
             </div>
 
             <div className="border-white-400 max-h-80 overflow-y-auto no-scrollbar">
-            {!currentComments || currentComments.length === 0 ? (
-              <p className="text-light text-center">No Comments!</p>
-            ) : (
-              currentComments.map((comment, index) => {
-                const authorNow = currentAuthors.find(
-                  (author) => author._id === comment.author
-                );
-                return (
-                  <CommentCard
-                    key={index}
-                    image={authorNow.profileImg}
-                    userName={authorNow ? authorNow.username : "Unknown Author"}
-                    postCaption={comment.content}
-                  />
-                );
-              })
-            )}
+              {!currentComments || currentComments.length === 0 ? (
+                <p className="text-light text-center">No Comments!</p>
+              ) : (
+                currentComments.map((comment, index) => {
+                  const authorNow = currentAuthors.find(
+                    (author) => author._id === comment.author
+                  );
+                  return (
+                    <CommentCard
+                      key={index}
+                      image={authorNow.profileImg}
+                      userName={
+                        authorNow ? authorNow.username : "Unknown Author"
+                      }
+                      postCaption={comment.content}
+                    />
+                  );
+                })
+              )}
               {/* Add more CommentCard components as needed */}
             </div>
           </div>

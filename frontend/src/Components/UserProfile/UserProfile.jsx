@@ -1,3 +1,5 @@
+import { MdDelete } from "react-icons/md";
+import { BsThreeDots } from "react-icons/bs";
 import { IoIosCopy } from "react-icons/io";
 import { BiLinkAlt } from "react-icons/bi";
 /* eslint-disable react/no-unescaped-entities */
@@ -458,7 +460,7 @@ function UserProfile() {
                 return (
                   <div
                     key={post._id}
-                    className="w-[350px] h-[370px] post-glass-effect rounded"
+                    className="w-[350px] h-[380px] post-glass-effect rounded"
                   >
                     {post.image ? (
                       <>
@@ -509,6 +511,15 @@ function UserProfile() {
                                 size={22}
                                 onClick={() => {
                                   toggleModal(post._id);
+                                }}
+                              />
+                              <MdDelete
+                                className="text-white mr-2 cursor-pointer hover:text-gray-300"
+                                size={23}
+                                onClick={() => {
+                                  confirm(
+                                    "Are you sure wanna delete? (btw, hiding somethin? 🌚😁)"
+                                  );
                                 }}
                               />
                               {/* <FaShare
@@ -1081,19 +1092,6 @@ function UserProfile() {
             />
           </div>
           <div className="border-white-400 max-h-80 overflow-y-auto no-scrollbar">
-            {/* Actual Logic to show post */}
-            {/* {posts.filter((post) => {
-              if (post._id === currentPostId) {
-                return (
-                  <CommentCard
-                    userName={"John Doe"}
-                    postCaption={post.content}
-                  />
-                );
-              }
-            })} */}
-
-            {/* Dummy (just to see how will it look) */}
             {!currentComments || currentComments.length === 0 ? (
               <p className="text-light text-center">No Comments!</p>
             ) : (
