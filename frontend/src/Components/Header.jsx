@@ -20,7 +20,7 @@ function Header({ setCurrentPage, showSearchSidebar, setShowSearchSidebar }) {
       <div className="icon-container px-3">
         <BiHomeAlt
           className="icon text-white mb-7"
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/PostPage")}
         />
         <AiOutlineSearch
           className="icon text-white mb-7"
