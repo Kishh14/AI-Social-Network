@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import ChatFooter from "./ChatFooter";
 import ChatBody from "./ChatBody";
-import { FaVideo, FaTimes } from "react-icons/fa";
+import { FaVideo } from "react-icons/fa";
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
-
+import { useNavigate } from "react-router-dom";
 const ChatPage = ({ socket, recipient }) => {
   const [localMessages, setLocalMessages] = useState([]);
   const [typing, setTyping] = useState("");
@@ -11,7 +11,7 @@ const ChatPage = ({ socket, recipient }) => {
   const lastMessageRef = useRef(null);
   const videoCallContainerRef = useRef(null);
   const zegoRef = useRef(null);
-
+  const navigate = useNavigate();
   const generateRoomId = (user1, user2) => {
     return [user1, user2].sort().join("-");
   };
@@ -26,6 +26,7 @@ const ChatPage = ({ socket, recipient }) => {
     zegoRef.current = zego;
     zego.joinRoom({
       container: videoCallContainerRef.current,
+      onLeaveRoom: ()=> window.location.reload(),
       scenario: {
         mode: ZegoUIKitPrebuilt.OneONoneCall,
       }
@@ -96,22 +97,25 @@ const ChatPage = ({ socket, recipient }) => {
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-blue-400 to-purple-600">
-      <div className="w-[600px] h-[95vh] rounded-tl-none rounded-bl-none max-w-4xl p-4 absolute top-8 rounded-lg bg-white shadow-lg">
+      <div className="w-[600px] h-[95vh] max-w-4xl p-4 absolute top-8 rounded-lg bg-white shadow-lg">
         <FaVideo onClick={handleVideo} className="absolute top-0 right-8 text-2xl text-gray-600 hover:text-green-500 cursor-pointer"/>
-        {isVideoCallActive && (
-          <div className="relative w-full h-full">
-            <FaTimes onClick={handleCloseVideo} className="absolute top-2 right-2 text-2xl text-gray-600 hover:text-red-500 cursor-pointer" />
-            <div ref={videoCallContainerRef} className="w-full h-full bg-black"></div>
-          </div>
-        )}
+        <ChatBody
+          messages={localMessages}
+          lastMessageRef={lastMessageRef}
+          typing={typing}
+          isVideoCallActive={isVideoCallActive}
+          videoCallContainerRef={videoCallContainerRef}
+          handleCloseVideo={handleCloseVideo}
+        />
         {!isVideoCallActive && (
-          <>
-            <ChatBody messages={localMessages} lastMessageRef={lastMessageRef} typing={typing} />
-            <ChatFooter socket={socket} handleSendMessage={(messageData) => {
+          <ChatFooter
+            socket={socket}
+            handleSendMessage={(messageData) => {
               setLocalMessages((prevMessages) => [...prevMessages, messageData]);
               socket.emit("message", messageData);
-            }} recipient={recipient} />
-          </>
+            }}
+            recipient={recipient}
+          />
         )}
       </div>
     </div>
