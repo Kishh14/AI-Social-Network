@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/client";
 import React, { useMemo, useState, useEffect } from "react";
 import axios from "axios";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import socketIO from "socket.io-client";
 import Messenger from "./Components/ChatPage/Messenger";
 import VideoGen from "./Components/PostPage/VideoGen/VideoGen";
@@ -15,6 +15,8 @@ import SearchPage from "./Components/SearchPage/SearchPage";
 import Explore from "./Components/Explore/Explore";
 import PostPage from "./Components/PostPage/PostPage";
 import CreatePost from "./Components/CreatePost/CreatePost";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 function App() {
   const [isLandingPage, setIsLandingPage] = useState(true);
@@ -125,6 +127,20 @@ function App() {
     setSearchQuery(e.target.value);
   };
 
+  const user = useSelector(state=>state.user.user);
+  const isAuthenticated = !!user?.details?._id;
+  
+  const ProtectedRoute = ({ element: Element, isAuthenticated, ...rest }) => {
+    if (!isAuthenticated) {
+      toast.error("Log in to access this page");
+      return <Navigate to="/authentication" />;
+    }
+  
+    return <Element {...rest} />;
+  };
+
+  
+
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
@@ -140,12 +156,14 @@ function App() {
             <div className="App flex-1 overflow-x-hidden">
               <Routes>
                 <Route path="/" element={<LandingPage />} />
-                <Route path="/explore" element={<Explore />} />
-                <Route path="/createPost" element={<CreatePost />} />
+                <Route path="/explore" element={<ProtectedRoute isAuthenticated={isAuthenticated} element={Explore} />}  />
+                <Route path="/createPost" element={<ProtectedRoute isAuthenticated={isAuthenticated} element={CreatePost} />} />
                 <Route
                   path="/messenger"
                   element={
-                    <Messenger
+                    <ProtectedRoute
+                      isAuthenticated={isAuthenticated}
+                      element={Messenger}
                       socket={socket}
                       handleSearch={handleSearch}
                       showSearch={showSearch}
@@ -159,15 +177,16 @@ function App() {
                     />
                   }
                 />
-                <Route path="/profile" element={<UserProfile />} />
-                <Route path="/profile/:name" element={<UserProfile />} />
-                <Route path="/videoGen" element={<VideoGen />} />
-                <Route path="/authentication" element={<Authentication />} />
+                <Route path="/profile" element={<ProtectedRoute isAuthenticated={isAuthenticated} element={UserProfile} />} />
+                <Route path="/profile/:name" element={<ProtectedRoute isAuthenticated={isAuthenticated} element={UserProfile} />} />
+                <Route path="/videoGen" element={<ProtectedRoute isAuthenticated={isAuthenticated} element={VideoGen} />} />
                 <Route
                   path="/PostPage"
-                  element={<PostPage socket={socket} setIsLandingPage={setIsLandingPage} />}
+                  element={<ProtectedRoute isAuthenticated={isAuthenticated} element={PostPage} socket={socket} setIsLandingPage={setIsLandingPage} />}
                 />
+                <Route path="/authentication" element={<Authentication />} />
               </Routes>
+              
             </div>
           </main>
         </Router>
