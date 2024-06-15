@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaRegEdit } from "react-icons/fa";
 import ChatPage from "./ChatPage";
@@ -18,37 +18,27 @@ const Messenger = ({
   chatterRendered,
   currentUser
 }) => {
-  const [showChatPage, setShowChatPage] = useState(false);
-
   const [messages, setMessages] = useState({});
   const [username, setUsername] = useState(
     sessionStorage.getItem("username") || ""
   );
-
-  const [activeChat, setActiveChat] = useState(null);
-  
-
-
+  const [selectedRecipient, setSelectedRecipient] = useState(null);
+  const [chatKey, setChatKey] = useState(0); 
 
   useEffect(() => {
     socket.on("messageResponse", (message) => {
-      
       setMessages((prevMessages) => ({
-        ...prevMessages,
-        [message.sender]: [...(prevMessages[message.sender] || []), message],
+        ...prevMessages
       }));
+      setChatKey((prevKey) => prevKey + 1); 
     });
-
-    
-
     return () => {
       socket.off("messageResponse");
     };
   }, [socket, currentUser]);
 
   const handleMessageContainer = (recipient) => {
-    setActiveChat(recipient);
-    setShowChatPage(!showChatPage);
+    setSelectedRecipient(recipient);
   };
 
   const renderChatter = () => {
@@ -144,29 +134,13 @@ const Messenger = ({
           </div>
         </div>
         <div className="w-2/3 flex flex-col items-center justify-center p-8 bg-gray-50">
-          {showChatPage && activeChat ? (
+          {selectedRecipient && (
             <ChatPage
+              key={chatKey} // Update key prop for re-rendering
               socket={socket}
-              recipient={activeChat}
-              messages={messages[activeChat] || []}
+              recipient={selectedRecipient}
+              messages={messages[selectedRecipient] || []}
             />
-          ) : (
-            <div className="text-center">
-              <FaRegCircle
-                className="text-gray-300 flex m-auto"
-                style={{
-                  fontSize: "75px",
-                }}
-              />
-              <FiSend
-                className="flex m-auto text-gray-700 translate-y-[-160%]"
-                style={{
-                  fontSize: "32px",
-                }}
-              />
-              <h2 className="text-2xl font-bold mb-2">Your Messages</h2>
-              <p>Send private photos and messages to a friend or group.</p>
-            </div>
           )}
         </div>
       </div>

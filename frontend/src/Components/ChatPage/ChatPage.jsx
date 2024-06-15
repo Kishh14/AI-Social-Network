@@ -5,7 +5,7 @@ import { FaVideo, FaTimes } from "react-icons/fa";
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
 
 const ChatPage = ({ socket, recipient, messages }) => {
-  const [localMessages, setLocalMessages] = useState(messages);
+  const [localMessages, setLocalMessages] = useState([messages]);
   const [typing, setTyping] = useState("");
   const [isVideoCallActive, setIsVideoCallActive] = useState(false);
   const lastMessageRef = useRef(null);
@@ -54,7 +54,7 @@ const ChatPage = ({ socket, recipient, messages }) => {
 
   useEffect(() => {
     setLocalMessages(messages);
-  }, [messages]);
+  }, []);
 
   const handleSendMessage = (messageData) => {
     // Add the sender's message to local messages
@@ -78,13 +78,13 @@ const ChatPage = ({ socket, recipient, messages }) => {
     const handleTyping = (data) => setTyping(data.typing);
 
     const handleMessageHistory = (data) => {
-      const relevantMessages = data.filter(
-        (message) => message.recipient === recipient || message.name === recipient
-      );
-      setLocalMessages(relevantMessages);
+      // const relevantMessages = data.filter(
+      //   (message) => message.recipient === recipient || message.name 
+      // );
+      setLocalMessages(data);
     };
 
-    socket.on("messageResponse", handleNewMessage);
+    socket.on("message", handleNewMessage);
     socket.on("typingResponse", handleTyping);
     socket.on("messageHistory", handleMessageHistory);
 
@@ -96,7 +96,7 @@ const ChatPage = ({ socket, recipient, messages }) => {
   }, [socket, recipient]);
 
   useEffect(() => {
-    lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+    lastMessageRef.current?.scrollIntoView();
   }, [localMessages]);
 
   useEffect(() => {
