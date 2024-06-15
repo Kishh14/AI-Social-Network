@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import ChatPage from "./ChatPage";
 import Chatter from "./Chatter";
 import { FaRegEdit } from "react-icons/fa";
-
+import { FiSend } from "react-icons/fi";
+import { FaRegCircle } from "react-icons/fa";
 const Messenger = ({
   accounts,
   performSearch,
@@ -127,12 +128,29 @@ const Messenger = ({
           </div>
         </div>
         <div className="w-2/3 flex flex-col items-center justify-center p-8 bg-gray-50">
-          {selectedRecipient && (
+          {selectedRecipient ? (
             <ChatPage
               key={chatKey}
               socket={socket}
               recipient={selectedRecipient}
             />
+          ):(
+            <div className="text-center">
+              <FaRegCircle
+                className="text-gray-300 flex m-auto"
+                style={{
+                  fontSize: "75px",
+                }}
+              />
+              <FiSend
+                className="flex m-auto text-gray-700 translate-y-[-160%]"
+                style={{
+                  fontSize: "32px",
+                }}
+              />
+              <h2 className="text-2xl font-bold mb-2">Your Messages</h2>
+              <p>Send private messages or video chat wtih a friend.</p>
+            </div>
           )}
         </div>
       </div>
