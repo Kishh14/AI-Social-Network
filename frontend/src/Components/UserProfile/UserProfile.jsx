@@ -369,11 +369,11 @@ function UserProfile() {
         reqConfig
       );
       if (name === user.details.username || name === undefined) {
-        // setLoggedinUser(true);
+        setLoggedinUser(false);
         const username = user.details.username;
         fetchUser(username);
       } else {
-        setLoggedinUser(false);
+        setLoggedinUser(true);
         fetchUser(name);
       }
     } catch (error) {
@@ -393,9 +393,10 @@ function UserProfile() {
       );
       if (name === user.details.username || name === undefined) {
         const username = user.details.username;
+        setLoggedinUser(false);
         fetchUser(username);
       } else {
-        setLoggedinUser(false);
+        setLoggedinUser(true);
         fetchUser(name);
       }
     } catch (error) {
