@@ -4,14 +4,16 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 
-function VideoGen({ setVideoPrompt, videoPrompt, video, setVideo,caption }) {
+function VideoGen({ setVideoPrompt, videoPrompt, video, setVideo, caption }) {
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isGenerated, setIsGenerated] = useState(false);
 
   const [error, setError] = useState(null);
   const [videoURL, setVideoURL] = useState();
 
   const generateVideo = async () => {
     setIsGenerating(true);
+    setIsGenerated(false);
     setError(null);
 
     try {
@@ -27,7 +29,9 @@ function VideoGen({ setVideoPrompt, videoPrompt, video, setVideo,caption }) {
       setVideo(data?.videoURL[0]);
       setVideoURL(data?.videoURL[0]);
       setIsGenerating(false);
+      setIsGenerated(true);
     } catch (error) {
+      setIsGenerated(false);
       setIsGenerating(false);
       console.error(error);
       setError("Failed to generate video");
@@ -41,12 +45,8 @@ function VideoGen({ setVideoPrompt, videoPrompt, video, setVideo,caption }) {
       "A majestic landscape with a winding river flowing through a lush forest",
       "A cyberpunk city at night, neon signs reflecting in a rainy street",
       "A playful cartoon cat wearing a pirate hat and riding a treasure chest",
-      "A portrait of a wise old owl perched on a bookshelf filled with ancient texts",
-      "A photorealistic image of a cat wearing a spacesuit exploring Mars",
       "A vibrant underwater scene with colorful coral reefs and exotic fish",
       "A futuristic cityscape with flying cars and towering skyscrapers",
-      "A portrait of a historical figure in a fantastical setting",
-      "A close-up photo of a delicious dessert with intricate details",
       "A breathtaking mountain range shrouded in mist at sunrise",
     ];
 
@@ -58,12 +58,12 @@ function VideoGen({ setVideoPrompt, videoPrompt, video, setVideo,caption }) {
   const user = useSelector((state) => state.user.user);
 
   const reqConfig = {
-    headers:{
-      Authorization:`Bearer ${user.token}`
-    }
-  }
+    headers: {
+      Authorization: `Bearer ${user.token}`,
+    },
+  };
 
-  const createPost = async()=>{
+  const createPost = async () => {
     try {
       const data = {
         aiLink: videoURL,
@@ -74,14 +74,14 @@ function VideoGen({ setVideoPrompt, videoPrompt, video, setVideo,caption }) {
         data,
         reqConfig
       );
-      toast.success('Post Uploaded!');
+      toast.success("Post Uploaded!");
     } catch (error) {
       toast.error(error.response.data.message);
     }
-  }
+  };
 
   return (
-    <section className="text-white w-[500px]">
+    <section className="text-white w-[500px] pb-5">
       <h2 className="my-3">Video Generation</h2>
       <div className="flex items-center gap-2">
         <input
@@ -100,7 +100,10 @@ function VideoGen({ setVideoPrompt, videoPrompt, video, setVideo,caption }) {
         >
           {isGenerating ? "Generating..." : "Generate"}
         </button>
-        <button className="btn text-purple-300 border-purple-400" onClick={randomVideo}>
+        <button
+          className="btn text-purple-300 border-purple-400"
+          onClick={randomVideo}
+        >
           <FaRandom size={23} />
         </button>
       </div>
@@ -116,12 +119,13 @@ function VideoGen({ setVideoPrompt, videoPrompt, video, setVideo,caption }) {
       </div>
 
       <div className="my-3">
-      <button
-        onClick={createPost}
-        className="btn px-5 text-center bg-purple-600 text-white hover:bg-purple-700 hover:shadow-lg hover:border hover:border-gray-400 mx-auto block mb-3"
-      >
-        Post Now
-      </button>
+        <button
+        disabled={!isGenerated}
+          onClick={createPost}
+          className="btn px-5 text-center bg-purple-600 text-white hover:bg-purple-700 hover:shadow-lg hover:border hover:border-gray-400 mx-auto block mb-3"
+        >
+          Post Now
+        </button>
       </div>
     </section>
   );

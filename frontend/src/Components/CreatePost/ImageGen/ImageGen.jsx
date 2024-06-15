@@ -4,9 +4,10 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-function ImageGen({ imageUrl, setImageUrl,caption }) {
+function ImageGen({ imageUrl, setImageUrl, caption }) {
   const [isGenerating, setIsGenerating] = useState(false);
-  const [image,setImage] = useState();
+  const [isGenerated, setIsGenerated] = useState(false);
+  const [image, setImage] = useState();
   const [imagePrompt, setImagePrompt] = useState(
     "A close-up photo of a delicious dessert with intricate details"
   );
@@ -14,6 +15,7 @@ function ImageGen({ imageUrl, setImageUrl,caption }) {
 
   const generateImage = async () => {
     setIsGenerating(true);
+    setIsGenerated(false);
     setError(null);
 
     try {
@@ -26,16 +28,18 @@ function ImageGen({ imageUrl, setImageUrl,caption }) {
       });
 
       const data = await response.json();
-      console.log(data);
       setImageUrl(data?.imageUrl);
       setImage(data?.imageUrl);
       setIsGenerating(false);
+      setIsGenerated(true);
     } catch (error) {
+      setIsGenerated(false);
       setIsGenerating(false);
       console.error(error);
       setError("Failed to generate image");
     } finally {
       setIsGenerating(false);
+      setIsGenerated(false);
     }
   };
 
@@ -61,10 +65,10 @@ function ImageGen({ imageUrl, setImageUrl,caption }) {
   const user = useSelector((state) => state.user.user);
 
   const reqConfig = {
-    headers:{
-      Authorization:`Bearer ${user.token}`
-    }
-  }
+    headers: {
+      Authorization: `Bearer ${user.token}`,
+    },
+  };
 
   const createPost = async () => {
     try {
@@ -77,12 +81,11 @@ function ImageGen({ imageUrl, setImageUrl,caption }) {
         data,
         reqConfig
       );
-      toast.success('Post Uploaded!');
+      toast.success("Post Uploaded!");
     } catch (error) {
       toast.error(error.response.data.message);
     }
   };
-  
 
   return (
     <section className="text-white w-[500px]">
@@ -112,21 +115,23 @@ function ImageGen({ imageUrl, setImageUrl,caption }) {
         </button>
       </div>
 
-      <div className="my-4">
+      <div className="mt-4 mb-3">
         <img
-          src={imageUrl}
+          src={isGenerated ? imageUrl : "https://placeholder.co/300x300"}
           alt="img"
           className="pb-10 object-cover rounded-md"
-          style={{ width: "100%", height: "400px" }}
+          style={{ width: "100%", height: "450px" }}
         />
       </div>
-      <div className="my-3">
-      <button
-        onClick={createPost}
-        className="btn px-5 text-center bg-purple-600 text-white hover:bg-purple-700 hover:shadow-lg hover:border hover:border-gray-400 mx-auto block mb-3"
-      >
-        Post Now
-      </button>
+      <div className="my-2">
+        {isGenerated && (
+          <button
+            onClick={createPost}
+            className="btn px-5 text-center bg-purple-600 text-white hover:bg-purple-700 hover:shadow-lg hover:border hover:border-gray-400 mx-auto block mb-3"
+          >
+            Post Now
+          </button>
+        )}
       </div>
     </section>
   );

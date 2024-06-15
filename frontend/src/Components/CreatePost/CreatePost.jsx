@@ -84,10 +84,6 @@ function CreatePost() {
     }
   };
 
-  const createPost = () => {
-    // Code to store the post in the DB
-  };
-
   return (
     <>
       <section className="create-post-container w-screen h-screen">
@@ -133,7 +129,11 @@ function CreatePost() {
                     caption={caption}
                   />
                 ) : (
-                  <MemeGen data={data} filteredData={filteredData} setFilteredData={setFilteredData} />
+                  <MemeGen
+                    data={data}
+                    filteredData={filteredData}
+                    setFilteredData={setFilteredData}
+                  />
                 )}
               </div>
 
@@ -151,38 +151,43 @@ function CreatePost() {
               ) : null}
             </div>
 
-            <div className="py-3">
-              {/* <button
-                onClick={createPost}
-                className="btn px-5 text-center bg-purple-600 text-white hover:bg-purple-700 hover:shadow-lg hover:border hover:border-gray-400 mx-auto block mb-3"
-              >
-                Post Now
-              </button> */}
-              <div className="flex items-center justify-center">
-                <hr
-                  style={{
-                    borderColor: "white",
-                    borderWidth: "1px",
-                    width: "30%",
-                  }}
-                />
-                <span className="text-white text-center mx-2">OR</span>
-                <hr
-                  style={{
-                    borderColor: "white",
-                    borderWidth: "1px",
-                    width: "30%",
-                  }}
-                />
-              </div>
+            {currentTool !== "VideoGen" && (
+              <div className="py-3">
+                {mediaPre && (
+                  <button
+                    onClick={uploadImage}
+                    className="btn px-5 text-center bg-purple-600 text-white hover:bg-purple-700 hover:shadow-lg hover:border hover:border-gray-400 mx-auto block mb-3"
+                  >
+                    Post Now
+                  </button>
+                )}
 
-              <button
-                onClick={handleShow}
-                className="btn text-gray-300 hover:text-gray-200 mt-3 mb-2 mx-auto block"
-              >
-                Upload from system
-              </button>
-            </div>
+                <div className="flex items-center justify-center">
+                  <hr
+                    style={{
+                      borderColor: "white",
+                      borderWidth: "1px",
+                      width: "30%",
+                    }}
+                  />
+                  <span className="text-white text-center mx-2">OR</span>
+                  <hr
+                    style={{
+                      borderColor: "white",
+                      borderWidth: "1px",
+                      width: "30%",
+                    }}
+                  />
+                </div>
+
+                <button
+                  onClick={handleShow}
+                  className="btn text-gray-300 hover:text-gray-200 mt-3 mb-2 mx-auto block"
+                >
+                  Upload from system
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Modal */}
@@ -209,7 +214,11 @@ function CreatePost() {
                 )}
 
                 <button
-                  onClick={() => uploadImage()}
+                  // onClick={() => uploadImage()}
+                  onClick={() => {
+                    setImageUrl(mediaPre);
+                    handleClose();
+                  }}
                   className="btn px-5 w-[60%] text-white text-center bg-purple-600 mx-auto block mt-4"
                   type="submit"
                 >

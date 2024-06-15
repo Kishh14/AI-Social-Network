@@ -29,7 +29,8 @@ const Replicate = require("replicate");
 
   // Init Replicate AI
   const replicate = new Replicate({
-    auth: "r8_HyCVh6nbO3VkqJkMvLIvDVLs2lzfS3b3rnJE1",
+    // auth: "r8_HyCVh6nbO3VkqJkMvLIvDVLs2lzfS3b3rnJE1",
+    auth: process.env.REPLICATE_TOKEN,
   });
 
   app.get("/api", (req, res) => {
