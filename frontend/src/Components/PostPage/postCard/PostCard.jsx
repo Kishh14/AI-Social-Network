@@ -6,7 +6,7 @@ import {
   FaShare,
   FaTimes,
 } from "react-icons/fa";
-import user from "../../../assets/user.png";
+import { IoMdSend } from "react-icons/io";
 import CommentCard from "../CommentCard/CommentCard";
 import "./PostCard.css";
 import { useClickAway } from "../../../hooks/useClickAway";
@@ -152,35 +152,51 @@ const PostCard = ({
         {isModalOpen && (
           <div
             ref={modalRef}
-            className="py-4 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded shadow-lg w-1/2 overflow-y-auto overflow-x-hidden no-scrollbar"
+            className="py-4  absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded shadow-lg w-1/2 overflow-y-auto overflow-x-hidden no-scrollbar"
             style={{
               backdropFilter: "blur(20px)",
-              background: "rgba(999,999,999, 0.2)",
+              background: "rgba(000,000,000, 0.8)",
             }}
           >
             <div className="flex justify-between border-b border-gray-300 pb-3 px-8 items-center mb-4">
-              <h2 className="text-xl">Comments</h2>
+              <h2 className="text-xl text-white">Comments</h2>
               <FaTimes
-                className="text-black text-xl cursor-pointer"
+                className="text-white text-xl cursor-pointer"
                 onClick={toggleModal}
               />
             </div>
+
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <input
+                type="text"
+                className="form-control bg-gray-300 w-[70%]"
+                placeholder="Say Something..."
+              />
+              <button className="btn bg-gray-200">
+                <IoMdSend size={26} />
+              </button>
+            </div>
+
             <div className="border-white-400 max-h-80 overflow-y-auto no-scrollbar">
               <CommentCard
                 userName="John Doe"
                 postCaption="This is a comment caption"
+                image={"https://placeholder.co/300x300"}
               />
               <CommentCard
                 userName="Jane Smith"
                 postCaption="This is another comment caption"
+                image={"https://placeholder.co/300x300"}
               />
               <CommentCard
                 userName="Alice Johnson"
                 postCaption="Yet another comment caption"
+                image={"https://placeholder.co/300x300"}
               />
               <CommentCard
                 userName="Bob Brown"
                 postCaption="And another one!"
+                image={"https://placeholder.co/300x300"}
               />
               {/* Add more CommentCard components as needed */}
             </div>

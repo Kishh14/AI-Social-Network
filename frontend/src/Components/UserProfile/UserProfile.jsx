@@ -68,7 +68,7 @@ function UserProfile() {
   });
 
   // Share Modal for each post
-  const [isShareModalOpen, setIsShareModalOpen] = useState(true);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const shareModalRef = useClickAway(() => {
     setIsShareModalOpen(false);
   });
@@ -210,8 +210,7 @@ function UserProfile() {
       setUserPageDetails(details.data.user);
 
       const userPosts = await axios.get(
-        `${import.meta.env.VITE_API_USER_URL}/${
-          details.data.user._id
+        `${import.meta.env.VITE_API_USER_URL}/${details.data.user._id
         }/singleUserPosts`
       );
       setPosts(userPosts.data.post);
@@ -487,11 +486,11 @@ function UserProfile() {
                                 toggleModal(post._id);
                               }}
                             />
-                            <FaShare
+                            {/* <FaShare
                               size={22}
                               className="text-white mr-2 hover:text-gray-300 cursor-pointer"
                               onClick={() => toggleShareModal()}
-                            />
+                            /> */}
                           </div>
                         </div>
                       </>
@@ -530,13 +529,14 @@ function UserProfile() {
                               size={22}
                               onClick={() => {
                                 toggleModal();
-                                setCurrentPostID(post._id);
+                                setCurrentPostId(post._id);
                               }}
                             />
-                            <FaShare
+                            {/* <FaShare
+                              onClick={()=>{console.log("user")}}
                               size={22}
                               className="text-white mr-2 hover:text-gray-300 cursor-pointer"
-                            />
+                            /> */}
                           </div>
                         </div>
                       </>
@@ -646,10 +646,10 @@ function UserProfile() {
                                 toggleModal(post._id);
                               }}
                             />
-                            <FaShare
+                            {/* <FaShare
                               size={22}
                               className="text-white mr-2 hover:text-gray-300 cursor-pointer"
-                            />
+                            /> */}
                           </div>
                         </div>
                       </>
@@ -690,10 +690,11 @@ function UserProfile() {
                                 toggleModal(post._id);
                               }}
                             />
-                            <FaShare
+                            {/* <FaShare
                               size={22}
                               className="text-white mr-2 hover:text-gray-300 cursor-pointer"
-                            />
+                              
+                            /> */}
                           </div>
                         </div>
                       </>
@@ -1037,7 +1038,7 @@ function UserProfile() {
       )}
 
       {/* Share Modal */}
-      {isShareModalOpen && (
+      {/* {isShareModalOpen && (
         <div
           ref={shareModalRef}
           className="py-4 absolute flex items-center justify-center left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded shadow-lg w-[35%] h-[20%] overflow-y-auto overflow-x-hidden no-scrollbar"
@@ -1046,19 +1047,18 @@ function UserProfile() {
             background: "rgba(999,999,999, 0.2)",
           }}
         >
-          <div className="border-white-400 max-h-80 overflow-y-auto no-scrollbar">
-            <p className="mx-5 flex items-center justify-center">
-              <div className="flex gap-2 items-center border rounded p-1 px-3">
-                <BiLinkAlt size={26} color="white" />
-                <p ref={textRef}>Text to copy</p>
-              </div>
-              <button className="btn" onClick={copyToClipboard}>
-                <IoIosCopy size={20} color="white" />
-              </button>
-            </p>
+          <div className="mx-5 flex items-center justify-center">
+            <div className="flex gap-2 items-center border rounded p-1 px-3">
+              <BiLinkAlt size={26} color="white" />
+              <p ref={textRef} className="text-gray-300">{imgURL}</p>
+            </div>
+            <button className="btn" onClick={copyToClipboard}>
+              <IoIosCopy size={20} color="white" />
+            </button>
           </div>
+
         </div>
-      )}
+      )} */}
     </>
   );
 }
