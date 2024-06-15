@@ -4,8 +4,8 @@ import ChatBody from "./ChatBody";
 import { FaVideo, FaTimes } from "react-icons/fa";
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
 
-const ChatPage = ({ socket, recipient, messages }) => {
-  const [localMessages, setLocalMessages] = useState(messages);
+const ChatPage = ({ socket, recipient }) => {
+  const [localMessages, setLocalMessages] = useState([]);
   const [typing, setTyping] = useState("");
   const [isVideoCallActive, setIsVideoCallActive] = useState(false);
   const lastMessageRef = useRef(null);
@@ -21,20 +21,14 @@ const ChatPage = ({ socket, recipient, messages }) => {
     const serverSecret = "43702c120437b5301a7d484678da4c7c";
     const username = sessionStorage.getItem("username");
     const roomId = generateRoomId(username, recipient);
-    const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
-      appID,
-      serverSecret,
-      roomId,
-      Date.now().toString(),
-      username
-    );
+    const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomId, Date.now().toString(), username);
     const zego = ZegoUIKitPrebuilt.create(kitToken);
     zegoRef.current = zego;
     zego.joinRoom({
       container: videoCallContainerRef.current,
       scenario: {
         mode: ZegoUIKitPrebuilt.OneONoneCall,
-      },
+      }
     });
     setIsVideoCallActive(true);
   };
@@ -48,23 +42,13 @@ const ChatPage = ({ socket, recipient, messages }) => {
   };
 
   const emitCallingMessage = () => {
+    const username = sessionStorage.getItem("username");
     const messageData = {
       sender: username,
       recipient: recipient,
       text: `${username} is calling you 🤙`,
       timestamp: new Date().toISOString(),
     };
-    socket.emit("message", messageData);
-  };
-
-  useEffect(() => {
-    setLocalMessages(messages);
-  }, [messages]);
-
-  const handleSendMessage = (messageData) => {
-    // Add the sender's message to local messages
-    setLocalMessages((prevMessages) => [...prevMessages, messageData]);
-    // Emit the message to the server
     socket.emit("message", messageData);
   };
 
@@ -84,8 +68,7 @@ const ChatPage = ({ socket, recipient, messages }) => {
 
     const handleMessageHistory = (data) => {
       const relevantMessages = data.filter(
-        (message) =>
-          message.recipient === recipient || message.name === recipient
+        (message) => message.recipient === recipient || message.name === recipient
       );
       setLocalMessages(relevantMessages);
     };
@@ -114,34 +97,20 @@ const ChatPage = ({ socket, recipient, messages }) => {
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-blue-400 to-purple-600">
       <div className="w-[600px] h-[95vh] rounded-tl-none rounded-bl-none max-w-4xl p-4 absolute top-8 rounded-lg bg-white shadow-lg">
-        <FaVideo
-          onClick={handleVideo}
-          className="absolute top-0 right-8 text-2xl text-gray-600 hover:text-green-500 cursor-pointer"
-        />
+        <FaVideo onClick={handleVideo} className="absolute top-0 right-8 text-2xl text-gray-600 hover:text-green-500 cursor-pointer"/>
         {isVideoCallActive && (
           <div className="relative w-full h-full">
-            <FaTimes
-              onClick={handleCloseVideo}
-              className="absolute top-2 right-2 text-2xl text-gray-600 hover:text-red-500 cursor-pointer"
-            />
-            <div
-              ref={videoCallContainerRef}
-              className="w-full h-full bg-black"
-            ></div>
+            <FaTimes onClick={handleCloseVideo} className="absolute top-2 right-2 text-2xl text-gray-600 hover:text-red-500 cursor-pointer" />
+            <div ref={videoCallContainerRef} className="w-full h-full bg-black"></div>
           </div>
         )}
         {!isVideoCallActive && (
           <>
-            <ChatBody
-              messages={localMessages}
-              lastMessageRef={lastMessageRef}
-              typing={typing}
-            />
-            <ChatFooter
-              socket={socket}
-              handleSendMessage={handleSendMessage}
-              recipient={recipient}
-            />
+            <ChatBody messages={localMessages} lastMessageRef={lastMessageRef} typing={typing} />
+            <ChatFooter socket={socket} handleSendMessage={(messageData) => {
+              setLocalMessages((prevMessages) => [...prevMessages, messageData]);
+              socket.emit("message", messageData);
+            }} recipient={recipient} />
           </>
         )}
       </div>
