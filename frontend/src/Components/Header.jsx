@@ -38,7 +38,7 @@ function Header({ setCurrentPage, showSearchSidebar, setShowSearchSidebar }) {
         />
         <BiChat
           className="icon text-white mb-7"
-          onClick={() => setCurrentPage("ChatPage")}
+          onClick={() => navigate("/messenger")}
         />
         <MdOutlineAccountCircle
           className="icon text-white mb-7"
