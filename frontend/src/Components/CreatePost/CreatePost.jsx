@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ImageGen from "./ImageGen/ImageGen";
 import "./CreatePost.css";
 import PostPreview from "./PostPreview";
@@ -10,6 +10,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { Modal } from "react-bootstrap";
 import MemeGen from "./MemeGen/MemeGen";
+import { getAllMems } from "./MemeGen/MemeApi";
 
 function CreatePost() {
   const [imageUrl, setImageUrl] = useState("http://placeholder.co/400x300");
@@ -18,6 +19,15 @@ function CreatePost() {
   const [video, setVideo] = useState("");
   const [currentTool, setCurrentTool] = useState("ImageGen");
   const [show, setShow] = useState(false);
+
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+
+  // Fetch Memes
+  useEffect(() => {
+    getAllMems().then((memes) => setData(memes.data.memes));
+    setFilteredData(data);
+  }, [filteredData]);
 
   const handleClose = () => {
     setShow(false);
@@ -109,7 +119,11 @@ function CreatePost() {
               {/* AI Tools */}
               <div className="mt-2 w-full">
                 {currentTool === "ImageGen" ? (
-                  <ImageGen imageUrl={imageUrl} setImageUrl={setImageUrl} caption={caption}/>
+                  <ImageGen
+                    imageUrl={imageUrl}
+                    setImageUrl={setImageUrl}
+                    caption={caption}
+                  />
                 ) : currentTool === "VideoGen" ? (
                   <VideoGen
                     videoPrompt={videoPrompt}
@@ -119,7 +133,7 @@ function CreatePost() {
                     caption={caption}
                   />
                 ) : (
-                  <MemeGen />
+                  <MemeGen data={data} filteredData={filteredData} setFilteredData={setFilteredData} />
                 )}
               </div>
 
@@ -145,9 +159,21 @@ function CreatePost() {
                 Post Now
               </button> */}
               <div className="flex items-center justify-center">
-                <hr style={{ borderColor: "white", borderWidth: "1px", width: "30%" }} />
+                <hr
+                  style={{
+                    borderColor: "white",
+                    borderWidth: "1px",
+                    width: "30%",
+                  }}
+                />
                 <span className="text-white text-center mx-2">OR</span>
-                <hr style={{ borderColor: "white", borderWidth: "1px", width: "30%" }} />
+                <hr
+                  style={{
+                    borderColor: "white",
+                    borderWidth: "1px",
+                    width: "30%",
+                  }}
+                />
               </div>
 
               <button
