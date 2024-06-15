@@ -1,8 +1,12 @@
 import { FaRandom } from "react-icons/fa";
 import React, { useState } from "react";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
-function ImageGen({ imageUrl, setImageUrl }) {
+function ImageGen({ imageUrl, setImageUrl,caption }) {
   const [isGenerating, setIsGenerating] = useState(false);
+  const [image,setImage] = useState();
   const [imagePrompt, setImagePrompt] = useState(
     "A close-up photo of a delicious dessert with intricate details"
   );
@@ -13,7 +17,7 @@ function ImageGen({ imageUrl, setImageUrl }) {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:3000/generate-image", {
+      const response = await fetch("http://localhost:4000/generate-image", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -22,7 +26,9 @@ function ImageGen({ imageUrl, setImageUrl }) {
       });
 
       const data = await response.json();
+      console.log(data);
       setImageUrl(data?.imageUrl);
+      setImage(data?.imageUrl);
       setIsGenerating(false);
     } catch (error) {
       setIsGenerating(false);
@@ -51,6 +57,34 @@ function ImageGen({ imageUrl, setImageUrl }) {
     const randomPrompt = imagePrompts[random % imagePrompts.length];
     setImagePrompt(randomPrompt);
   };
+
+  const user = useSelector((state) => state.user.user);
+
+  const reqConfig = {
+    headers:{
+      Authorization:`Bearer ${user.token}`
+    }
+  }
+
+  const createPost = async () => {
+    try {
+      const data = {
+        aiLink: image,
+        content: caption,
+      };
+      const resp = await axios.post(
+        `${import.meta.env.VITE_API_USER_URL}/uploadAIimagePost`,
+        data,
+        reqConfig
+      );
+      console.log(resp);
+      toast.success('Post Uploaded!');
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
+  };
+  
 
   return (
     <section className="text-white w-[500px]">
@@ -90,7 +124,7 @@ function ImageGen({ imageUrl, setImageUrl }) {
       </div>
       <div className="my-3">
       <button
-        // onClick={createPost}
+        onClick={createPost}
         className="btn px-5 text-center bg-purple-600 text-white hover:bg-purple-700 hover:shadow-lg hover:border hover:border-gray-400 mx-auto block mb-3"
       >
         Post Now

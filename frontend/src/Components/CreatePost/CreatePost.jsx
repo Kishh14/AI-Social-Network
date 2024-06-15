@@ -109,7 +109,7 @@ function CreatePost() {
               {/* AI Tools */}
               <div className="mt-2 w-full">
                 {currentTool === "ImageGen" ? (
-                  <ImageGen imageUrl={imageUrl} setImageUrl={setImageUrl} />
+                  <ImageGen imageUrl={imageUrl} setImageUrl={setImageUrl} caption={caption}/>
                 ) : currentTool === "VideoGen" ? (
                   <VideoGen
                     videoPrompt={videoPrompt}
