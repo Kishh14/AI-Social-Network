@@ -32,7 +32,12 @@ const ChatPage = ({ socket, recipient }) => {
     zegoRef.current = zego;
     zego.joinRoom({
       container: videoCallContainerRef.current,
-      onLeaveRoom: () => window.location.reload(),
+      onLeaveRoom: () => {
+        navigate("/");
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      },
       scenario: {
         mode: ZegoUIKitPrebuilt.OneONoneCall,
       },

@@ -18,3 +18,8 @@
   backdrop-filter: blur(45px) !important;
   /* border-radius: 10px; */
 }
+
+
+body::-webkit-scrollbar{
+  display: none;
+}

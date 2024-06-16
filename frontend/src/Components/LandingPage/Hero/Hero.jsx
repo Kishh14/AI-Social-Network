@@ -4,10 +4,13 @@ import L1 from "../../../assets/L1.png";
 import Vector from "../../../assets/3d.png";
 import Start from "../../../assets/Start.png";
 import { useNavigate } from "react-router-dom";
-import heroImg from '../../../assets/hero-image.png'
+import heroImg from "../../../assets/hero-image.png";
+import { useSelector } from "react-redux";
 
 const Hero = () => {
   const navigate = useNavigate();
+
+  const user = useSelector((state) => state.user.user);
 
   return (
     <div className="flex h-[80vh] justify-between bg-image">
@@ -24,12 +27,21 @@ const Hero = () => {
             Media
           </p>
 
-          <img
-            src={Start}
-            alt=""
-            className="h-40 w-40 ml-52 mt-5 para cursor-pointer"
-            onClick={() => navigate("/authentication")}
-          />
+          {!user.details._id ? (
+            <img
+              src={Start}
+              alt=""
+              className="h-40 w-40 ml-52 mt-5 para cursor-pointer"
+              onClick={() => navigate("/authentication")}
+            />
+          ) : (
+            <img
+              src={Start}
+              alt=""
+              className="h-40 w-40 ml-52 mt-5 para cursor-pointer"
+              onClick={() => navigate("/PostPage")}
+            />
+          )}
         </div>
         <p className="text-white p-1 m-1 mt-5 w-3/4">
           Tired of the same old social media routine? Introducing a

@@ -409,18 +409,24 @@ function UserProfile() {
     }
   };
 
-  const handleDelete=async(postId)=>{
+  const handleDelete = async (postId) => {
     try {
-      const userConfirmed = confirm("Are you sure wanna delete? (btw, hiding somethin? 🌚😁)");
-      if(userConfirmed){
-       const deletePost = await axios.delete(`${import.meta.env.VITE_API_USER_URL}/${postId}/deletePost`,reqConfig);
-       toast.success("Post deleted!");
-       window.location.reload();
+      const userConfirmed = confirm(
+        "Are you sure wanna delete? (btw, hiding somethin? 🌚😁)"
+      );
+      if (userConfirmed) {
+        const deletePost = await axios.delete(
+          `${import.meta.env.VITE_API_USER_URL}/${postId}/deletePost`,
+          reqConfig
+        );
+        fetchUser(user.details.username);
+        toast.success("Post deleted!");
+        // window.location.reload();
       }
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
     <>
@@ -529,7 +535,7 @@ function UserProfile() {
                               <MdDelete
                                 className="text-white mr-2 cursor-pointer hover:text-gray-300"
                                 size={23}
-                                onClick={()=>handleDelete(post._id) }
+                                onClick={() => handleDelete(post._id)}
                               />
                               {/* <FaShare
                               size={22}

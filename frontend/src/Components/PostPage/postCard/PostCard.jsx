@@ -29,11 +29,11 @@ const PostCard = ({
   authorId,
   postId,
   post,
+  fetchData,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showDeleteDropdown, setShowDeleteDropdown] = useState(false);
   const modalRef = useClickAway(() => {
-    console.log("Clicked!");
     setIsModalOpen(false);
   });
 
@@ -72,6 +72,10 @@ const PostCard = ({
   };
 
   const [like, setLike] = useState(likeCount);
+  const [isLiked, setIsLiked] = useState(
+    post?.likes.includes(authorId) ? true : false
+  );
+
   const [postLike, setPostLike] = useState();
   const navigate = useNavigate();
 
@@ -91,7 +95,8 @@ const PostCard = ({
         payload,
         reqConfig
       );
-      navigate("/PostPage");
+      fetchData();
+      setIsLiked(true);
     } catch (error) {
       console.log(error);
     }
@@ -107,6 +112,8 @@ const PostCard = ({
           data: payload,
         }
       );
+      fetchData();
+      setIsLiked(false);
     } catch (error) {
       console.error(
         "Error disliking the post:",
@@ -140,18 +147,24 @@ const PostCard = ({
     }
   };
 
-  const handleDelete=async(postId)=>{
+  const handleDelete = async (postId) => {
     try {
-      const userConfirmed = confirm("Are you sure wanna delete? (btw, hiding somethin? 🌚😁)");
-      if(userConfirmed){
-       const deletePost = await axios.delete(`${import.meta.env.VITE_API_USER_URL}/${postId}/deletePost`,reqConfig);
-       toast.success("Post deleted!");
-       window.location.reload();
+      const userConfirmed = confirm(
+        "Are you sure wanna delete? (btw, hiding somethin? 🌚😁)"
+      );
+      if (userConfirmed) {
+        const deletePost = await axios.delete(
+          `${import.meta.env.VITE_API_USER_URL}/${postId}/deletePost`,
+          reqConfig
+        );
+        fetchData();
+        toast.success("Post deleted!");
+        // window.location.reload();
       }
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
     <div className="rounded-md overflow-hidden mx-3 glass-effect my-3">
@@ -258,7 +271,7 @@ const PostCard = ({
       {/* Like, Comment, Share Section */}
       <div className="flex flex-col p-4">
         <div className="flex items-center gap-1 mb-1 ml-3">
-          {post?.likes.includes((pos) => pos === authorId) ? (
+          {isLiked ? (
             <FaHeart
               className="mr-2 text-red-500 cursor-pointer"
               size={22}
@@ -283,7 +296,7 @@ const PostCard = ({
         </div>
 
         <div className="text-gray-400 ml-3">
-          <p>{like} Likes</p>
+          <p>{likeCount} Likes</p>
         </div>
         {isModalOpen && (
           <div

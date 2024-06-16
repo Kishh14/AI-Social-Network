@@ -42,7 +42,7 @@ function Explore() {
                   <img
                     src={post.image}
                     alt={`Image ${post._id}`}
-                    className="image rounded-md w-full h-full"
+                    className="image rounded-md w-full h-full cursor-pointer"
                     onClick={()=>handlePostClick(post.author)}
                   />
                 )}

@@ -15,7 +15,7 @@ function CaptionGen({ setCaption, imageUrl }) {
     let captionPrompt = `Write an engaging caption for this image, suitable for social media. The caption can be concise, informative, casual and may capture a bit of the essence of the image. It can be humorous, inspirational, dark humurous, or informal also add relevant emojis and hashtags.`;
 
     try {
-      const response = await fetch("http://localhost:3000/generate-caption", {
+      const response = await fetch("https://ai-social-network-1-api.onrender.com/generate-caption", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

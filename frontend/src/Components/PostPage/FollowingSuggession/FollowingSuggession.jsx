@@ -35,7 +35,7 @@ const FollowingSuggession = () => {
         </div>
       </div>
 
-      <div className="p-4 flex flex-col px-3">
+      <div className="p-4 flex flex-col px-3 no-scrollbar overflow-y-scroll h-[50vh] pb-5 mb-4">
         {allUsers?.length > 0 ? allUsers?.map((user)=>{
           return( <FollowCard key={user._id} userName={user.username} userId={user._id} image={user.profileImg}/>)
         }

@@ -70,12 +70,13 @@ function PostPage({ socket, setIsLandingPage }) {
                   userImage={postUser?.profileImg}
                   postId={post._id}
                   post={post}
+                  fetchData={fetchData}
                 />
               );
             })}
           </div>
         </div>
-        <div className="w-1/4 glass-effect">
+        <div className="w-1/4 glass-effect no-scrollbar overflow-y-hidden">
           <div className="border-b overflow-y-scroll h-[350px] border-gray-400 no-scrollbar">
             <Notification socket={socket} />
           </div>
