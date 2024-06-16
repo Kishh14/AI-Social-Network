@@ -39,7 +39,6 @@ function ImageGen({ imageUrl, setImageUrl, caption }) {
       setError("Failed to generate image");
     } finally {
       setIsGenerating(false);
-      setIsGenerated(false);
     }
   };
 

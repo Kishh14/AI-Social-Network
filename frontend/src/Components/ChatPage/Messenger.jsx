@@ -14,7 +14,7 @@ const Messenger = ({
   handleSearch,
   showSearch,
   chatterRendered,
-  currentUser
+  currentUser,
 }) => {
   const [selectedRecipient, setSelectedRecipient] = useState(null);
   const [chatKey, setChatKey] = useState(0);
@@ -50,7 +50,7 @@ const Messenger = ({
           <div
             key={index}
             onClick={() => handleMessageContainer(chatterData.name)}
-            className="flex items-center mb-4 cursor-pointer hover:bg-gray-200 p-2 rounded-lg"
+            className="flex items-center mb-4 cursor-pointer hover:bg-gray-900 p-2 rounded-lg"
           >
             <img
               src={chatterData.profileImg || "/path/to/default/image.jpg"}
@@ -83,34 +83,34 @@ const Messenger = ({
   };
 
   return (
-    <div className="min-h-screen w-[70vw] flex justify-center items-center bg-gradient-to-r from-blue-400 to-purple-600 p-8 rounded-lg">
-      <div className="flex w-full h-[95vh] max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden">
-        <div className="w-1/3 h-[100vh] bg-gray-100 p-4 relative">
+    <div className="flex justify-center items-center mx-9 mt-3 rounded-lg">
+      <div className="flex w-full rounded-lg shadow-lg overflow-hidden glass-effect">
+        <div className="w-1/3 shadow-2xl text-white p-4 relative border-r border-gray-700">
           <div className="flex justify-between items-center mb-4">
             <span className="text-2xl font-bold">{currentUser}</span>
-            {showSearch ? (
+            {!showSearch ? (
               <FaRegEdit
                 className="text-2xl cursor-pointer"
                 onClick={handleSearch}
                 size={28}
               />
             ) : (
-              <div className="absolute top-[15vh] left-[35px]">
+              <div className="absolute top-[8vh] left-[35px] flex items-center">
                 <input
                   type="text"
-                  className="border-gray-800 rounded-lg mr-8 shadow-md"
+                  className="border-gray-800 p-2 form-control inline rounded-lg rounded-r-none shadow-md"
                   placeholder="Search username..."
                   value={searchQuery}
                   onChange={handleSearchChange}
                 />
                 <button
-                  className="border-none w-[125px] mt-2 bg-blue-700 hover:bg-blue-900 text-white rounded-md rounded-tr-none rounded-br-none p-1"
+                  className="border-none w-[125px] bg-blue-700 hover:bg-blue-900 text-white rounded-tr-none rounded-br-none p-2"
                   onClick={performSearch}
                 >
                   Search
                 </button>
                 <button
-                  className="border-none mt-2 bg-red-600 hover:bg-red-900 text-white p-1 w-12 rounded-md rounded-tl-none rounded-bl-none"
+                  className="border-none p-2 bg-red-800 hover:bg-red-900 text-white w-12 rounded-md rounded-tl-none rounded-bl-none"
                   onClick={handleSearch}
                 >
                   X
@@ -118,7 +118,7 @@ const Messenger = ({
               </div>
             )}
           </div>
-          <div className="overflow-y-auto mt-[100px] h-[100vh]">
+          <div className="overflow-y-auto mt-[50px] h-[100vh]">
             {renderAccounts()}
             {!chatterRendered && chatter.length > 0 ? (
               <div>{renderChatter()}</div>
@@ -127,25 +127,25 @@ const Messenger = ({
             )}
           </div>
         </div>
-        <div className="w-2/3 flex flex-col items-center justify-center p-8 bg-gray-50">
+        <div className="w-2/4 flex flex-col items-center justify-center p-8">
           {selectedRecipient ? (
             <ChatPage
               key={chatKey}
               socket={socket}
               recipient={selectedRecipient}
             />
-          ):(
-            <div className="text-center">
+          ) : (
+            <div className="text-center text-gray-200">
               <FaRegCircle
                 className="text-gray-300 flex m-auto"
                 style={{
-                  fontSize: "75px",
+                  fontSize: "70px",
                 }}
               />
               <FiSend
-                className="flex m-auto text-gray-700 translate-y-[-160%]"
+                className="flex m-auto text-gray-200 translate-y-[-160%]"
                 style={{
-                  fontSize: "32px",
+                  fontSize: "30px",
                 }}
               />
               <h2 className="text-2xl font-bold mb-2">Your Messages</h2>

@@ -11,7 +11,7 @@ const ChatBody = ({ messages, typing, lastMessageRef, isVideoCallActive, videoCa
   console.log("Rendering ChatBody");
 
   return (
-    <div className="chat__body overflow-y-auto h-[80vh] p-4 bg-gray-100 rounded-lg shadow-inner">
+    <div className="chat__body overflow-y-auto mt-2 h-[80vh] p-4 bg-gray-100 rounded-t-lg shadow-inner">
       {isVideoCallActive ? (
         <div className="relative w-full h-full">
           <FaTimes onClick={handleCloseVideo} className="absolute top-2 right-2 text-2xl text-gray-600 hover:text-red-500 cursor-pointer" />

@@ -44,7 +44,11 @@ const ChatFooter = ({ socket, handleSendMessage, recipient }) => {
     e.preventDefault();
     const username = sessionStorage.getItem("username");
     if (message.trim() && username) {
-      handleSendMessage({ text: message, name:username, recipient:recipient});
+      handleSendMessage({
+        text: message,
+        name: username,
+        recipient: recipient,
+      });
       setMessage("");
       setIsTyping(false);
       socket.emit("typing", { typing: "", recipient });
@@ -53,7 +57,7 @@ const ChatFooter = ({ socket, handleSendMessage, recipient }) => {
   };
 
   return (
-    <div className="w-full p-2 border-t border-gray-200 bg-white flex items-center justify-between">
+    <div className="w-full p-2 border-t rounded-b-lg border-gray-300 bg-gray-300 flex items-center justify-between">
       <form className="form w-full flex items-center" onSubmit={onSendMessage}>
         <input
           type="text"
@@ -67,9 +71,7 @@ const ChatFooter = ({ socket, handleSendMessage, recipient }) => {
           onClick={handleMic}
           className="ml-2 text-gray-500 cursor-pointer text-2xl hover:text-gray-900"
         />
-        <button
-          className="sendBtn ml-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-        >
+        <button className="sendBtn ml-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
           SEND
         </button>
       </form>

@@ -21,15 +21,21 @@ const ChatPage = ({ socket, recipient }) => {
     const serverSecret = "43702c120437b5301a7d484678da4c7c";
     const username = sessionStorage.getItem("username");
     const roomId = generateRoomId(username, recipient);
-    const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomId, Date.now().toString(), username);
+    const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
+      appID,
+      serverSecret,
+      roomId,
+      Date.now().toString(),
+      username
+    );
     const zego = ZegoUIKitPrebuilt.create(kitToken);
     zegoRef.current = zego;
     zego.joinRoom({
       container: videoCallContainerRef.current,
-      onLeaveRoom: ()=> window.location.reload(),
+      onLeaveRoom: () => window.location.reload(),
       scenario: {
         mode: ZegoUIKitPrebuilt.OneONoneCall,
-      }
+      },
     });
     setIsVideoCallActive(true);
   };
@@ -69,7 +75,8 @@ const ChatPage = ({ socket, recipient }) => {
 
     const handleMessageHistory = (data) => {
       const relevantMessages = data.filter(
-        (message) => message.recipient === recipient || message.name === recipient
+        (message) =>
+          message.recipient === recipient || message.name === recipient
       );
       setLocalMessages(relevantMessages);
     };
@@ -97,8 +104,11 @@ const ChatPage = ({ socket, recipient }) => {
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-blue-400 to-purple-600">
-      <div className="w-[600px] h-[95vh] max-w-4xl p-4 absolute top-8 rounded-lg bg-white shadow-lg">
-        <FaVideo onClick={handleVideo} className="absolute top-0 right-8 text-2xl text-gray-600 hover:text-green-500 cursor-pointer"/>
+      <div className="w-[600px] h-[95vh] max-w-4xl p-4 absolute top-8 rounded-lg bg-white bg-opacity-10 shadow-lg">
+        <FaVideo
+          onClick={handleVideo}
+          className="absolute top-0 right-8 my-1 text-2xl text-gray-200 hover:text-green-500 cursor-pointer"
+        />
         <ChatBody
           messages={localMessages}
           lastMessageRef={lastMessageRef}
@@ -111,7 +121,10 @@ const ChatPage = ({ socket, recipient }) => {
           <ChatFooter
             socket={socket}
             handleSendMessage={(messageData) => {
-              setLocalMessages((prevMessages) => [...prevMessages, messageData]);
+              setLocalMessages((prevMessages) => [
+                ...prevMessages,
+                messageData,
+              ]);
               socket.emit("message", messageData);
             }}
             recipient={recipient}
