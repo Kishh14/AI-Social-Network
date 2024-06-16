@@ -64,9 +64,9 @@ const SearchCard = ({ userName, followedBy, userImg, id }) => {
   };
 
   return (
-    <div className="p-3 flex justify-between items-center gap-2" onClick={()=>{navigate(`/profile/${userName}`)}}>
-      <img src={userImg} alt="" className="h-12 w-12 rounded-full object-cover" />
-      <div className="">
+    <div className="p-3 flex justify-between items-center gap-2">
+      <img src={userImg} alt="" className="h-12 w-12 rounded-full object-cover cursor-pointer" onClick={()=>{navigate(`/profile/${userName}`)}}/>
+      <div className="cursor-pointer" onClick={()=>{navigate(`/profile/${userName}`)}}>
         <p className="text-white font-semibold ml-2">{userName}</p>
         <p className="text-gray-300 font-semibold ml-2">{followedBy}</p>
       </div>
