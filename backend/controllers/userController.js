@@ -20,21 +20,18 @@ const AddUser = async (req, res) => {
             return res.status(400).json({ message: "All fields are mandatory!" });
         }
 
-        const lowerCaseEmail = email.toLowerCase();
-        const lowerCaseUsername = username.toLowerCase();
-
-        const findEmail = await UserModel.findOne({ email: { $regex: new RegExp('^' + lowerCaseEmail + '$', 'i') } });
+        const findEmail = await UserModel.findOne({ email });
         if (findEmail) {
             return res.status(400).json({ message: "Email already registered!" });
         }
 
-        const findUsername = await UserModel.findOne({ username: { $regex: new RegExp('^' + lowerCaseUsername + '$', 'i') } });
+        const findUsername = await UserModel.findOne({ username });
         if (findUsername) {
             return res.status(400).json({ message: "Username already registered!" });
         }
 
         const hashPassword = await bcrypt.hash(password, 8);
-        const newUser = new UserModel({ username: username, email: email, password: hashPassword, profileImg: image });
+        const newUser = new UserModel({ username, email, password: hashPassword, profileImg: image });
         const resp = await newUser.save();
 
         return res.status(200).json({ message: "User Registered Successfully!", user: resp });
@@ -43,7 +40,6 @@ const AddUser = async (req, res) => {
     }
 };
 
-
 const LoginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -51,11 +47,7 @@ const LoginUser = async (req, res) => {
             return res.status(400).json({ message: "All fields are mandatory!" });
         }
 
-        // Convert email to lowercase
-        const lowerCaseEmail = email.toLowerCase();
-
-        // Use a case-insensitive query to find the user
-        const user = await UserModel.findOne({ email: { $regex: new RegExp('^' + lowerCaseEmail + '$', 'i') } });
+        const user = await UserModel.findOne({ email });
         if (!user) {
             return res.status(400).json({ message: "Email is not registered!" });
         }
@@ -65,16 +57,8 @@ const LoginUser = async (req, res) => {
             return res.status(400).json({ message: "Email or Password is Incorrect!" });
         }
 
-        const token = jwt.sign({ email: user.email }, process.env.JWT_TOKEN);
-        const userInfo = {
-            "_id": user._id,
-            "username": user.username,
-            "email": user.email,
-            "profileImg": user.profileImg,
-            "followers": user.followers,
-            "following": user.following,
-            "bio": user.bio
-        };
+        const token = jwt.sign(user.email, process.env.JWT_TOKEN);
+        const userInfo = { "_id": user._id, "username": user.username, "email": user.email, "profileImg": user.profileImg, "followers": user.followers, "following": user.following, "bio": user.bio };
 
         return res.status(200).json({ message: "User Logged In Successfully!", token, user: userInfo });
     } catch (error) {

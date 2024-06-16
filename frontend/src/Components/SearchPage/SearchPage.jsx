@@ -37,22 +37,26 @@ function SearchPage({ showSearchSidebar }) {
     const newTimeout = setTimeout(async () => {
       try {
         if (!value) {
-          searchUsers();
+          const resp = await axios.get(`${import.meta.env.VITE_API_USER_URL}/getAllUsers`);
+          let users = resp.data.allUsers;
+          users = users.filter(users => user.details._id !== users._id)
+          setAllUsers(users);
+          setAllUsers(resp.data.allUsers);
         }
         else {
           const response = await axios.get(
             `${import.meta.env.VITE_API_USER_URL}/${value}/singleUser`
           );
-          if(response?.data.user._id===user.details._id){
+          if(response.data.user===user.details.username){
             setAllUsers();
           }else
-          setAllUsers([response.data.user]);
+          setAllUsers(response.data.user);
         }
       } catch (error) {
         console.error('Failed to fetch user:', error);
       }
     }, 1000);
-    
+
     setSearchTimeout(newTimeout);
   }
 
@@ -88,7 +92,13 @@ function SearchPage({ showSearchSidebar }) {
               id={user._id}
             />
           )
-            :<p className="text-light">No users found</p>
+            :
+            <SearchCard
+              userImg={allUsers.profileImg}
+              userName={allUsers.username}
+              followedBy="Followed by terylucas + 2 more"
+              id={allUsers._id}
+            />
           }
         </div>
       </div>
