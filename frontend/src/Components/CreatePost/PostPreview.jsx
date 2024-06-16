@@ -5,7 +5,15 @@ import user from "../../assets/user.png";
 import { FaComment, FaHeart, FaShare } from "react-icons/fa";
 import CaptionGen from "./CaptionGen/CaptionGen";
 
-function PostPreview({ imageUrl, caption, video, currentTool, setCaption }) {
+function PostPreview({
+  imageUrl,
+  caption,
+  video,
+  currentTool,
+  setCaption,
+  isCaptionAIGen,
+  setIsCaptionAIGen,
+}) {
   const [isEditingCaption, setIsEditingCaption] = useState(false);
 
   return (
@@ -44,7 +52,12 @@ function PostPreview({ imageUrl, caption, video, currentTool, setCaption }) {
             {/* Generate the captions only for Images else let the user add caption manually */}
             {currentTool === "ImageGen" ? (
               <div className="flex flex-col gap-1">
-                <CaptionGen setCaption={setCaption} imageUrl={imageUrl} />
+                <CaptionGen
+                  setCaption={setCaption}
+                  imageUrl={imageUrl}
+                  setIsCaptionAIGen={setIsCaptionAIGen}
+                  isCaptionAIGen={isCaptionAIGen}
+                />
                 <button className="btn text-white border-0">
                   {!isEditingCaption ? (
                     <BiEditAlt

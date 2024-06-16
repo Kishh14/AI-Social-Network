@@ -4,7 +4,12 @@ import { BsRobot } from "react-icons/bs";
 import React, { useState } from "react";
 import "./../CaptionGen/CaptionGen.css";
 
-function CaptionGen({ setCaption, imageUrl }) {
+function CaptionGen({
+  setCaption,
+  imageUrl,
+  setIsCaptionAIGen,
+  isCaptionAIGen,
+}) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState(null);
 
@@ -15,19 +20,24 @@ function CaptionGen({ setCaption, imageUrl }) {
     let captionPrompt = `Write an engaging caption for this image, suitable for social media. The caption can be concise, informative, casual and may capture a bit of the essence of the image. It can be humorous, inspirational, dark humurous, or informal also add relevant emojis and hashtags.`;
 
     try {
-      const response = await fetch("https://ai-social-network-1-api.onrender.com/generate-caption", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ captionPrompt, image: imageUrl }),
-      });
+      const response = await fetch(
+        "https://ai-social-network-1-api.onrender.com/generate-caption",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ captionPrompt, image: imageUrl }),
+        }
+      );
 
       const data = await response.json();
-      setCaption(data);
+      setCaption(data.join(''));
       setIsGenerating(false);
+      setIsCaptionAIGen(true);
     } catch (error) {
       setIsGenerating(false);
+      setIsCaptionAIGen(false);
       console.error(error);
       setError("Failed to generate caption");
     } finally {

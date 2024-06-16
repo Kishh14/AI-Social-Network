@@ -19,6 +19,7 @@ function CreatePost() {
   const [video, setVideo] = useState("");
   const [currentTool, setCurrentTool] = useState("ImageGen");
   const [show, setShow] = useState(false);
+  const [isCaptionAIGen, setIsCaptionAIGen] = useState(false);
 
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -68,6 +69,7 @@ function CreatePost() {
   const uploadImage = async () => {
     try {
       const formData = new FormData();
+      // console.log(caption);
       formData.append("image", media);
       formData.append("content", caption);
       await axios.post(
@@ -119,6 +121,8 @@ function CreatePost() {
                     imageUrl={imageUrl}
                     setImageUrl={setImageUrl}
                     caption={caption}
+                    setIsCaptionAIGen={setIsCaptionAIGen}
+                    isCaptionAIGen={isCaptionAIGen}
                   />
                 ) : currentTool === "VideoGen" ? (
                   <VideoGen
@@ -146,6 +150,8 @@ function CreatePost() {
                     video={video}
                     setCaption={setCaption}
                     currentTool={currentTool}
+                    setIsCaptionAIGen={setIsCaptionAIGen}
+                    isCaptionAIGen={isCaptionAIGen}
                   />
                 </div>
               ) : null}

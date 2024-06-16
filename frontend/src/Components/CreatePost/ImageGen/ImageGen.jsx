@@ -4,7 +4,13 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-function ImageGen({ imageUrl, setImageUrl, caption }) {
+function ImageGen({
+  imageUrl,
+  setImageUrl,
+  caption,
+  setIsCaptionAIGen,
+  isCaptionAIGen,
+}) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isGenerated, setIsGenerated] = useState(false);
   const [image, setImage] = useState();
@@ -19,13 +25,16 @@ function ImageGen({ imageUrl, setImageUrl, caption }) {
     setError(null);
 
     try {
-      const response = await fetch("https://ai-social-network-1-api.onrender.com/generate-image", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ imagePrompt }),
-      });
+      const response = await fetch(
+        "https://ai-social-network-1-api.onrender.com/generate-image",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ imagePrompt }),
+        }
+      );
 
       const data = await response.json();
       setImageUrl(data?.imageUrl);
