@@ -1,14 +1,14 @@
-.circle{
-    height: 150px;
-    width:150px;
-    background-color: #bbb;
-    border-radius: 50%;
-    display:flex;
+.circle {
+  height: 120px;
+  width: 120px;
+  /* background-color: #bbb; */
+  background-position: center;
+  background-size: cover;
+  border-radius: 50%;
+  display: flex;
 }
 
-.BG-image{
-    background: radial-gradient(at 100% 10%,rgb(143, 171, 198), #070707 50%);
-    padding: 10px;
-  
-      
+.BG-image {
+  background: radial-gradient(at 100% 10%, rgb(143, 171, 198), #070707 50%);
+  padding: 10px;
 }

@@ -21,7 +21,7 @@ const Hero = () => {
             Use the power of AI in content creation
           </p>
         </div>
-        <div className=" mt-5 h-auto w-3/4 flex">
+        <div className="mt-4 h-auto flex items-center">
           <p className="text-white text-5xl ">
             The Next <span className="text-sky-500">Generation</span> Social
             Media
@@ -31,14 +31,14 @@ const Hero = () => {
             <img
               src={Start}
               alt=""
-              className="h-40 w-40 ml-52 mt-5 para cursor-pointer"
+              className="h-40 w-40 mt-5 para cursor-pointer"
               onClick={() => navigate("/authentication")}
             />
           ) : (
             <img
               src={Start}
               alt=""
-              className="h-40 w-40 ml-52 mt-5 para cursor-pointer"
+              className="h-40 w-40 mt-5 para cursor-pointer"
               onClick={() => navigate("/PostPage")}
             />
           )}

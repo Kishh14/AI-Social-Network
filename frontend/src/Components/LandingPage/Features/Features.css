@@ -1,131 +1,123 @@
-/* .bg-image{
-  background-image: url('../../../assets/bg1.png'); 
-  background-size: cover;
-  background-position: center;
-} */
-
-.BGImage{
-  
-  background: 
-  radial-gradient(at 0% 50%, rgb(168, 96, 176) 10px, rgb(117, 160, 153) 10%, rgb(13, 78, 139) 20%, #070707 70%) 0 0 / 20% 90% no-repeat,
-  linear-gradient(to right, #070707 20%, transparent 20%);
+.BGImage {
+  background: radial-gradient(
+        at 0% 50%,
+        rgb(168, 96, 176) 10px,
+        rgb(117, 160, 153) 10%,
+        rgb(13, 78, 139) 20%,
+        #07070700 60%
+      )
+      0 0 / 20% 90% no-repeat,
+    linear-gradient(to right, #070707 0%, transparent 0%);
   margin-top: 30px;
- 
 }
 .glassmorphism {
-    background: rgba(255, 255, 255, 0.25);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-  }
-  .gallery{
-    display: flex;
-    gap: 4px;
-    
-  }
-  .card{
-    position: relative;
-    left: 0px;
-    padding: 8px;
-    overflow: hidden;
-    background-color: white;
-    transition:5s ease-in;
-    flex: 1 1 auto;
-  }
-  
-  .card:nth-child(1){
-    background-image: url("../../../assets/planet-06.png");
-    background-size: cover; 
-    background-position: center;
-   
-    
-  }
-  .card:nth-child(2){
-    background-image: url("../../../assets/planet-07.png");
-    background-size: cover; 
-    background-position: center;
-    
-  }
-  .card:nth-child(3){
-    background-image: url("../../../assets/planet-06.png");
-    background-size: cover; 
-    background-position: center;
-  } 
-   .card:nth-child(4){
-    background-image: url("../../../assets/planet-07.png");
-    background-size: cover; 
-    background-position: center;
-  }
-  .card:nth-child(5){
-    background-image: url("../../../assets/planet-06.png");
-    background-size: cover; 
-    background-position: center;
-  }
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+.gallery {
+  display: flex;
+  gap: 4px;
+}
+.card {
+  position: relative;
+  left: 0px;
+  padding: 8px;
+  overflow: hidden;
+  background-color: white;
+  transition: all 0.3s !important;
+  flex: 1 1 auto;
+}
 
-  .card:hover{
-    width: 300px;
-    font-weight:bold ;
-    cursor: pointer;
-  }
+.card:nth-child(1) {
+  background-image: url("../../../assets/planet-06.png");
+  background-size: cover;
+  background-position: center;
+}
+.card:nth-child(2) {
+  background-image: url("../../../assets/planet-07.png");
+  background-size: cover;
+  background-position: center;
+}
+.card:nth-child(3) {
+  background-image: url("../../../assets/planet-06.png");
+  background-size: cover;
+  background-position: center;
+}
+.card:nth-child(4) {
+  background-image: url("../../../assets/planet-07.png");
+  background-size: cover;
+  background-position: center;
+}
+.card:nth-child(5) {
+  background-image: url("../../../assets/planet-06.png");
+  background-size: cover;
+  background-position: center;
+}
 
-  .card .hide {
-    position: absolute;
-    bottom: 0;
-    padding: 8px;
-    display: flex;
-    justify-content: start;
-    width: 100%;
-    flex-direction: column;
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 0 0 24px 24px;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.4s ease-in, visibility 0.4s ease-in;
-  }
-  
-  .card:hover .hide {
-    opacity: 1;
-    visibility: visible;
-  }
+.card:hover {
+  width: 300px;
+  font-weight: bold;
+  cursor: pointer;
+}
 
-  .card:hover h3{
-    visibility: hidden;
-  }
+.card .hide {
+  position: absolute;
+  bottom: 0;
+  padding: 8px;
+  display: flex;
+  justify-content: start;
+  width: 100%;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 0 0 24px 24px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease-in, visibility 0.4s ease-in;
+}
 
-  @media (max-width: 1024px) {
-    .media {
-      flex-direction: column !important;
-      
-    }
-    .card{
-      min-width: 500px !important;
-      height: 100px !important;
-    }
-    .card:hover{
-      height: 300px !important;
-      font-weight:bold !important;
-      cursor: pointer !important;
-    }
-    .txt {
-      transform: rotate(0deg) !important;
-      bottom: auto !important;
-      top: 30px !important; /* Adjust this value as needed */
-  }
-  }
+.card:hover .hide {
+  opacity: 1;
+  visibility: visible;
+}
 
-  @media (max-width: 768px)  {
-    .media {
-      flex-direction: column !important;
-      
-    }
-    .card{
-      min-width: 300px !important;
-      height: 100px !important;
-    }
-    .card:hover{
-      height: 300px !important;
-      font-weight:bold !important;
-      cursor: pointer !important;
-    }
+.card:hover h3 {
+  visibility: hidden;
+}
+
+@media (max-width: 1024px) {
+  .media {
+    flex-direction: column !important;
   }
+  .card {
+    min-width: 500px !important;
+    height: 100px !important;
+  }
+  .card:hover {
+    height: 300px !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+  }
+  .txt {
+    transform: rotate(0deg) !important;
+    bottom: auto !important;
+    top: 30px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .media {
+    flex-direction: column !important;
+  }
+  .card {
+    min-width: 300px !important;
+    height: 100px !important;
+  }
+  .card:hover {
+    height: 300px !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+  }
+}

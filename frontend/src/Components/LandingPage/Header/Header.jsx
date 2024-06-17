@@ -8,21 +8,21 @@ const Header = () => {
   const user = useSelector((state) => state.user.user);
 
   return (
-    <header className="p-4 m-3 w-auto h-5 flex justify-between items-center  ">
-      <img src={Logo} alt="Logo" className="w-10 h-10 " />
-      <p className="ml-3 text-white font-semibold text-4xl">
-        Social <span className="text-sky-500">Media</span>{" "}
-      </p>
+    <header className="p-4 my-4 mx-10 w-auto h-8 flex justify-between items-center ">
+      <img src={Logo} alt="Logo" className="w-16 h-16 " />
+      <h4 className="font-extrabold text-[22px] text-white ml-4">
+        AI<span className="text-blue-500">Media</span>
+      </h4>
       {!user.details._id ? (
         <button
-          className="text-white bg-sky-400 hover:shadow-lg hover:border hover:border-white rounded-3xl btn ml-auto"
+          className="text-white bg-sky-500 hover:shadow-lg hover:border hover:border-white rounded-3xl btn ml-auto"
           onClick={() => navigate("/authentication")}
         >
           SignUp
         </button>
       ) : (
         <button
-          className="text-white bg-sky-400 hover:shadow-lg hover:border hover:border-white rounded-3xl btn ml-auto"
+          className="text-white bg-sky-500 hover:shadow-lg hover:border hover:border-white rounded-3xl btn ml-auto"
           onClick={() => navigate("/PostPage")}
         >
           {user.details.username}

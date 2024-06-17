@@ -1,19 +1,23 @@
 import { useEffect, useState } from "react";
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 import Carousel from "./Carousel/Carousel";
 import "./Explore.css";
-import axios from 'axios'
+import axios from "axios";
 
 function Explore() {
-  const [posts,setPosts] = useState([]);
+  const [posts, setPosts] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const resp = await axios.get(`${import.meta.env.VITE_API_USER_URL}/allPosts`);
+        const resp = await axios.get(
+          `${import.meta.env.VITE_API_USER_URL}/allPosts`
+        );
         let topPost = resp.data.posts;
-        topPost = topPost.filter(post=>post.isMedia===true&&post.video===null)
+        topPost = topPost.filter(
+          (post) => post.isMedia === true && post.video === null
+        );
         setPosts(topPost);
       } catch (error) {
         console.error("Failed to fetch posts:", error);
@@ -23,8 +27,10 @@ function Explore() {
     fetchPosts();
   }, []);
 
-  const handlePostClick = async(authorId) => {
-    const author = await axios.get(`${import.meta.env.VITE_API_USER_URL}/${authorId}/getbyid`);
+  const handlePostClick = async (authorId) => {
+    const author = await axios.get(
+      `${import.meta.env.VITE_API_USER_URL}/${authorId}/getbyid`
+    );
     navigate(`/profile/${author.data.user.username}`);
   };
 
@@ -37,13 +43,13 @@ function Explore() {
         <div className="flex gap-5 glass-effect rounded flex-wrap justify-center my-4 py-8">
           {posts?.map((post) => {
             return (
-              <div key={post._id} className="w-[400px] h-[300px]">
+              <div key={post._id} className="w-[350px] h-[350px]">
                 {post.image && (
                   <img
                     src={post.image}
                     alt={`Image ${post._id}`}
-                    className="image rounded-md w-full h-full cursor-pointer"
-                    onClick={()=>handlePostClick(post.author)}
+                    className="image rounded-md w-full h-full object-cover cursor-pointer"
+                    onClick={() => handlePostClick(post.author)}
                   />
                 )}
                 {post.video && (
