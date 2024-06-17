@@ -71,7 +71,7 @@ const initSocket = (http) => {
 
             // Save the message to the database
             await Message.create(message);
-            console.log(`Message received: ${message.text} from ${message.name} to ${message.recipient} anddsddd ${message.email}`);
+            console.log(`Message received: ${message.text} from ${message.name} to ${message.recipient}`);
 
             if (recipientSocketId) {
                 io.to(recipientSocketId).emit('messageResponse', message);
@@ -102,6 +102,36 @@ const initSocket = (http) => {
                 io.emit('userList', userList);
             }
         });
+
+        // Handle follow notifications
+        socket.on('followUser', async (data) => {
+            const { followerUsername, followedUsername } = data;
+            console.log('followUser event received with data:', data); // Debugging log
+          
+            const followedSocketId = usernames[followedUsername];
+            const followerProfile = await User.findOne({ username: followerUsername }).lean();
+          
+            const notification = {
+              id: uuidv4(),
+              message: `${followerUsername} has started following you.`,
+              follower: {
+                id: followerProfile._id,
+                username: followerProfile.username,
+                profileImg: followerProfile.profileImg
+              },
+              timestamp: new Date()
+            };
+          
+            console.log('Emitting newFollowerNotification:', notification); // Add log here
+          
+            if (followedSocketId) {
+              io.to(followedSocketId).emit('newFollowerNotification', notification);
+            } else {
+              // Store notification for offline user
+              await Notification.create({ recipient: followedUsername, message: notification });
+            }
+          });
+          
     });
 };
 

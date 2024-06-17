@@ -5,7 +5,7 @@ import "./SearchPage.css";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-function SearchPage({ showSearchSidebar }) {
+function SearchPage({ showSearchSidebar, socket }) {
 
   const [searchInput, setSearchInput] = useState();
   const [allUsers, setAllUsers] = useState([]);
@@ -90,6 +90,7 @@ function SearchPage({ showSearchSidebar }) {
               userName={user.username}
               followedBy="Followed by terylucas + 2 more"
               id={user._id}
+              socket = {socket}
             />
           )
             :
@@ -98,6 +99,7 @@ function SearchPage({ showSearchSidebar }) {
               userName={allUsers.username}
               followedBy="Followed by terylucas + 2 more"
               id={allUsers._id}
+              socket={socket}
             />
           }
         </div>

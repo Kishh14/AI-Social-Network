@@ -8,13 +8,22 @@ const Notification = ({ socket }) => {
 
   useEffect(() => {
     const handleMessageResponse = (message) => {
+      console.log('Received message response:', message); // Debugging log
       setNotifications((prevNotifications) => [...prevNotifications, message]);
     };
 
+    const handleFollowNotification = (notification) => {
+      console.log('Received follow notification:', notification); // Debugging log
+      setNotifications((prevNotifications) => [...prevNotifications, notification]);
+    };
+
+    console.log('Socket connected:', socket.connected); // Debugging log
     socket.on("messageResponse", handleMessageResponse);
+    socket.on("newFollowerNotification", handleFollowNotification);
 
     return () => {
       socket.off("messageResponse", handleMessageResponse);
+      socket.off("newFollowerNotification", handleFollowNotification);
     };
   }, [socket]);
 
@@ -27,6 +36,8 @@ const Notification = ({ socket }) => {
   const deleteAllNotifications = () => {
     setNotifications([]);
   };
+
+  console.log('Current notifications state:', notifications); // Debugging log
 
   return (
     <div className="pb-2 mb-3 relative">
@@ -57,28 +68,32 @@ const Notification = ({ socket }) => {
         )}
       </div>
       {notifications.length > 0 ? (
-        <>
-          <div className="text-white mb-2 mx-3">
-            {notifications.map((notification, i) => (
-              <div
-                key={i}
-                className="noti-glass-effect rounded-md p-2 mt-2 flex justify-between items-center"
+        <div className="text-white mb-2 mx-3">
+          {notifications.map((notification, i) => (
+            <div
+              key={i}
+              className="noti-glass-effect rounded-md p-2 mt-2 flex justify-between items-center"
+            >
+              <p className="overflow-x-scroll no-scrollbar mr-3">
+                {notification.text ? (
+                  <>
+                    A new message from{" "}
+                    <strong className="text-blue-300">{notification.name}</strong>
+                    : {notification.text}
+                  </>
+                ) : (
+                  notification.message // Ensure correct rendering for follow notifications
+                )}
+              </p>
+              <button
+                className="text-white px-2 py-1 rounded"
+                onClick={() => deleteNotification(i)}
               >
-                <p className="overflow-x-scroll no-scrollbar mr-3">
-                  A new message from{" "}
-                  <strong className="text-blue-300">{notification.name}</strong>
-                  : {notification.text}
-                </p>
-                <button
-                  className="text-white px-2 py-1 rounded"
-                  onClick={() => deleteNotification(i)}
-                >
-                  <IoMdClose className="text-red-100" />
-                </button>
-              </div>
-            ))}
-          </div>
-        </>
+                <IoMdClose className="text-red-100" />
+              </button>
+            </div>
+          ))}
+        </div>
       ) : (
         <p className="ml-5 text-white mb-2 text-center mt-5">
           No new notifications

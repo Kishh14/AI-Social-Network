@@ -32,7 +32,7 @@ function App() {
     })
   );
 
-  const socket = useMemo(() => socketIO.connect("https://ai-social-network-1-api.onrender.com"), []);
+  const socket = useMemo(() => socketIO.connect("https://ai-social-network-1-api.onrender.com"));
   const [currentPage, setCurrentPage] = useState("PostPage");
   const [searchResults, setSearchResults] = useState([]);
   const [userList, setUserList] = useState({});
@@ -91,10 +91,8 @@ function App() {
       }
     });
 
-    socket.on("userList", (users) => {
-      setUserList(Object.fromEntries(users));
-      console.log("Connected users:", Object.fromEntries(users));
-    });
+
+   
 
     socket.on("disconnect", () => {
       console.log("Disconnected from WebSocket server");
@@ -138,7 +136,7 @@ function App() {
                 setShowSearchSidebar={setShowSearchSidebar}
               />
             )}
-            <SearchPage showSearchSidebar={showSearchSidebar} />
+            <SearchPage showSearchSidebar={showSearchSidebar} socket={socket} />
             <div className="App flex-1 overflow-x-hidden">
               <Routes>
                 <Route path="/" element={<LandingPage />} />
