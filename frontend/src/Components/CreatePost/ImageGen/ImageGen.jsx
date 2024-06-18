@@ -1,5 +1,5 @@
 import { FaRandom } from "react-icons/fa";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -18,6 +18,30 @@ function ImageGen({
     "A close-up photo of a delicious dessert with intricate details"
   );
   const [error, setError] = useState(null);
+  const textArray = [
+    "The AI model is cooking, wait please 🍳",
+    "Bss ho gya bhai, 1 minute or...",
+    "The AI model is generating, wait please 🤖",
+    "Raste me hi hun bhai, dekh aa gaya... 🛣️🚲",
+    "Remember great things take time 😉",
+    "I'm not lazy, I'm just on energy-saving mode ⚡️",
+    "Please wait, I'm trying to be intelligent 🤓",
+    "Loading... (just like your patience)",
+    "Hold on for me, please 🥹",
+    "I'm not slow, I'm just thorough 🔍",
+    "The AI model is on a coffee break ☕️",
+    "Please hold, I'm experiencing a moment of genius 💡",
+    "This is taking longer than expected... whoops 🙈",
+    "I'm not stuck, I'm just thinking deeply 🤔",
+  ];
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((currentIndex + 1) % textArray.length);
+    }, 7000);
+    return () => clearInterval(interval);
+  }, [currentIndex]);
 
   const generateImage = async () => {
     setIsGenerating(true);
@@ -122,6 +146,12 @@ function ImageGen({
           <FaRandom size={23} />
         </button>
       </div>
+
+      {isGenerating && (
+        <div className="mt-3 glass-effect shadow text-purple-100 text-center py-2 rounded">
+          <p>{textArray[currentIndex]}</p>
+        </div>
+      )}
 
       <div className="mt-4 mb-3">
         <img

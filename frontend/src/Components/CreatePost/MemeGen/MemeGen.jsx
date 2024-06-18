@@ -12,21 +12,24 @@ function MemeGen({ data, filteredData, setFilteredData }) {
   const [count, setCount] = useState(0);
   const [editMemeImg, setEditMemeImg] = useState(null);
   const memeref = createRef();
+  const [width, setWidth] = useState(100);
 
   const addText = () => {
     setCount(count + 1);
   };
-
-  // useEffect(() => {
-  //   getAllMems().then((memes) => setData(memes.data.memes));
-  //   setFilteredData(data);
-  // }, [filteredData]);
 
   const handleSearch = () => {
     const filteredMemes = data.filter((meme) =>
       meme.name.toLowerCase().includes(searchVal.toLowerCase())
     );
     setFilteredData(filteredMemes);
+  };
+
+  const handleInputChange = (e) => {
+    const newText = e.target.value;
+    setTextVal(newText);
+    const newWidth = newText.length * 10;
+    setWidth(newWidth);
   };
 
   return (
@@ -84,14 +87,35 @@ function MemeGen({ data, filteredData, setFilteredData }) {
               .map((e) => (
                 <Draggable key={e}>
                   {editMode ? (
-                    <input
+                    <div
+                      contentEditable="true"
+                      style={{
+                        padding: "5px",
+                        width: `${width}px`,
+                        overflow: "hidden",
+                        whiteSpace: "pre-wrap",
+                        wordBreak: "break-all",
+                        textAlign: "center",
+                      }}
+                      dangerouslySetInnerHTML={{ __html: textVal }}
                       type="text"
                       autoFocus
+                      onChange={(e) => handleInputChange(e)}
                       onClick={(e) => setTextVal(e.target.value)}
-                      //   onDoubleClick={(e) => setEditMode(false)}
-                      className="form-control text-black w-[40%] block border-none outline-none"
-                    />
+                      className="text-black rounded bg-white block border-none outline-none"
+                    ></div>
                   ) : (
+                    // <textarea
+                    //   value={textVal}
+                    //   onChange={(e) => handleInputChange(e)}
+                    //   style={{
+                    //     width: `${width}px`,
+                    //     resize: "none",
+                    //     whiteSpace: "pre-wrap",
+                    //     wordBreak: "break-all",
+                    //   }}
+                    //   className="text-black rounded border-none outline-none"
+                    // />
                     <h4 className="" onDoubleClick={(e) => setEditMode(true)}>
                       {textVal}
                     </h4>

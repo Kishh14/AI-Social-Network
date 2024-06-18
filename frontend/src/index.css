@@ -19,7 +19,11 @@
   /* border-radius: 10px; */
 }
 
-
-body::-webkit-scrollbar{
+body::-webkit-scrollbar {
   display: none;
+}
+
+.hidden {
+  /* display: none; */
+  bottom: 0px;
 }

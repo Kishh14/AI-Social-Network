@@ -1,5 +1,5 @@
 import { FaRandom } from "react-icons/fa";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
@@ -11,19 +11,47 @@ function VideoGen({ setVideoPrompt, videoPrompt, video, setVideo, caption }) {
   const [error, setError] = useState(null);
   const [videoURL, setVideoURL] = useState();
 
+  const textArray = [
+    "The AI model is cooking, wait please 🍳",
+    "Bss ho gya bhai, 1 minute or...",
+    "The AI model is generating, wait please 🤖",
+    "Raste me hi hun bhai, dekh aa gaya... 🛣️🚲",
+    "Remember great things take time 😉",
+    "I'm not lazy, I'm just on energy-saving mode ⚡️",
+    "Please wait, I'm trying to be intelligent 🤓",
+    "Loading... (just like your patience)",
+    "Hold on for me, please 🥹",
+    "I'm not slow, I'm just thorough 🔍",
+    "The AI model is on a coffee break ☕️",
+    "Please hold, I'm experiencing a moment of genius 💡",
+    "This is taking longer than expected... whoops 🙈",
+    "I'm not stuck, I'm just thinking deeply 🤔",
+  ];
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((currentIndex + 1) % textArray.length);
+    }, 7000);
+    return () => clearInterval(interval);
+  }, [currentIndex]);
+
   const generateVideo = async () => {
     setIsGenerating(true);
     setIsGenerated(false);
     setError(null);
 
     try {
-      const response = await fetch("https://ai-social-network-1-api.onrender.com/generate-video", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ videoPrompt }),
-      });
+      const response = await fetch(
+        "https://ai-social-network-1-api.onrender.com/generate-video",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ videoPrompt }),
+        }
+      );
 
       const data = await response.json();
       setVideo(data?.videoURL[0]);
@@ -108,6 +136,12 @@ function VideoGen({ setVideoPrompt, videoPrompt, video, setVideo, caption }) {
         </button>
       </div>
 
+      {isGenerating && (
+        <div className="mt-3 glass-effect shadow text-purple-100 text-center py-2 rounded">
+          <p>{textArray[currentIndex]}</p>
+        </div>
+      )}
+
       <div className="my-4">
         <video
           src={video}
@@ -120,7 +154,7 @@ function VideoGen({ setVideoPrompt, videoPrompt, video, setVideo, caption }) {
 
       <div className="my-3">
         <button
-        disabled={!isGenerated}
+          disabled={!isGenerated}
           onClick={createPost}
           className="btn px-5 text-center bg-purple-600 text-white hover:bg-purple-700 hover:shadow-lg hover:border hover:border-gray-400 mx-auto block mb-3"
         >

@@ -720,51 +720,129 @@ function UserProfile() {
                           src={post.image}
                           alt={post.author}
                         />
-                        <div className="ml-4 px-2 mt-2 text-gray-100">
-                          {post.content}{" "}
+                        <div
+                          className={`ml-4 px-2 mt-2 text-gray-100 ${
+                            showFullContent ? "h-[75px] overflow-scroll" : ""
+                          } no-scrollbar`}
+                        >
+                          {/* {post.content}{" "} */}
+                          {handleShowFullContent(post)}
+                          {post.content.length > 30 ? (
+                            <span
+                              className={`cursor-pointer ${
+                                showFullContent ? "text-blue-400" : ""
+                              }`}
+                              onClick={() =>
+                                setShowFullContent(!showFullContent)
+                              }
+                            >
+                              {showFullContent ? "less" : "..."}
+                            </span>
+                          ) : null}
                         </div>
                         {/* Like, Comment, Share Section */}
-                        <div className="flex justify-between px-2 mt-3 ml-2">
-                          <div className="text-gray-300 ml-2 mb-1">
-                            {/* <p>{post.likes} Likes</p> */}
-                            <p>{post.likes.length} Likes</p>
-                          </div>
-                          <div className="flex items-center gap-1 ml-2">
-                            {post.likes.includes(user.details._id) ? (
-                              <FaHeart
-                                className="mr-2 text-red-500 cursor-pointer"
+                        {!showFullContent && (
+                          <div className="flex justify-between px-2 mt-3 ml-2">
+                            <div className="text-gray-300 ml-2 mb-1">
+                              {/* <p>{post.likes} Likes</p> */}
+                              <p>{post.likes.length} Likes</p>
+                            </div>
+                            <div className="flex items-center gap-1 ml-2">
+                              {post.likes.includes(user.details._id) ? (
+                                <FaHeart
+                                  className="mr-2 text-red-500 cursor-pointer"
+                                  size={22}
+                                  onClick={() => handleDislike(post._id)}
+                                />
+                              ) : (
+                                <FaHeart
+                                  className="text-white mr-2 cursor-pointer"
+                                  size={22}
+                                  onClick={() => handleLike(post._id)}
+                                />
+                              )}
+                              <FaComment
+                                className="text-white mr-2 cursor-pointer hover:text-gray-300"
                                 size={22}
-                                onClick={() => handleDislike(post._id)}
+                                onClick={() => {
+                                  toggleModal(post._id);
+                                }}
                               />
-                            ) : (
-                              <FaHeart
-                                className="text-white mr-2 cursor-pointer"
-                                size={22}
-                                onClick={() => handleLike(post._id)}
+                              <MdDelete
+                                className="text-white mr-2 cursor-pointer hover:text-gray-300"
+                                size={23}
+                                onClick={() => handleDelete(post._id)}
                               />
-                            )}
-                            <FaComment
-                              className="text-white mr-2 cursor-pointer hover:text-gray-300"
-                              size={22}
-                              onClick={() => {
-                                toggleModal(post._id);
-                              }}
-                            />
-                            {/* <FaShare
-                              size={22}
-                              className="text-white mr-2 hover:text-gray-300 cursor-pointer"
-                            /> */}
+                              {/* <FaShare
+                            size={22}
+                            className="text-white mr-2 hover:text-gray-300 cursor-pointer"
+                            onClick={() => toggleShareModal()}
+                          /> */}
+                            </div>
                           </div>
-                        </div>
+                        )}
                       </>
                     ) : post.video ? (
-                      <video
-                        className="h-[80%] w-full"
-                        src={post.video}
-                        alt={post.author}
-                        controls
-                        muted
-                      />
+                      <>
+                        <video
+                          className="h-[80%] w-full object-cover"
+                          src={post.video}
+                          alt={post.author}
+                          controls
+                          muted
+                        />
+                        <div className="ml-4 px-2 mt-1 text-gray-100">
+                          {handleShowFullContent(post)}
+                          {post.content.length > 30 ? (
+                            <span
+                              className={`cursor-pointer ${
+                                showFullContent ? "text-blue-400" : ""
+                              }`}
+                              onClick={() =>
+                                setShowFullContent(!showFullContent)
+                              }
+                            >
+                              {showFullContent ? "less" : "..."}
+                            </span>
+                          ) : null}
+                        </div>
+                        {/* Like, Comment, Share Section */}
+                        {!showFullContent && (
+                          <div className="flex justify-between px-2 mt-2 ml-2">
+                            <div className="text-gray-300 ml-2 mb-1">
+                              {/* <p>{post.likes} Likes</p> */}
+                              <p>{post.likes.length} Likes</p>
+                            </div>
+                            <div className="flex items-center gap-1 ml-2">
+                              {post.likes.includes(user.details._id) ? (
+                                <FaHeart
+                                  className="mr-2 text-red-500 cursor-pointer"
+                                  size={22}
+                                  onClick={() => handleDislike(post._id)}
+                                />
+                              ) : (
+                                <FaHeart
+                                  className="text-white mr-2 cursor-pointer"
+                                  size={22}
+                                  onClick={() => handleLike(post._id)}
+                                />
+                              )}
+                              <FaComment
+                                className="text-white mr-2 cursor-pointer hover:text-gray-300"
+                                size={22}
+                                onClick={() => {
+                                  toggleModal(post._id);
+                                }}
+                              />
+                              {/* <FaShare
+                              size={22}
+                              className="text-white mr-2 hover:text-gray-300 cursor-pointer"
+                              onClick={() => toggleShareModal()}
+                            /> */}
+                            </div>
+                          </div>
+                        )}
+                      </>
                     ) : (
                       <>
                         <p
