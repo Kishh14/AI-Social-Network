@@ -27,7 +27,14 @@ const Hero = () => {
             Media
           </p>
 
-          {!user.details._id ? (
+          <img
+            src={Start}
+            alt=""
+            className="h-40 w-40 mt-5 para cursor-pointer"
+            onClick={() => navigate("/authentication")}
+          />
+
+          {/* {!user.details._id ? (
             <img
               src={Start}
               alt=""
@@ -41,7 +48,7 @@ const Hero = () => {
               className="h-40 w-40 mt-5 para cursor-pointer"
               onClick={() => navigate("/PostPage")}
             />
-          )}
+          )} */}
         </div>
         <p className="text-white p-1 m-1 mt-5 w-3/4">
           Tired of the same old social media routine? Introducing a

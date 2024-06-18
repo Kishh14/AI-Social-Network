@@ -56,7 +56,11 @@ const About = () => {
           ></div>
           <p className=" text-center text-gray-200 mt-3">Tejas</p>
         </a>
-        <a className="text-[22px]" target="_blank">
+        <a
+          href="https://www.linkedin.com/in/manveer-singh-147292220"
+          className="text-[22px]"
+          target="_blank"
+        >
           <div
             className="circle items-center justify-center bg-sky-500"
             style={{
