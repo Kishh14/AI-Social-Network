@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 
 function SearchPage({ showSearchSidebar, socket }) {
 
-  const [searchInput, setSearchInput] = useState();
+  const [searchInput, setSearchInput] = useState('');
   const [allUsers, setAllUsers] = useState([]);
   const [searchTimeout, setSearchTimeout] = useState(null);
   const user = useSelector(state => state.user.user);
@@ -29,7 +29,7 @@ function SearchPage({ showSearchSidebar, socket }) {
 
   const handleSearch = async (e) => {
     const value = e.target.value;
-    setSearchInput(e.target.value);
+    setSearchInput(value);
     if (searchTimeout) {
       clearTimeout(searchTimeout);
     }
@@ -39,21 +39,21 @@ function SearchPage({ showSearchSidebar, socket }) {
         if (!value) {
           const resp = await axios.get(`${import.meta.env.VITE_API_USER_URL}/getAllUsers`);
           let users = resp.data.allUsers;
-          users = users.filter(users => user.details._id !== users._id)
+          users = users.filter(users => user.details._id !== users._id);
           setAllUsers(users);
-          setAllUsers(resp.data.allUsers);
-        }
-        else {
+        } else {
           const response = await axios.get(
             `${import.meta.env.VITE_API_USER_URL}/${value}/singleUser`
           );
-          if(response.data.user===user.details.username){
-            setAllUsers();
-          }else
-          setAllUsers(response.data.user);
+          if (response.data.user && response.data.user.username !== user.details.username) {
+            setAllUsers([response.data.user]);
+          } else {
+            setAllUsers([]);
+          }
         }
       } catch (error) {
         console.error('Failed to fetch user:', error);
+        setAllUsers([]);
       }
     }, 1000);
 
@@ -86,21 +86,16 @@ function SearchPage({ showSearchSidebar, socket }) {
         <div className="w-3/4 flex flex-col mt-2 mr-1">
           {allUsers?.length > 0 ? allUsers?.map((user) =>
             <SearchCard
+              key={user._id}
               userImg={user.profileImg}
               userName={user.username}
               followedBy="Followed by terylucas + 2 more"
               id={user._id}
-              socket = {socket}
+              socket={socket}
             />
           )
             :
-            <SearchCard
-              userImg={allUsers.profileImg}
-              userName={allUsers.username}
-              followedBy="Followed by terylucas + 2 more"
-              id={allUsers._id}
-              socket={socket}
-            />
+            <p className="text-light">No users found!</p>
           }
         </div>
       </div>
