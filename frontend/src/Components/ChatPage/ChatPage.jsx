@@ -36,8 +36,9 @@ const ChatPage = ({ socket, recipient }) => {
         navigate("/");
         setTimeout(() => {
           window.location.reload();
+          navigate('/PostPage');
         }, 2000);
-        navigate('/PostPage');
+        
       },
       scenario: {
         mode: ZegoUIKitPrebuilt.OneONoneCall,
