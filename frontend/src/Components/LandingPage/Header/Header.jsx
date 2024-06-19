@@ -13,13 +13,13 @@ const Header = () => {
       <h4 className="font-extrabold text-[22px] text-white ml-4">
         AI<span className="text-blue-500">Media</span>
       </h4>
-      {/* <button
+      <button
           className="text-white bg-sky-500 hover:shadow-lg hover:border hover:border-white rounded-3xl btn ml-auto"
           onClick={() => navigate("/authentication")}
         >
           SignUp
-        </button> */}
-      {!user.details._id ? (
+        </button>
+      {/* {!user.details._id ? (
         <button
           className="text-white bg-sky-500 hover:shadow-lg hover:border hover:border-white rounded-3xl btn ml-auto"
           onClick={() => navigate("/authentication")}
@@ -33,7 +33,7 @@ const Header = () => {
         >
           {user.details.username}
         </button>
-      )}
+      )} */}
     </header>
   );
 };
