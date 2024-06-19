@@ -28,7 +28,7 @@ function MemeGen({ data, filteredData, setFilteredData }) {
   const handleInputChange = (e) => {
     const newText = e.target.value;
     setTextVal(newText);
-    const newWidth = newText.length * 10;
+    const newWidth = newText.length * 10 + 20;
     setWidth(newWidth);
   };
 
@@ -91,10 +91,10 @@ function MemeGen({ data, filteredData, setFilteredData }) {
                       contentEditable="true"
                       style={{
                         padding: "5px",
-                        width: `${width}px`,
+                        width: `${150}px`,
                         overflow: "hidden",
-                        whiteSpace: "pre-wrap",
-                        wordBreak: "break-all",
+                        // whiteSpace: "pre-wrap",
+                        // wordBreak: "break-all",
                         textAlign: "center",
                       }}
                       dangerouslySetInnerHTML={{ __html: textVal }}
