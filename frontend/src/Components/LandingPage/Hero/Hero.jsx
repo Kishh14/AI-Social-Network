@@ -13,9 +13,9 @@ const Hero = () => {
   const user = useSelector((state) => state.user.user);
 
   return (
-    <div className="flex h-[80vh] justify-between bg-image">
-      <div className="m-4 w-1/2 flex flex-col justify-center">
-        <div className="h-auto w-2/3  mt-3 bg-gray-700 flex items-center rounded">
+    <div className="flex h-[80vh] main-div justify-between bg-image">
+      <div className="left-div m-4 w-1/2 flex flex-col justify-center">
+        <div className=" inner-div w-2/3  mt-3 bg-gray-700 flex items-center rounded">
           <img src={L1} alt="image" className="h-12 w-12" />
           <p className="text-white text-xl">
             Use the power of AI in content creation

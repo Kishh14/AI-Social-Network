@@ -3,7 +3,7 @@ import "./Connect.css";
 import connect from "../../../assets/connect.jpg";
 const Connect = () => {
   return (
-    <div className=" mb-[50px] mt-[160px] flex flex-col justify-center items-center  bg-Image p-20">
+    <div className="connect mb-[50px] mt-[160px] flex flex-col justify-center items-center  bg-Image p-20">
       <p className="text-white text-3xl text-center px-2">
         Find People around you and socialize in the same world
       </p>

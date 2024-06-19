@@ -1,0 +1,13 @@
+@media (max-width: 425px) {
+  .ft {
+    padding: 0px 50px !important;
+    /* justify-content: center !important; */
+  }
+}
+@media (max-width: 768px) {
+  .ft {
+    padding: 0px 50px !important;
+    justify-content: center !important;
+    gap: 4px !important;
+  }
+}

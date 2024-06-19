@@ -1,4 +1,5 @@
 import React from "react";
+import './Footer.css';
 import { SlSocialTwitter } from "react-icons/sl";
 import { SiLinkedin, SiInstagram, SiFacebook } from "react-icons/si";
 
@@ -8,7 +9,7 @@ const Footer = () => {
       <div className="flex flex-col">
         <div className="h-[1px] bg-white opacity-10" />
 
-        <div className="flex items-center justify-between flex-wrap gap-4 px-[110px] pt-8">
+        <div className="ft flex items-center justify-between flex-wrap gap-4 px-[110px] pt-8">
           <h4 className="font-extrabold text-[22px] text-white">
             AI<span className="text-blue-500">Media</span>
           </h4>

@@ -7,7 +7,7 @@ const About = () => {
       <p className="text-white text-3xl text-center mb-[10px] mt-[30px]">
         Meet the team behind the platform
       </p>
-      <div className="flex flex-wrap w-auto h-auto gap-12 mt-10 mb-5">
+      <div className="flex flex-wrap w-auto h-auto gap-12 mt-10 mb-5 justify-center">
         <a
           href="https://www.linkedin.com/in/mohammad-aqib-687ab5263/"
           className="text-[22px]"
@@ -49,9 +49,9 @@ const About = () => {
             className="circle items-center justify-center bg-sky-500"
             style={{
               background:
-                "url(https://i.pinimg.com/474x/8d/12/49/8d1249009c78480d4f773714179f8d8f.jpg )",
-              // backgroundSize: "cover",
-              // backgroundPosition: "center",
+                "url(https://i.pinimg.com/564x/55/87/02/558702a05a32730f1101a4e84e0e9233.jpg )",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
             }}
           ></div>
           <p className=" text-center text-gray-200 mt-3">Tejas</p>

@@ -5,7 +5,15 @@
     -webkit-backdrop-filter: blur(4px);
     border: 1px solid rgba(255, 255, 255, 0.18);
   }
-
-  .connect{
-   
+  @media (max-width: 425px) {
+    .connect {
+      padding: 0px !important;
+      /* justify-content: center !important; */
+    }
+  }
+  @media (max-width: 768px) {
+    .connect {
+      padding: 0px !important;
+      /* justify-content: center !important; */
+    }
   }

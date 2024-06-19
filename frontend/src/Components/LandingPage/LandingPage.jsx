@@ -13,7 +13,7 @@ const LandingPage = () => {
     <div className="w-full h-screen overflow-hidden  bg-black background">
       <div className="mx-auto h-full overflow-y-scroll no-scrollbar ">
         <Header/>
-        <Hero />
+        <Hero  />
         <Features />
         <Connect />
         <About />
